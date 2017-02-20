@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<title>规则新建</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" /> 
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" /> 
+    <link rel="stylesheet" type="text/css" href="../styles/autocomplete/jquery.autocomplete.css"/>
+    <div th:fragment="styles">
+	    <link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/layout.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/table.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/monitor-search.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/asyncbox/asyncbox.css" type="text/css"  rel="stylesheet" />
+	    <link rel="stylesheet" href="../styles/themes/base/minified/jquery-ui.min.css"/>
+  		<link rel="stylesheet" href="../styles/style.css"/>
+    </div>
+    <script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+    <script type="text/javascript" src="../autocomplete/thickbox-compressed.js"></script>
+    <script type="text/javascript" src="../scripts/ui/jquery.ui.button.js"></script>
+    
+<div th:fragment="scripts">
+        <script type="text/javascript" src="../scripts/rule/RuleCreate.js" charset="utf-8"></script>
+        <script type="text/javascript" src="../scripts/AsyncBox.v1.4.5.js"></script>
+        <script type="text/javascript" src="../scripts/ui/minified/jquery-ui.min.js"></script>
+    </div>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+<body>
+	<div th:fragment="content" style="margin: 5px; padding: 2px; border: 1px solid #aacbee; background: #f8f8f8; min-width: 1020px;">
+		<table cellpadding="0" cellspacing="0" border="0" width="100%">
+			<tr>
+				<td class="Table_title"><img src="../images/icon_01.gif" />&nbsp;&nbsp;新建规则
+				</td>
+				<input type="hidden" id="flag" value="" />
+			</tr>
+		</table>
+		<form name="ruleForm" action="../rule/createRule.html" method="post">
+			<input type="submit" name="submitBtn" id="submitBtn"
+				style="display: none;" /> <input type="hidden" name="titles"
+				id="titles"/> <input type="hidden" name="exe" id="exe"/>
+				<input type="hidden" name="dictDepartmentJson" id="dictDepartmentJson" th:value="${dictDepartmentJson}"/>
+			<input type="hidden" name="data" id="data"/>
+			<div style="width: 100%; height: 100%;">
+				<table height="46%" border="0" cellpadding="0" cellspacing="0"
+					class="Table_01" style="width: 100%; height: 100%;">
+					<tr >
+						<td align="right" style="width:60px;">规则名称
+						</td>
+						<td style="width:210px;"><input type="text" id="ruleName" name="ruleName" size="18" 
+							 onblur="checkValue(this.id,this.value);" /></td>
+						<td align="right" style="width:60px;">所属的组
+						</td>
+						<td style="width:210px;"><select name="rulegroupId" id="groupCode"
+							class="selected01" 
+							onchange="checkValue(this.id,this.value);">
+								<option value="">
+									请选择
+								</option>
+									<option th:each="group : ${ruleGroup }" th:value="${group.rulegroupId}" th:text="${group.rulegroupName}" >${group.rulegroupName}
+									</option>
+						</select></td>
+						<td align="right" style="width:60px;">所属科室
+						</td>
+						<td align="left">
+							<div class="selectDeptDict" style="z-index: 200">
+								<input id="deptName" onblur="checkValue(this.id,this.value);" value="" style="width:150px;"/>
+							</div>
+							<input id="deptCode" type="hidden" value="" />
+						</td>
+					</tr>
+					<tr>
+						<td align="right">模型事实
+						</td>
+						<td colspan="5"><select name="modelId" id="modelCode"
+							class="selected01" style="width: 180px;"
+							onchange="checkValue(this.id,this.value);">
+								<option value="">
+									请选择
+								</option>
+									<option th:each=" model: ${ruleMode }" th:value="${model.modelId}" th:text="${model.modelName}" >${model.modelName}
+									</option>
+						</select> </td>
+					</tr>
+					<tr>
+						<td align="right">规则条件
+						</td>
+						<td colspan="5" id="td_condition"><input name="Input"
+							type="button" class="btn01"
+							onclick="javascript:addCondition(0);" value="添加条件" />
+						</td>
+					</tr>
+					<tr>
+						<td align="right">执行操作
+						</td>
+						<td colspan="5" id="td_operate"><input name="Input2"
+							type="button" class="btn01"
+							onclick="javascript:addCondition(1);" value="添加操作" />
+						</td>
+					</tr>
+					<tr>
+						<td align="right">描述
+						</td>
+						<td colspan="5" align="left"><textarea id="memo" name="memo"
+								rows="3" cols="30"></textarea></td>
+					</tr>
+				</table>
+			</div>
+		</form>
+		<div style="width: 70%; height: 90%; overflow: auto;">
+			<table id="mainTable" border="0" cellpadding="0" cellspacing="0"
+				class="Table_01">
+				<thead>
+					<tr id="column_title">
+						<th rowspan="2" align="center" width="80px;">操作
+						</th>
+						<th rowspan="2" width="40px;" align="center">序号
+						</th>
+						<th width="40px;" rowspan="2">描述
+						</th>
+					</tr>
+					<tr id="column_exe"></tr>
+				</thead>
+				<tbody class="tbody">
+				</tbody>
+			</table>
+		</div>
+		<p class="space20" style="margin-top: 5px;">
+			<input name="" type="button"
+				value='添加一行' class="btn01"
+				onclick="javascript:addRow();" />
+		</p>
+		<div>
+			<table cellpadding="0" cellspacing="0" border="0" align="center">
+				<tr>
+					<td >
+						<button id="saveBtn" type="button" onclick="saveRule()" style="overflow:visible;width:auto;height:23px;"  class="btn01">
+							<img src="../images/btn/save.gif" style="vertical-align: middle;" />保存
+						</button>
+					</td>
+					
+					<td >
+						<button id="returnBtn" type="button" onclick="returnRule()" style="overflow:visible;width:auto;height:23px;"  class="btn01">
+							<img src="../images/btn/back.gif" style="vertical-align: middle;" />返回
+						</button>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<p class="space20"></p>
+		<div id="setResult"></div>
+	</div>
+</body>
+</html>

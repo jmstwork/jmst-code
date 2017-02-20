@@ -1,0 +1,163 @@
+@charset "UTF-8";
+#CNMain{min-width:1024px;_width:1024px;padding:5px; background:#fff;}
+.Table_title
+{
+    background:url(../images/title_bg.gif) repeat-x;
+    width:100%;
+    height:25px;
+    border:1px solid #aacbee;
+    line-height:25px;
+    color:#4b7aab;
+    font-size:12px;
+    font-weight:bold;
+    padding-left:5px;
+}
+.Table_02 td {
+padding: 8px 0 0 5px;
+}
+.founder-button, .founder-button-change, .founder-button-down
+{
+display: inline-block;
+font-size: 10pt;
+margin: 0 20px 0 0;
+padding: 1px 5px 1px 5px;
+line-height: normal;
+white-space: nowrap;
+text-align: center;
+cursor: pointer;
+border: 1px solid #999;
+background-color: #edf5ff;
+}
+.founder-button-icon-search {
+background-image: url(../images/assets/skins/sam/search.gif);
+}
+.founder-button-icon-clean {
+background-image: url(../images/assets/skins/sam/clean.gif);
+}
+.founder-button-bg {
+display: inline-block;
+width: 16px;
+height: 16px;
+}
+.founder-button-content {
+display: inline-block;
+padding-left: 2px;
+vertical-align: bottom;
+}
+
+.founder-datatable {
+border: 1px solid #cbcbcb;
+}
+.yui3-skin-sam .founder-datatable-header {
+background: url("../images/assets/skins/sam/title_thbg.gif") repeat-x scroll 0 0 transparent;
+border-color: #A9C3D0;
+}
+.founder-datatable-header, .founder-datatable-drag-div {
+background: #fff url(../images/assets/skins/sam/sprite.png) repeat-x 0 0;
+color: #000;
+font-weight: normal;
+text-align: center;
+padding-left: 0;
+padding-right: 0;
+vertical-align: middle;
+-moz-user-select: none;
+}
+.founder-datatable-col-_no {
+padding-bottom: 2px;
+padding-left: 0;
+padding-right: 0;
+text-align: center;
+}
+.founder-datatable-cell, .founder-datatable-header, .founder-datatable-drag-div {
+border-left: 1px solid #cbcbcb;
+border-bottom: 1px solid #cbcbcb;
+font-size: 10pt;
+margin: 0;
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
+padding: 4px 10px 4px 10px;
+}
+.founder-datatable-even {
+background-color: #fff;
+}
+.founder-datatable-odd {
+background-color: #edf5ff;
+}
+.founder-datatable-first-header {
+border-left: 0;
+}
+.founder-datatable-first-column {
+border-left: 0;
+}
+
+.yui3-skin-sam .founder-datatable-paging {
+background: url("../images/page_bg.gif") repeat-x scroll 0 0 transparent;
+height: 26px;
+line-height: 26px;
+padding: 0;
+/*border: 1px solid #A9C3D0;*/
+color: #2F2F2F;
+margin: 0;
+font-family: "arial";
+font-size: 12px;
+}
+.founder-datatable-paging {
+margin: 0 auto;
+background: #fff url(/ggfw/js/fui/1.4.4-SNAPSHOT/fui-datatable/assets/skins/sam/sprite.png) repeat-x 0 0;
+font-size: 10pt;
+padding: 4px 0 0 0;
+height: 25px;
+}
+.founder-datatable-paging-info {
+padding-left: 10px;
+padding-top: 2px;
+}
+.founder-datatable-paging-count {
+padding-right: 20px;
+}
+.founder-datatable-paging-page {
+text-align: right;
+}
+.founder-datatable-paging-first {
+background: url(../images/assets/skins/sam/first.gif) no-repeat 0 0;
+padding-left: 15px;
+margin-right: 10px;
+cursor: pointer;
+}
+.founder-datatable-paging-previous {
+background: url(../images/assets/skins/sam/previous.gif) no-repeat 0 0;
+padding-left: 15px;
+margin-right: 10px;
+cursor: pointer;
+}
+.founder-datatable-paging-next {
+background: url(../images/assets/skins/sam/next.gif) no-repeat top right;
+padding-right: 15px;
+cursor: pointer;
+}
+.founder-datatable-paging-last {
+background: url(../images/assets/skins/sam/last.gif) no-repeat top right;
+margin-left: 10px;
+margin-right: 10px;
+padding-right: 15px;
+cursor: pointer;
+}
+.founder-datatable-paging-jump {
+margin-left: 10px;
+}
+.founder-datatable-paging-jump-input {
+margin: 0 5px 0 5px;
+width: 30px;
+height: 12px;
+}
+.founder-datatable-paging-jump-go {
+display: inline-block;
+width: 12px;
+height: 12px;
+background: url(../images/assets/skins/sam/go.gif) no-repeat top right;
+cursor: pointer;
+margin-left: 2px;
+margin-right: 5px;
+margin-bottom: 1px;
+}

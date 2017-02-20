@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>权限配置</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" /> 
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" /> 
+     <style>
+		fieldset { padding:0; border:0; margin-top:3px; }
+		.ui-dialog .ui-state-error { padding: .3em; }
+		.validateTips { border: 1px solid transparent; }
+		.ui-widget-header { border: 1px solid #aaaaaa; background: #cccccc url(images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x; color: #222222; font-weight: bold; }
+	</style>
+    <div th:fragment="styles">
+	    <link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/layout.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/table.css" type="text/css"  rel="stylesheet" />
+	    <link rel="stylesheet" href="../styles/themes/base/jquery.ui.all.css"/>
+	    <link href="../styles/monitor-search.css" type="text/css"  rel="stylesheet" />
+		<link href="../styles/asyncbox/asyncbox.css" type="text/css"
+		rel="Stylesheet" />
+    </div>
+   	<script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+	    <script src="../scripts/ui/jquery.ui.core.js"></script>
+		<script src="../scripts/ui/jquery.ui.widget.js"></script>
+		<script src="../scripts/ui/jquery.ui.mouse.js"></script>
+		<script src="../scripts/ui/jquery.ui.button.js"></script>
+		<script src="../scripts/ui/jquery.ui.draggable.js"></script>
+		<script src="../scripts/ui/jquery.ui.position.js"></script>
+		<script src="../scripts/ui/jquery.ui.resizable.js"></script>
+		<script src="../scripts/ui/jquery.ui.dialog.js"></script>
+		<script src="../scripts/ui/jquery.ui.effect.js"></script>
+    	<script type="text/javascript" src="../scripts/paging.js"></script>
+    <div th:fragment="scripts">
+		<script src="../scripts/sysmgt/rmtAuthSetList.js" type="text/javascript"></script>
+		<script src="../scripts/AsyncBox.v1.4.5.js"></script>
+   </div>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+<body id="Auth">
+	<form id="setAuthForm" name="setAuthForm" action="../user/authList"
+		method="post">
+		<input type="hidden" id="userAccount" name="userAccount" th:value="${userAccount}" />
+		<div>
+			<p></p>
+			<table cellpadding="0" cellspacing="0" border="0" class="Table_01">
+				<tr>
+					<td colspan="2" align="left" class="Table_title"><img
+						src="../images/icon_01.gif" />权限管理 </td>
+				</tr>
+				<tr>
+					<th align="right" class="title" width="15%">账户&nbsp;&nbsp;&nbsp;</th>
+					<td width="85%" th:text="${userAccount}"></td>
+				</tr>
+				<tr>
+					<th align="right" class="title">用户名&nbsp;&nbsp;&nbsp;</th>
+					<td th:text="${userName}"></td>
+				</tr>
+			</table>
+			<p class="space10"></p>
+		</div>
+		<div id="dataTable" style="margin-top: 10px;">
+			<table id="authList" style=" margin-top: 1px;" class="Table_01" cellspacing="0" cellpadding="1">
+				<th:block th:each="reskey:${resMap}">
+					<tr th:if="${#strings.contains(reskey.key,'flg')} " >
+						<th style="text-align: left; font-weight: bold;" align="left"	colspan="8">
+							<input style="align:center" type="checkbox" id="parentBox" name="parentBox" th:value="${#strings.replace(reskey.key,'flg','')}" 
+								checked="checked" onclick="checkParent(this);"/>
+							<span th:text="${#strings.replace(reskey.key,'flg','')}"></span>
+						</th>
+					</tr>
+					<tr th:unless="${#strings.contains(reskey.key,'flg')} " >
+						<th style="text-align: left;font-weight: bold;" align="left" colspan="8">
+							<input style="align:center" type="checkbox" id="parentBox" name="parentBox" th:value="${reskey.key}"
+						  		onclick="checkParent(this);"/>
+						 	<span th:text="${#strings.replace(reskey.key,'flg','')}"></span>
+						</th>
+					</tr>
+					<tr >
+						<th:block th:each="item:${reskey.value}">
+							<td th:if="${item.deleteFlg == 1}" style="border: 0">
+								<input type="checkbox" id="resourceId" th:name="${item.resourceId }" checked="checked"
+									onclick="checkChildren(this)" th:value="${#strings.replace(reskey.key,'flg','')}" />
+								<span th:text="${item.resourceName }"></span>
+							</td>
+							<td th:if="${item.deleteFlg != 1}" style="border: 0">
+								<input type="checkbox" id="resourceId" th:name="${item.resourceId }" 
+									onclick="checkChildren(this)" th:value="${#strings.replace(reskey.key,'flg','')}" />
+								<span th:text="${item.resourceName }"></span>
+							</td>
+						</th:block>
+					</tr>
+				</th:block>
+			</table>
+		</div>
+	</form>
+</body>
+</html>

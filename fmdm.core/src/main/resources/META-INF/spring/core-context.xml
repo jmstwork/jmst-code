@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations" value="classpath:setting-${ENV}.properties" />
+	</bean>
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy">
+		<property name="targetDataSource" ref="dataSourceTarget" />
+	</bean>
+	<bean id="dataSourceTarget" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="maxActive" value="${jdbc.maxActive}" />
+		<property name="maxIdle" value="10" />
+		<property name="maxWait" value="1000" />
+		<property name="defaultAutoCommit" value="true" />
+		<property name="removeAbandoned" value="true" />
+		<property name="removeAbandonedTimeout" value="20000" />
+        <property name="testWhileIdle" value="true" />
+        <property name="testOnBorrow" value="false" />
+        <property name="testOnReturn" value="false" />
+		<property name="validationQuery" value="${jdbc.validation}" />
+        <property name="validationQueryTimeout" value="1" />
+        <property name="timeBetweenEvictionRunsMillis" value="30000" />
+        <property name="numTestsPerEvictionRun" value="${jdbc.maxActive}" />
+	</bean>
+    <bean id="pfmonAdvice" class="org.springframework.aop.interceptor.PerformanceMonitorInterceptor">
+        <!--
+        <property name="useDynamicLogger" value="false"/>
+        <property name="loggerName" value=""/>
+        -->
+    </bean>
+    
+    <!-- 事务 -->
+    <tx:annotation-driven transaction-manager="txManager" order="2"/>
+    
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    	 <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <!-- End -->
+	
+	<context:component-scan base-package="com.founder" >
+		<!-- context:include-filter type="regex" expression=".*(Service).*"/-->
+	</context:component-scan>
+	
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="${mail.smtp.host}"></property>
+        <!--
+        <property name="username" value="${mail.smtp.username}"></property>
+        <property name="password" value="${mail.smtp.password}"></property>
+        -->
+        <property name="port" value="${mail.smtp.port}"></property>
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.auth">${mail.smtp.auth}</prop>
+                <prop key="mail.smtp.timeout">25000</prop>
+                <prop key="mail.debug">true</prop>
+                <prop key="mail.mime.charset">UTF-8</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="appSettings" class="com.founder.core.AppSettings">
+    	<property name="locations">
+	      <list>  
+	        <value>classpath:fmdm.properties</value>  
+			<value>classpath:oid.properties</value>
+			<value>classpath:message.properties</value>
+		  </list>
+		</property> 
+	</bean>
+	<bean id="senderFactory" class="com.founder.wmq.WMQQueueFactory">
+		<property name="host" value="${wmqsender.hostname}" />
+		<property name="channel" value="${wmqsender.channel}" />
+		<property name="ccsid" value="${wmqsender.ccsid}" />
+		<property name="port" value="${wmqsender.port}" />
+		<property name="transport" value="${wmqsender.transport}" />
+		<property name="managerName" value="${wmqsender.queueManagerName}" />
+	</bean>
+	
+	<bean id="wmqMessageSender" class="com.founder.wmq.WMQMessageSender">
+		<property name="queueFactory" ref="senderFactory"/>
+	</bean>
+	
+    <beans profile="mysql">
+    	<bean id="mysqlDialect" class="org.seasar.doma.jdbc.dialect.MysqlDialect" />
+    </beans>
+    
+    <beans profile="oracle">
+    	<bean id="oracleDialect" class="org.seasar.doma.jdbc.dialect.OracleDialect" />
+    </beans>
+    
+    
+</beans>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="
+       		http://www.springframework.org/schema/beans 
+       		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       		http://www.springframework.org/schema/context
+       		http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       		http://www.springframework.org/schema/task 
+       		http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+	
+	<task:annotation-driven/>
+	
+	<bean id="wmqMessageReader" class="com.founder.wmq.WMQMessageReader" destroy-method="shutdown">
+		<property name="queueFactory" ref="readerFactory"/>
+		<property name="queueName" value="${wmqreader.queueName}"/>
+	</bean>
+	
+	<bean id="readerFactory" class="com.founder.wmq.WMQQueueFactory" destroy-method="shutdown">
+		<property name="host" value="${wmqreader.hostname}" />
+		<property name="channel" value="${wmqreader.channel}" />
+		<property name="ccsid" value="${wmqreader.ccsid}" />
+		<property name="port" value="${wmqreader.port}" />
+		<property name="transport" value="${wmqreader.transport}" />
+		<property name="managerName" value="${wmqreader.queueManagerName}" />
+	</bean>
+	<bean id="mqMessageListener" class="com.founder.fmdm.MqMessageListener" destroy-method="destroy">
+		<property name="WMQMessageReader" ref="wmqMessageReader"/>
+	</bean>
+	
+</beans>

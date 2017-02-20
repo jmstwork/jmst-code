@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>变更比较</title>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" /> 
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" /> 
+    <div th:fragment="styles">
+    <link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+    <link href="../styles/layout.css" type="text/css"  rel="stylesheet" />
+    <link href="../styles/table.css" type="text/css"  rel="stylesheet" />
+    <link href="../styles/monitor-search.css" type="text/css"  rel="stylesheet" />
+    </div>
+    <script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+    <div th:fragment="scripts">
+    <script type="text/javascript" src="../scripts/paging.js"></script>
+     <script type="text/javascript" src="../scripts/term/dictitemeditdetail.js"></script>
+    </div>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+<body>
+	<div th:fragment="content" style="margin: 5px; padding: 2px; border: 1px solid #aacbee; background: #f8f8f8; min-width: 1020px;">
+		<table cellpadding="0" cellspacing="0" border="0" width="100%">
+				<tr>
+					<td class="Table_title" th:text="*{titleName}"><img src="../images/icon_01.gif" />变更比较（字典名：证件类型）</td>
+				</tr>
+		</table>
+		
+		<hr />
+		<div id="dataTable" style="padding-top: 5px; border: 0px solid #aacbee;">
+			<table style="width: 100%; margin-top: 1px;" border="1px" cellspacing="0" cellpadding="1" class="Table_01">
+				<thead>
+					<tr>
+						<th>变更状态</th>
+						<th th:each="item : ${termItemList}" th:text="${item['field_desc']}">编码</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr style="cursor: pointer;" th:each="itemData : ${differentData}" >
+						<td th:text="${itemData['update_flg']}" align="center">变更前</td>
+						<td th:each="itemField : ${termItemList}" th:text="${itemData['__${itemField['field_name']}__']}" align="center">jmsfz111</td>
+					</tr>
+					
+				</tbody>
+				<tfoot>
+				<tr th:if="${viewType!=null}">
+						<button  type="button" style="width: 85px;height:25px;"  class="btn01" 
+								th:if="${viewType eq '0' and title eq '0'}" th:onclick="'javascript:location.href=\'../term/dictitemlist.html?title='+*{title}+'&#38;dictId='+*{dictId}+'&#38;searchAll='+'&#38;viewTypeId=0,'+*{viewId} +'\';'">
+								<img src="../images/btn/back.gif"
+									style="vertical-align: middle;" />&nbsp;返回
+						</button>
+						<button  type="button" style="width: 85px;height:25px;"  class="btn01" 
+								th:if="${viewType eq '0' and title ne '0'}" th:onclick="'javascript:location.href=\'../term/dictitemlist.html?title='+*{title}+'&#38;dictId='+*{dictId}+'&#38;searchAll=on'+'&#38;viewTypeId=0,'+*{viewId} +'\';'">
+								<img src="../images/btn/back.gif"
+									style="vertical-align: middle;" />&nbsp;返回
+						</button>
+						
+						<button  type="button" style="width: 85px;height:25px;"  class="btn01" 
+								th:if="${viewType eq '1' and title eq '0'}" th:onclick="'javascript:location.href=\'../term/dictitemlist.html?title='+*{title}+'&#38;dictId='+*{dictId}+'&#38;searchAll='+'&#38;viewTypeId=1,'+*{viewId}+'\';'">
+								<img src="../images/btn/back.gif"
+									style="vertical-align: middle;" />&nbsp;返回
+						</button>
+						<button  type="button" style="width: 85px;height:25px;"  class="btn01" 
+								th:if="${viewType eq '1' and title ne '0'}" th:onclick="'javascript:location.href=\'../term/dictitemlist.html?title='+*{title}+'&#38;dictId='+*{dictId}+'&#38;searchAll=on'+'&#38;viewTypeId=1,'+*{viewId}+'\';'">
+								<img src="../images/btn/back.gif"
+									style="vertical-align: middle;" />&nbsp;返回
+						</button>
+						
+						<button  type="button" style="width: 85px;height:25px;"  class="btn01" 
+								th:if="${viewType eq '2' and title eq '0'}" th:onclick="'javascript:location.href=\'../term/dictitemlist.html?title='+*{title}+'&#38;dictId='+*{dictId}+'&#38;searchAll='+'&#38;viewTypeId=2,'+*{viewId}+'\';'">
+								<img src="../images/btn/back.gif"
+									style="vertical-align: middle;" />&nbsp;返回
+						</button>
+						<button  type="button" style="width: 85px;height:25px;"  class="btn01" 
+								th:if="${viewType eq '2' and title ne '0'}" th:onclick="'javascript:location.href=\'../term/dictitemlist.html?title='+*{title}+'&#38;dictId='+*{dictId}+'&#38;searchAll=on'+'&#38;viewTypeId=2,'+*{viewId}+'\';'">
+								<img src="../images/btn/back.gif"
+									style="vertical-align: middle;" />&nbsp;返回
+						</button>
+				</tr>
+				<tr th:unless="${viewType!=null}">
+						<button  type="button" style="width: 85px;height:25px;"  class="btn01"  th:if="*{title=='0'}"
+								 th:onclick="'javascript:location.href=\'../term/admindictitemlist.html?title='+*{title}+'&#38;dictId='+*{dictId}+'&#38;searchAll='+'\';'">
+								<img src="../images/btn/back.gif"
+									style="vertical-align: middle;" />&nbsp;返回
+						</button>
+						<button  type="button" style="width: 85px;height:25px;"  class="btn01"  th:unless="*{title=='0'}"
+								 th:onclick="'javascript:location.href=\'../term/admindictitemlist.html?title='+*{title}+'&#38;dictId='+*{dictId}+'&#38;searchAll=on'+'\';'">
+								<img src="../images/btn/back.gif"
+									style="vertical-align: middle;" />&nbsp;返回
+						</button>
+				</tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

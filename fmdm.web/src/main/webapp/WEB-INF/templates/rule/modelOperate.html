@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>${page_title}</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" /> 
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" /> 
+    <div th:fragment="styles">
+	    <link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/layout.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/table.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/asyncbox/asyncbox.css" type="text/css" rel="stylesheet" />
+    </div>
+    <script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+    <div th:fragment="scripts">
+        <script type="text/javascript" src="../scripts/rule/RlmgModel.js"></script>
+	    <script type="text/javascript" src="../scripts/paging.js"></script>
+	    <script type="text/javascript" src="../scripts/AsyncBox.v1.4.js"></script>
+    </div>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+<body>
+	<div th:fragment="content" style="margin: 5px; padding: 2px; border: 0px solid #aacbee; background: #f8f8f8; min-width: 1020px;">
+		<form name="modelForm" method="post"  th:object="${rlmgModelTpyeCondition}" action="">
+		<input type="hidden" name="opt" id="opt" th:value="${opt}"/>
+		<table cellpadding="0" cellspacing="0" border="0" width="100%">
+			<tr>
+				<td class="Table_title" th:if="${opt == 'add'}"  >
+					<img src="../images/icon_01.gif" />新建模型
+				</td>
+				<td class="Table_title" th:if="${opt == 'edit'}"  >
+					<img src="../images/icon_01.gif" />编辑模型
+				</td>
+			</tr>
+		</table>
+		<hr />
+		<div id="dataTable" style="padding-top: 5px; border: 0px solid #aacbee;" >
+			<table class="Table_01" id="SignFrame" border="1">
+					<tr>
+						<td class="label"><font color="red">*</font>模型名</td>
+						<td>
+						   <input type="hidden" name="modelId" id="modelId" th:field="*{modelId}"/>
+                           <input type="text" name="modelName" id="modelName" th:field="*{modelName}"/>
+                        </td>
+						<td class="label"><font color="red">*</font>模型英文名</td>
+                        <td colspan="4">
+                        	<input type="text" name="modelEnName" id="modelEnName"  th:field="*{modelEnName}"/>
+                        </td>
+					</tr>
+					<tr id="SignItem1" th:if="${opt == 'add'}">
+						<td class="label"><font color="red">*</font>字段名</td>
+						<td>
+                           <input type="text" name="fieldName" id="fieldName" th:field="*{fieldName}"/>
+                        </td>
+						<td class="label"><font color="red">*</font>字段英文名</td>
+                        <td>
+                        	<input type="text" name="fieldEnName" id="fieldEnName"  th:field="*{fieldEnName}"/>
+                        </td>
+                        <td class="label"><font color="red">*</font>字段类型</td>
+                        <td>
+                        	<select style="width: 120px;" name="fieldType" id="fieldType" th:field="*{fieldType}">
+									<option value="-1">请选择</option>
+									<option value="Integer">整型</option>
+									<option value="String">文本</option>
+									<option value="Date">日期</option>
+									<option value="Boolean">布尔</option>
+									<option value="Float">浮点</option>
+							</select>
+                        </td>
+                        <td> 
+	                        <div align='center' style='width:120px'>
+		                        <a href="javascript:AddSignRow();" class="Linkblue">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;添加</a>&nbsp;&nbsp;
+		                        <a href="javascript:clearnRow(1);" class="Linkblue">清空</a>
+	                        </div>
+     					</td>
+					</tr>
+					<tr id="SignItem1" th:if="${opt == 'edit'}"  th:each="item,str: ${fieldList}" >
+						<td class="label"><font color="red">*</font>字段名</td>
+						<td>
+						   <input type="hidden" name="fieldId" id="fieldId" th:value="${item.fieldId}"/>
+                           <input type="text" name="fieldName" id="fieldName" th:value="${item.fieldName}"/>
+                        </td>
+						<td class="label"><font color="red">*</font>字段英文名</td>
+                        <td th:if="${item.usedFlg == 1}">
+                        	<input type="text" name="fieldEnName" id="fieldEnName" readonly = "readonly" th:value="${item.fieldEnName}" style="background:#B8B8B8"/>
+                        </td>
+                        <td th:if="${item.usedFlg == 2}" >
+                        	<input type="text" name="fieldEnName" id="fieldEnName" th:value="${item.fieldEnName}"/>
+                        </td>
+                        <td class="label"><font color="red">*</font>字段类型</td>
+                        <td th:if="${item.usedFlg == 1}">
+                        	<select style="width: 120px;background:#B8B8B8" name="fieldType" id="fieldType" onfocus="this.defaultIndex=this.selectedIndex;" onchange="this.selectedIndex=this.defaultIndex;">
+									<option value="-1">请选择</option>
+									<option value="Integer" th:selected="${item.fieldType=='Integer'}">整型</option>
+									<option value="String" th:selected="${item.fieldType=='String'}">文本</option>
+									<option value="Date" th:selected="${item.fieldType=='Date'}">日期</option>
+									<option value="Boolean" th:selected="${item.fieldType=='Boolean'}">布尔</option>
+									<option value="Float" th:selected="${item.fieldType=='Float'}">浮点</option>
+							</select>
+                        </td>
+                        <td th:if="${item.usedFlg == 2}">
+                        	<select style="width: 120px;" name="fieldType" id="fieldType">
+									<option value="-1">请选择</option>
+									<option value="Integer" th:selected="${item.fieldType=='Integer'}">整型</option>
+									<option value="String" th:selected="${item.fieldType=='String'}">文本</option>
+									<option value="Date" th:selected="${item.fieldType=='Date'}">日期</option>
+									<option value="Boolean" th:selected="${item.fieldType=='Boolean'}">布尔</option>
+									<option value="Float" th:selected="${item.fieldType=='Float'}">浮点</option>
+							</select>
+                        </td>
+                        <td th:if="${str.count == 1}"> 
+		                        <a href="javascript:AddSignRow();" class="Linkblue">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;添加</a>&nbsp;&nbsp;
+		                        <a href="javascript:clearnRow(1);" class="Linkblue">清空</a>
+     					</td>
+     					<td th:if="${str.count != 1}"> 
+		                        <a href="javascript:AddSignRow();" class="Linkblue">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;添加</a>&nbsp;&nbsp;
+		                        <a href="#" th:onclick="'deleteRow(this,'+${item.usedFlg}+');'" class="Linkblue">删除</a>
+     					</td>
+					</tr>
+			</table>
+			 <div align="center" style="margin-top:5px;margin-bottom:5px;">
+				<button id="saveBtn" type="button" style="height:25px;" class="btn01">
+					<img src="../images/btn/save.gif" style="vertical-align: middle;" />&nbsp;保存
+				</button>
+				<button id="delBtn" type="reset" style="height:25px;width: 100px" class="btn01">
+					<img src="../images/btn/clear.gif" style="vertical-align: middle;" />&nbsp;重置
+				</button>
+				<button id="returnBtn" type="button" style="height:25px;width: 100px" class="btn01" th:if="${opt == 'edit'}">
+					<img src="../images/btn/back.gif" style="vertical-align: middle;" />&nbsp;返回
+				</button>
+			</div>
+
+		</div>
+		</form>
+	</div>
+</body>
+</html>

@@ -1,0 +1,1 @@
+select * from MQ_MESSAGE_LIB where send_flg  = /*# sendFlg */0 order by arrive_time 

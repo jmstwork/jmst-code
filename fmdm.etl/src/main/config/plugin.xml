@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin
+    id="com.founder.component.sender"
+    version="1.0.0"
+    provider-name="founder">
+    <runtime>
+        <library path="fmdm.etl-1.0-SNAPSHOT.jar"/>
+    </runtime>
+    <requires engine-version="3.4.1">
+    </requires>
+    <extension point-id="component">
+        <parameter id="className" value="com.founder.component.sender.MQSender"/>
+        <parameter id="type" value="MQ_SENDER"/>
+    </extension>
+</plugin>

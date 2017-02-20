@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>审计事件管理</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<link rel="icon" type="image/x-icon" href="../favicon.ico" />
+<link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" />
+<div th:fragment="styles">
+	<link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/layout.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/table.css" type="text/css"  rel="stylesheet" />
+	    <link rel="stylesheet" href="../styles/themes/base/jquery.ui.all.css"/>
+	    <link href="../styles/monitor-search.css" type="text/css"  rel="stylesheet" />
+</div>
+<script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+<div th:fragment="scripts">
+	<script type="text/javascript" src="../scripts/audit/addAuditEvent.js"></script>
+	<script type="text/javascript" src="../scripts/My97DatePicker/WdatePicker.js"></script>
+	<script type="text/javascript" src="../scripts/paging.js"></script>
+</div>
+</head>
+<body>
+	<div th:fragment="content"
+		style="height: 490px; margin: 5px; padding: 2px; border: 1px solid #aacbee; background: #f8f8f8; min-width: 1020px;">
+		<form action="" id="auditManageForm" name="auditManageForm" method="post" th:object="${auditSearchCondition}">
+			<table cellpadding="0" cellspacing="0" border="0" width="100%" >
+				<tr>
+					<td class="Table_title" ><img src="../images/icon_01.gif"/>新增审计事件</td>
+				</tr>
+			</table>
+			<div id="searchDiv" class="Graybg">
+				<p class="space10"></p>
+                <table class="Table_s" align="center" style="width:100%">
+                	<tr align="center">
+                		<td class="label" style="width:110px;">
+                			<font color="red" style=" top:2px;">*</font>&nbsp;审计事件名称
+                		</td>
+                		<td align="left">
+                        	&nbsp;&nbsp;&nbsp;<input type="text" id="eventName" maxsize="50" size="30" />
+                        	<label id = "tipoldPasswd"></label>
+                        </td>
+                        
+                    </tr>
+                     
+                </table>
+            </div>
+			
+		</form>
+
+	</div>
+</body>
+</html>

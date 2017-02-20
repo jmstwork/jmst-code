@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>术语同步列表</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" /> 
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" /> 
+    <div th:fragment="styles">
+	    <link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/layout.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/table.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/monitor-search.css" type="text/css"  rel="stylesheet" />
+    </div>
+    <div th:fragment="scripts">
+	    <script type="text/javascript" src="../scripts/paging.js"></script>
+	    <script type="text/javascript" src="../scripts/term/synclist.js"></script>
+    </div>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+<body>
+	<div th:fragment="content" style="margin: 5px; padding: 2px; border: 1px solid #aacbee; background: #f8f8f8; min-width: 1020px;">
+		<form id="synclistForm" name="synclistForm" method="post" action=""   th:object="${termSearchCondition}">
+			<table cellpadding="0" cellspacing="0" border="0" width="100%">
+				<tr>
+					<td class="Table_title"><img src="../images/icon_01.gif" />术语同步列表</td>
+				</tr>
+			</table>
+            <div id="searchDiv" class="Graybg">
+                <table class="Table_s">
+                    <tr>
+                        <td class="label" width="50px">服务ID</td>
+                        <td><input type="text" name="dictId" id="dictId" th:field='*{dictId}' /></td>
+                        <td class="label">术语名称</td>
+						<td><input type="text" name="dictName" id="dictName" th:field='*{dictName}' /></td>
+                        <td align="right">
+                        	<button  type="button" style="width: 85px;height:25px;" class="btn01"  onclick="doSearch();" >
+								<img src="../images/btn/search.gif" style="vertical-align: middle;" />&nbsp;搜索
+							</button>
+						</td>
+						<td align="left">
+                        	<button  id="cleanBtn" name='cleanBtn' type="submit" style="width: 85px;height:25px;cursor:pointer;" class="btn01">
+								<img src="../images/btn/clean.gif" style="vertical-align: middle;"/>&nbsp;清空
+							</button>
+						</td>
+						<td style="width:400px;">
+                        	
+						</td>
+                    </tr>
+                    <tr style="height:1px;">
+						<td></td>
+                        <td style="width: 55px;"></td>
+                        <td style="width: 120px;"></td>
+                        <td style="width: 55px;"></td>
+                        <td style="width: 145px;"></td>
+                        <td style="width: 55px;"></td>
+                        <td style="width: 145px;"></td>
+                        <td style="width: 55px;"></td>
+                        <td style="width: 145px;"></td>
+                        <td style="width: 55px;"></td>
+                        <td style=""></td>
+                    </tr>
+                </table>
+            </div>
+            <input type="hidden" name="currentPage" value="1" th:field="*{currentPage}"/>
+            <input type="hidden" name="totalPage"   value="5" th:field="*{totalPage}"/>
+            <input type="hidden" name="jumpToPage" id="jumpToPage"  value="" />
+            <input type="hidden" name="backMsg" id="backMsg" th:value="${backMsg}" />
+		</form>
+		<hr />
+		<div id="dataTable" style="padding-top: 5px; border: 0px solid #aacbee;">
+			<div>
+				<button type="button" style="width:85px;height:25px;" class="btn01" onclick="javascript:location.href='../term/syncedit.html'">
+					<img src="../images/btn/add.gif" style="vertical-align: middle;" />&nbsp;新增
+				</button>
+				<button  type="button" style="height:25px;"  class="btn01" 
+					 onclick="updateDictStatus(1);">
+					<img src="../images/btn/start.png"
+						style="vertical-align: middle;" />&nbsp;启用
+				</button>
+				<button  type="button" style="height:25px;"  class="btn01" 
+					 onclick="updateDictStatus(0);">
+					<img src="../images/btn/stop.png"
+						style="vertical-align: middle;" />&nbsp;停用
+				</button>
+				<p style="height:3px;"/>
+			</div>
+			<table style="width: 100%; margin-top: 2px;" border="1px" cellspacing="0" cellpadding="1" class="Table_01">
+				<thead>
+					<tr>
+						<th style="width:50px;"><input type="checkbox" id="parentBox" name="parentBox" onclick="checkParent();" /></th>
+						<th style="width:50px;">序号</th>
+						<th style="width:80px;">服务ID</th>
+						<th style="width:250px;">数据源名称</th>
+						<th style="width:150px;">术语名称</th>
+						<th style="width:200px;">术语表名</th>
+						<th style="width:80px;">间隔时间</th>
+						<th style="width:80px;">状态</th>
+						<th style="width:150px;">同步结果</th>
+						<th style="width:150px;">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr  style="cursor: pointer;" th:each="item : ${syncTermList}">
+						<td align="center"><input type="checkbox" name="childrenBox" id="childrenBox"  onclick="checkChildren();"/></td>
+						<td th:text="${#ids.seq('')}" th:id="${item.syncId}" align="center" >1</td>
+						<td th:text="${item.dictId}">BS002</td> 
+						<td th:text="${item.datasourceName}"></td>
+						<td th:text="${item.dictName}">布尔字典</td>
+						<td th:text="${item.dictTableName}">dict_boolean</td>
+						<td th:text="${item.syncInterval}">5分钟</td>
+						<td th:if="${item['dictStatus'] == 0}">未启用</td>
+						<td th:unless="${item['dictStatus'] == 0}">启用</td>
+						<td th:if="${item['syncResult'] == 1 }" >
+							<a href="#" th:onclick="'javascript:checkReason(\''+${item.syncId}+'\');'" style="color:blue;text-decoration:underline; " >失败原因</a>
+						</td>
+						<td th:if="${item['syncResult'] == 0}"  >成功</td>
+						<td th:if="${item['syncResult'] == 3}"  ></td>
+						<td th:if="${item['dictStatus'] == 0}" align="center">
+							<a href="#" th:onclick="'javascript:updateSyncTerm(\''+${item.syncId}+'\');'" style="color:blue;text-decoration:underline; " >编辑</a>&nbsp;&nbsp;
+							<a href="#" th:onclick="'javascript:deleteSyncTerm(\''+${item.syncId}+'\',this);'" style="color:blue;text-decoration:underline; ">删除</a>
+						</td>
+						<td th:unless="${item['dictStatus'] == 0}" >
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr th:unless="${#lists.isEmpty(syncTermList)}" class="datatable-paging">
+		                 <td colspan="5" class="datatable-paging-info">
+		                     <span class="datatable-paging-count">第<span th:text="${termSearchCondition.currentPage}">1</span>页/共<span th:text="${termSearchCondition.totalPage}">550</span>页</span>
+		                     <span class="datatable-paging-total">总共<span th:text="${termSearchCondition.totalSize}">5500</span>条数据</span>
+		                 </td>
+		                 <td colspan="5" class="datatable-paging-page">
+		                     <span class="datatable-paging-first" th:style="${termSearchCondition.currentPage == 1 ? 'display: none;' : ''}" onclick="firstPage(document.synclistForm);">首页</span>
+		                     <span class="datatable-paging-previous" th:style="${termSearchCondition.currentPage == 1 ? 'display: none;' : ''}" onclick="prevPage(document.synclistForm);">上一页</span>
+		                     <span class="datatable-paging-next" th:style="${termSearchCondition.currentPage == termSearchCondition.totalPage ? 'display: none;' : ''}" onclick="nextPage(document.synclistForm);">下一页</span>
+		                     <span class="datatable-paging-last" th:style="${termSearchCondition.currentPage == termSearchCondition.totalPage ? 'display: none;' : ''}" onclick="lastPage(document.synclistForm);">尾页</span>
+		                     <span class="datatable-paging-jump" th:style="${termSearchCondition.totalPage == 1 ? 'display: none;' : ''}">
+		                         <span>跳转到：</span>
+		                         <input type="text" class="datatable-paging-jump-input" id="jumpToInput" />
+		                         <span class="datatable-paging-jump-go" onclick="jumpToPage(document.synclistForm, document.getElementById('jumpToInput'));"></span>
+		                     </span>
+		                 </td>
+	                </tr>
+                    <tr th:if="${#lists.isEmpty(syncTermList)}" class="datatable-paging">
+	                    <td colspan="10" class="datatable-paging-info">
+	                        <span>没有查询结果，请修改检索条件重新检索。</span>
+	                    </td>
+	                </tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

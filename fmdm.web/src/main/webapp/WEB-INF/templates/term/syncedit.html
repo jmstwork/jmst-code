@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>术语同步设置</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" /> 
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" /> 
+    <div th:fragment="styles">
+	    <link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/layout.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/table.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/monitor-search.css" type="text/css"  rel="stylesheet" />
+    </div>
+    <script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+    <div th:fragment="scripts">
+	    <script type="text/javascript" src="../scripts/paging.js"></script>
+	    <script type="text/javascript" src="../scripts/term/syncedit.js"></script>
+    </div>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+<body>
+	<div th:fragment="content" style="margin: 5px; padding: 2px; border: 1px solid #aacbee; background: #f8f8f8; min-width: 1020px;">
+		<form id="syncTermForm" name="syncTermForm" method="post"  th:object="${syncTermDto}" >
+		<table cellpadding="0" cellspacing="0" border="0" width="100%">
+			<tr>
+				<td class="Table_title"><img src="../images/icon_01.gif" />术语同步设置</td>
+			</tr>
+		</table>
+		<hr />
+		<input type="hidden" id="updateFlg" name="updateFlg" th:value="${updateFlg}"/>
+		<input type="hidden" id="result" name="result" value="false"/>
+		<input type="hidden" id="updateCount" th:field="*{updateCount}"/>
+		<input type="hidden" id="syncId" th:field="*{syncId}"/>
+		<div id="dataTable" style="padding-top: 5px; border: 0px solid #aacbee;" >
+			<table style="width: 100%; margin-top: 1px;" border="1px" cellspacing="0" cellpadding="1" class="Table_01" >
+				<tr >
+					<td class="label"><font color="red" style="position:relative; top:2px;">*</font>&nbsp;数据源选择</td>
+                     <td >
+                          <select id="datasourceId" name="datasourceId" class="selected01" style="width: 180px;"  th:field="*{datasourceId}">
+                    		<option value="">请选择...</option>
+							<option th:each="item : ${datasourceList}" th:text="${item['datasourceName']}" th:value="${item['datasourceId']}"></option>
+					 	</select>
+                     </td>
+				</tr>
+				<tr>
+                      <td class="label"><font color="red" style="position:relative; top:2px;">*</font>&nbsp;术语选择</td>
+                      <td th:if="${#lists.isEmpty(updateFlg)}">
+                            <select id="dictId" name="dictId" class="selected01" style="width: 180px;" th:field="*{dictId}"
+                            	onChange="getDictTable(this.options[this.selectedIndex].id);" >
+                    			<option value="">请选择...</option>
+								<option th:each="item : ${dictList}" th:text="${item['service_id']}+'&nbsp;'+${item['dict_name']}" th:id="${item['table_name']}" th:value="${item['service_id']}"></option>
+					 		</select>
+                      </td>
+                       <td th:unless="${#lists.isEmpty(updateFlg)}">
+                       		
+                            <select disabled ="disabled"  id="dictId" name="dictId" class="selected01" style="width: 180px;" th:field="*{dictId}"
+                            	onChange="getDictTable(this.options[this.selectedIndex].id);" >
+                    			<option value="">请选择...</option>
+								<option th:each="item : ${dictList}" th:text="${item['service_id']}+'&nbsp;'+${item['dict_name']}" th:id="${item['table_name']}" th:value="${item['service_id']}"></option>
+					 		</select>
+                      </td>
+                </tr>
+				<tr>
+                	<td class="label"><font color="red" style="position:relative; top:2px;">*</font>&nbsp;术语表名</td>
+                    <td><input name="dictTableName" id="dictTableName" readOnly="true"  th:value="${syncTermDto.dictTableName}"></input></td>
+                </tr>
+				<tr>
+                      <td class="label"><font color="red" style="position:relative; top:2px;">*</font>&nbsp;间隔时间</td>
+                      <td th:if="${#lists.isEmpty(updateFlg)}">
+                          <input type="text" id="syncInterval" name="syncInterval" th:value="5"/>分钟
+                      </td>
+                       <td th:unless="${#lists.isEmpty(updateFlg)}">
+                          <input type="text" id="syncInterval" name="syncInterval" th:field="*{syncInterval}"/>分钟
+                      </td>
+				</tr>
+				<tr>
+                      <td class="label">是否启用</td>
+                      <td><input type="checkbox" id="dictStatus" name="dictStatus" th:checked="${syncTermDto.dictStatus}"/>&nbsp;是</td>
+                </tr>
+				<tr>
+                      <td class="label"><font color="red" style="position:relative; top:2px;">*</font>&nbsp;源数据源SQL</td>
+                      <td><textarea rows="5" cols="60" id="fromDatasourceSql" name="fromDatasourceSql" th:field="*{fromDatasourceSql}"></textarea> 
+                      	<span style="color:red;" id="fromDataError"></span>
+                      </td>
+                </tr>
+				<tr>
+                      <td class="label"><font color="red" style="position:relative; top:2px;">*</font>&nbsp;目标数据源SQL</td>
+                      <td><textarea rows="5" cols="60"   id="toDatasourceSql" name="toDatasourceSql" th:field="*{toDatasourceSql}" ></textarea>
+                      	<span style="color:red;" id="toDataError"></span>
+                      </td>
+                 </tr>
+			</table>
+		</div>
+		</form>
+		<p style="height:2px;"/>
+		<div align="center" style="width:80%;">
+			<button id="testBtn" type="button" style="height:25px;" class="btn01" >
+				<img src="../images/btn/checkout.png" style="vertical-align: middle;" />&nbsp;校验SQL
+			</button>
+			<button id="saveBtn" type="button" style="height:25px;" class="btn01" >
+				<img src="../images/btn/save.gif" style="vertical-align: middle;" />&nbsp;保存 </button>
+			<button  id = "back" name="back" type="button" style="height:25px;"  class="btn01"  onclick="javascript:location.href='./synclist.html'">
+				<img src="../images/btn/back.gif" style="vertical-align: middle;" />&nbsp;返回
+			</button>
+		</div>
+	</div>
+</body>
+</html>

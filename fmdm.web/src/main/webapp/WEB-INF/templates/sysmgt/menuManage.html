@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>菜单管理</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" /> 
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" /> 
+     <style>
+		fieldset { padding:0; border:0; margin-top:3px; }
+		.ui-dialog .ui-state-error { padding: .3em; }
+		.validateTips { border: 1px solid transparent; }
+		.ui-widget-header { border: 1px solid #aaaaaa; background: #cccccc url(images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x; color: #222222; font-weight: bold; }
+	</style>
+    <div th:fragment="styles">
+	    <link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/layout.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/table.css" type="text/css"  rel="stylesheet" />
+	    <link rel="stylesheet" href="../styles/themes/base/jquery.ui.all.css"/>
+	    <link href="../styles/monitor-search.css" type="text/css"  rel="stylesheet" />
+	    <link rel="stylesheet" href="../scripts/zTree_v3-master/css/demo.css" type="text/css"/>
+	    <link rel="stylesheet" href="../scripts/zTree_v3-master/css/zTreeStyle/zTreeStyle.css" type="text/css"/>
+	    
+	    <link rel="stylesheet" href="../styles/tab/tabbed_pages.css" />
+	    <style>
+	    	.ztree li span.button.add {margin-left:2px; margin-right: -1px; background-position:-144px 0; vertical-align:top; *vertical-align:middle}
+	    	.menutree{width:21%; /*border:1px solid #FF6699;*/ float:left}   
+			.menuInfo{width:78%; /*border:1px solid #FF6699;*/ float:left;font-size:12px;}   
+			.btn{width:50px; height:30px; margin-top:10px; cursor:pointer;}
+	    </style>
+    </div>
+
+    <div th:fragment="scripts">
+    	<script src="../scripts/tabEnter.js"></script>
+    	<script src="../scripts/zTree_v3-master/js/jquery.ztree.all.min.js"></script>
+    	<script src="../scripts/sysmgt/menuManage.js" type="text/javascript"></script>
+		<script type="text/javascript" th:inline="javascript">
+    	/*<![CDATA[*/
+    	    var sysAuthority = /*[[${sysAuthority}]]*/null;
+    	    console.info(sysAuthority);
+    	    $(function(){
+    	    	
+    	    });
+    	/*]]>*/
+    	</script>
+   </div>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+<body>
+	<div th:fragment="content" style="height:450px;margin: 5px; padding: 2px; border: 1px solid #aacbee; background: #f8f8f8; min-width: 1020px;">
+		<table cellpadding="0" cellspacing="0" border="0" width="100%" >
+			<tr>
+				<td class="Table_title"> <img src="../images/icon_01.gif" /> 菜单管理</td>
+			</tr>
+			<tr style="height:5px;">
+                <td ></td>
+            </tr>
+		</table>
+		<div class="menu_wrap" style="width: 100%;">
+			<div class="menutree">
+				<ul id="treeDemo" class="ztree"></ul>
+			</div>  
+			<div class="menuInfo">
+				<form id="menuForm" name="menuForm" method="post" action="../menus/handleNodes.html">
+	            <input type="hidden" name="smbId" id="smbId" />
+	            <input type="hidden" name="parentNode" id="parentNode" />
+	            <input type="hidden" name="updateCount" id="updateCount" />
+	            <div id="searchDiv" class="Graybg">
+	                <table class="Table_s">
+	                    <tr>
+	                        <td class="label" width="70px">菜单名称</td>
+	                   		<td>
+	                   			<input style="height:20px;" type="text" name="smbName" id="smbName"/>
+	                   		</td>
+							<td class="label" width="70px">菜单地址</td>
+	                        <td>
+	                            <input style="height:20px;width: 200px;" type="text" name="smbLink" id="smbLink"/>
+	                        </td>
+	                        <td class="label" width="40px">类型</td>
+	                        <td>
+	                             <select id="type" name="type" class="selected01" style="width: 100px;">
+									<option value="1">父菜单</option>
+									<option value="2">子菜单</option>
+							 	</select>
+	                        </td>
+	                        <td>
+								<button id="saveBtn" type="button" style="height:25px;" class="btn01">
+									<img src="../images/btn/save.gif" style="vertical-align: middle;" />&nbsp;保存
+								</button>
+							</td>
+							<td>
+								<button  id="cleanBtn" name='cleanBtn' type="button" style="width: 85px;height:25px;cursor:pointer;" class="btn01">
+									<img src="../images/btn/clean.gif" style="vertical-align: middle;"/>&nbsp;清空
+								</button>
+							</td>
+	                    </tr>
+	                    <tr style="height:1px;">
+	                        <td colspan="8"></td>
+	                    </tr>
+	                </table>
+	            </div>
+	            
+	            <div style="float:left;padding-left: 20px;">
+          		  <select multiple="multiple" id="select1" style="width:220px;height:360px; float:left; border:1px #A0A0A4 outset; padding:4px;">
+		            <option value="A001">新增</option>
+		            <option value="A002">删除</option>
+		            <option value="A003">编辑</option>
+		            <option value="A004">启用</option>
+		            <option value="A005">停用</option>
+		            <option value="A006">更新</option>
+		            <option value="A007">测试</option>
+		          </select>
+	            </div>
+	            <div style="margin-left:42px;margin-top:50px; float:left">
+          		     <div style="width:100px; float:left"> <span id="add">
+			          <input type="button" class="btn" value="&gt;"/>
+			          </span><br/>
+			          <span id="add_all">
+			          <input type="button" class="btn" value="&gt;&gt;"/>
+			          </span> <br />
+			          <span id="remove">
+			          <input type="button" class="btn" value="&lt;"/>
+			          </span><br />
+			          <span id="remove_all">
+			          <input type="button" class="btn" value="&lt;&lt;"/>
+			          </span> 
+		          </div>
+	            </div>
+	            <div style="float:left">
+	            	<select multiple="multiple" id="select2" style="width:220px;height:360px; float:left; border:1px #A0A0A4 outset; padding:4px;">
+					</select>
+	            </div>
+	          </form>
+			</div>  
+		</div>
+	</div>
+</body>
+</html>

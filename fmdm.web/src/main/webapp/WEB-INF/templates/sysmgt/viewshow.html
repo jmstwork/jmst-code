@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>视图显示</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" /> 
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" /> 
+     <style>
+		fieldset { padding:0; border:0; margin-top:3px; }
+		.ui-dialog .ui-state-error { padding: .3em; }
+		.validateTips { border: 1px solid transparent; }
+		.ui-widget-header { border: 1px solid #aaaaaa; background: #cccccc url(images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x; color: #222222; font-weight: bold; }
+	</style>
+	    <link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/layout.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/table.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/themes/base/jquery.ui.all.css" rel="stylesheet" />
+	    <link href="../styles/monitor-search.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/asyncbox/asyncbox.css" type="text/css"  rel="stylesheet" />
+   		<script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+   		<script type="text/javascript" src="../scripts/paging.js"></script>
+	    <script src="../scripts/ui/jquery.ui.core.js"></script>
+		<script src="../scripts/ui/jquery.ui.widget.js"></script>
+		<script src="../scripts/ui/jquery.ui.mouse.js"></script>
+		<script src="../scripts/ui/jquery.ui.button.js"></script>
+		<script src="../scripts/ui/jquery.ui.draggable.js"></script>
+		<script src="../scripts/ui/jquery.ui.position.js"></script>
+		<script src="../scripts/ui/jquery.ui.resizable.js"></script>
+		<script src="../scripts/ui/jquery.ui.dialog.js"></script>
+		<script src="../scripts/ui/jquery.ui.effect.js"></script>
+		<script type="text/javascript" src="../scripts/AsyncBox.v1.4.5.js"></script>
+		<script type="text/javascript" src="../scripts/sysmgt/viewshow.js"></script>		
+		<script type="text/javascript" src="../scripts/sysmgt/json2.js"></script>		
+		<script>
+
+		</script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+<body>
+	<div style="margin: 1px; padding: 1px; border: 1px solid #aacbee; background: #f8f8f8;">
+	<p class="validateTips" style="color:red;" align="left"></p>
+		<form id="viewShowForm" name="viewShowForm" method="post" action="../user/selectUsers.html" th:object="${viewSearchCondition}">
+			<input type="hidden" id="operation" name="operation" th:value="*{operation}"/>
+			<input type="hidden" id="addFlg" name="addFlg" th:value="*{addFlg}"/>
+			<input type="hidden" id="deleteFlg" name="deleteFlg" th:value="*{deleteFlg}"/>
+			<input type="hidden" id="approveFlg" name="approveFlg" th:value="*{approveFlg}"/>
+			<input type="hidden" id="releaseFlg" name="releaseFlg" th:value="*{releaseFlg}"/>
+			<input type="hidden" id="viewType00" name="viewType" th:value="*{viewType}"/>
+			<input type="hidden" id="viewId_" name="viewId" th:value="*{viewId}"/>
+            <div id="searchDiv" class="Graybg">
+            	<table cellpadding="0" cellspacing="0" border="0" width="100%"  align="center">
+					<tr>
+						<td class="Table_title" th:if="${viewSearchCondition.operation=='add'}"><img src="../images/icon_01.gif" />&nbsp;新增视图</td>
+						<td class="Table_title" th:if="${viewSearchCondition.operation=='edit'}"><img src="../images/icon_01.gif" />&nbsp;编辑视图</td>
+						<td class="Table_title" th:if="${viewSearchCondition.operation=='show'}"><img src="../images/icon_01.gif" />&nbsp;查看视图</td>
+					</tr>
+				</table>
+                <table style="width: 100%; margin-top: 1px;" border="0px" cellspacing="0" cellpadding="1" class="Table_s">
+                    <tr>
+                    	<td class="label" style="width:200px;"><font color="red" style="position:relative; top:1px;">*</font>视图名称</td>
+                        <td align="left" style="width:200px;">
+                           <input type="text" th:disabled="${viewSearchCondition.operation=='show'}" style="width: 196px;" name="viewName01" id="viewName01" th:field="*{viewName}"/>
+                        </td>
+                        <td id="viewNameDesc"></td>
+					</tr>
+					<tr>
+                        <td class="label"><font color="red" style="position:relative; top:1px;">*</font>视图类型</td>
+                        <td align="left" style="width:200px;">
+                            <select id="viewType01" th:disabled="${viewSearchCondition.operation=='show' or viewSearchCondition.operation=='edit'}" name="viewType01" class="selected01" style="width: 200px;" th:field="*{viewType}">
+		                    		<option value="">请选择...</option>
+									<option th:each="item : ${viewTypeList}" th:text="${item.viewTypeName}" th:value="${item.viewTypeCode}"></option>
+							 </select>						
+						</td>
+						<td id="viewTypeDesc"></td>
+					</tr>
+					<tr>
+                        <td class="label"><font color="red" style="position:relative; top:1px;">*</font>术语名称</td>
+                        <td align="left" style="width:200px;">
+                            <select id="dictId01" th:disabled="${viewSearchCondition.operation!='add'}" name="dictId01" class="selected01" style="width: 200px;" th:field="*{dictId}">
+		                    		<option value="">请选择...</option>
+									<option th:each="item : ${dictMainList}" th:text="${item['DICT_NAME']}" th:value="${item['DICT_ID']}"></option>
+							 </select>						
+						</td>
+						<td id="dictIdDesc"></td>
+					</tr>					
+					<tr id="viewOperation" style="display:''">
+                        <td class="label">术语操作</td>
+                        <td align="left" style="width:200px;">
+                        	<span>
+							<input th:disabled="${viewSearchCondition.operation=='show'}" type="checkbox" th:onclick="'javascript:return '+${viewSearchCondition.operation!='show'}" name="termOperation_addFlg" id="termOperation_addFlg" th:value="*{addFlg}"/>&nbsp;新增&nbsp;&nbsp;
+							<input th:disabled="${viewSearchCondition.operation=='show'}" type="checkbox" th:onclick="'javascript:return '+${viewSearchCondition.operation!='show'}" name="termOperation_deleteFlg" id="termOperation_deleteFlg" th:value="*{deleteFlg}" />&nbsp;删除&nbsp;&nbsp;
+							<input th:disabled="${viewSearchCondition.operation=='show'}" type="checkbox" th:onclick="'javascript:return '+${viewSearchCondition.operation!='show'}" name="termOperation_approveFlg" id="termOperation_approveFlg" th:value="*{approveFlg}"/>&nbsp;审批&nbsp;&nbsp;
+							<input th:disabled="${viewSearchCondition.operation=='show'}" type="checkbox" th:onclick="'javascript:return '+${viewSearchCondition.operation!='show'}" name="termOperation_releaseFlg" id="termOperation_releaseFlg" th:value="*{releaseFlg}"/>&nbsp;发布&nbsp;&nbsp;
+							</span>
+                        </td>
+					</tr>
+					<tr>
+						<td class="label" >字段列表项</td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td colspan="3">
+	                        <div id="fieldDataTable"  style="padding-top: 0px;overflow-y:auto;overflow-x:auto; border: 0px solid #aacbee;height:190px;" scroll="auto">
+                            <table th:if="${viewSearchCondition.viewType=='0'}" style="width:95%; margin-top:0px;margin-left:10px;" border="1px" cellspacing="0" cellpadding="1" class="Table_01">
+									<thead>
+										<tr>
+											<th style="width:40px;">序号</th>
+											<th style="width:60px;">列名</th>
+											<th style="width:100px;">列名描述</th>
+											<th style="width:80px;">列表项</th>
+											<th style="width:80px;">检索项</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="data,rowStat:${fieldsList}">
+											<td th:text="${rowStat.count}" th:id="${data.viewFieldId}" align="center">1</td>
+											<td align="left" th:text="${data.fieldName}"></td>
+											<td align="left" th:text="${data.fieldDesc}"></td>
+											<td align="center" th:id="${data.fieldId}">
+												<span th:if="${data.itemFlg=='1'}">
+													<input th:disabled="${viewSearchCondition.operation=='show'}" type="checkbox"  th:onclick="'javascript:return '+${viewSearchCondition.operation!='show'}" checked="" th:value="${data.itemFlg}" id="'childrenItemFlg'+${rowStat.count}" name="childrenItemFlg" />
+												</span>
+												<span th:unless="${data.itemFlg=='1'}">
+													<input th:disabled="${viewSearchCondition.operation=='show'}" type="checkbox" th:onclick="'javascript:return '+${viewSearchCondition.operation!='show'}" value="${data.itemFlg}" id="'childrenItemFlg'+${rowStat.count}" name="childrenItemFlg" />
+												</span>	
+												<span id="itemOrderNumDec" th:onclick="'javascript:numDec(\'#itemOrder' + ${rowStat.count} + '\');'">-</span> 
+													<input th:disabled="${viewSearchCondition.operation=='show'}" style="width:20px;height:15px;padding-bottom: 2px;margin:2px"  th:onkeyup="'javascript:check(\'#itemOrder' + ${rowStat.count} + '\');'" th:value="${data.itemOrder}" type="text" th:id="'itemOrder'+${rowStat.count}" /> 
+												<span id="itemOrderNumAdd" th:onclick="'javascript:numAdd(\'#itemOrder' + ${rowStat.count} + '\');'">+</span>
+											</td>
+											<td align="center">
+												<span th:if="${data.retrievalFlg=='1'}">
+													<input th:disabled="${viewSearchCondition.operation=='show'}" type="checkbox" th:onclick="'javascript:return '+${viewSearchCondition.operation!='show'}" checked="" th:value="${data.retrievalFlg}" th:id="'childrenRetrievalFlg'+${rowStat.count}" name="childrenRetrievalFlg" />
+												</span>
+												<span th:unless="${data.retrievalFlg=='1'}">
+													<input th:disabled="${viewSearchCondition.operation=='show'}" type="checkbox" th:onclick="'javascript:return '+${viewSearchCondition.operation!='show'}" th:value="${data.retrievalFlg}" th:id="'childrenRetrievalFlg'+${rowStat.count}" name="childrenRetrievalFlg" />
+												</span>												
+												<span id="fieldOrderNumDec" th:onclick="'javascript:numDec(\'#fieldOrder' + ${rowStat.count} + '\');'">-</span> 
+													<input th:disabled="${viewSearchCondition.operation=='show'}" style="width:20px;height:15px;padding-bottom: 2px;" th:onclick="'javascript:return '+${viewSearchCondition.operation!='show'}" th:onkeyup="'javascript:check(\'#fieldOrder' + ${rowStat.count} + '\');'" th:value="${data.fieldOrder}" type="text" th:id="'fieldOrder'+${rowStat.count}" /> 
+												<span id="fieldOrderNumAdd"  th:onclick="'javascript:numAdd(\'#fieldOrder' + ${rowStat.count} + '\');'">+</span>												
+											</td>
+										</tr>
+									</tbody>
+	                            </table>	
+                 				<table th:if="${viewSearchCondition.viewType=='1'}" style="width: 95%; margin-top:0px;margin-left:10px;" border="1px" cellspacing="0" cellpadding="1" class="Table_01">
+									<thead>
+										<tr>
+											<th style="width:40px;">序号</th>
+											<th style="width:60px;">列名</th>
+											<th style="width:100px;">列名描述</th>
+											<!-- <th style="width:80px;">编辑</th>
+											<th style="width:80px;">列表项</th> -->
+					                        <th style="width:80px;">状态</th>
+					                        <th style="width:80px;">列表顺序</th>
+					                        <th style="width:80px;">检索顺序</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="data,rowStat:${fieldsList}">
+											<td th:text="${rowStat.count}" th:id="${data.viewFieldId}" align="center">1</td>
+											<td align="left" th:text="${data.fieldName}"></td>
+											<td align="left" th:text="${data.fieldDesc}"></td>
+											<td align="center" style="width:100px;">
+                                               <select th:if="${viewSearchCondition.operation=='edit'}" id="viewType01" class="selected01" style="width: 80px;">
+                                               		<option th:selected="${data.editFlg=='1' and data.retrievalFlg=='1' and data.itemFlg=='1'?'true':'false'}" value="0">编辑</option>
+			                                    	<option th:selected="${data.editFlg=='0' and data.retrievalFlg=='1' and data.itemFlg=='1'?'true':'false'}" value="1">检索</option>
+			                                    	<option th:selected="${data.editFlg=='0' and data.retrievalFlg=='0' and data.itemFlg=='1'?'selected':'false'}" value="2">显示</option>
+			                                    	<option th:selected="${data.editFlg=='0' and data.retrievalFlg=='0' and data.itemFlg=='0'?'selected':'false'}" value="3">隐藏</option>
+					                           </select>	
+                                               <select th:if="${viewSearchCondition.operation=='show'}" th:disabled="${viewSearchCondition.operation=='show'}" id="viewType01" class="selected01" style="width: 80px;">
+                                               		<option th:if="${data.editFlg=='1' and data.retrievalFlg=='1' and data.itemFlg=='1'}" value="0">编辑</option>
+			                                    	<option th:if="${data.editFlg=='0' and data.retrievalFlg=='1' and data.itemFlg=='1'}" value="1">检索</option>
+			                                    	<option th:if="${data.editFlg=='0' and data.retrievalFlg=='0' and data.itemFlg=='1'}" value="2">显示</option>
+			                                    	<option th:if="${data.editFlg=='0' and data.retrievalFlg=='0' and data.itemFlg=='0'}" value="3">隐藏</option>
+					                           </select>	
+					                        </td>
+					                        <!-- <td align="center">
+												<span th:if="${data.retrievalFlg=='1'}">
+													<input type="checkbox" th:onclick="'javascript:return '+${viewSearchCondition.operation!='show'}" checked="" th:value="${data.retrievalFlg}" th:id="'childrenRetrievalFlg'+${rowStat.count}" name="childrenRetrievalFlg" />
+												</span>
+												<span th:unless="${data.retrievalFlg=='1'}">
+													<input type="checkbox" th:onclick="'javascript:return '+${viewSearchCondition.operation!='show'}" th:value="${data.retrievalFlg}" th:id="'childrenRetrievalFlg'+${rowStat.count}" name="childrenRetrievalFlg" />
+												</span>												
+											</td> -->
+					                        <td th:id="${data.fieldId}" align="center">
+					                         	<span id="itemOrderNumDec" th:onclick="'javascript:numDec(\'#itemOrder' + ${rowStat.count} + '\');'">-</span> 
+					                        		<input th:disabled="${viewSearchCondition.operation=='show'}" style="width:20px;height:15px;padding-bottom: 2px;margin:2px"  th:onkeyup="'javascript:check(\'#itemOrder' + ${rowStat.count} + '\');'" th:value="${data.itemOrder}" type="text" th:id="'itemOrder'+${rowStat.count}" /> 
+					                        	<span id="itemOrderNumAdd" th:onclick="'javascript:numAdd(\'#itemOrder' + ${rowStat.count} + '\');'">+</span>					
+					                        </td>
+					                        <td th:id="${data.fieldId}" align="center">
+					                         	<span id="itemOrderNumDec" th:onclick="'javascript:numDec(\'#fieldOrder' + ${rowStat.count} + '\');'">-</span> 
+					                        		<input th:disabled="${viewSearchCondition.operation=='show'}" style="width:20px;height:15px;padding-bottom: 2px;margin:2px"  th:onkeyup="'javascript:check(\'#fieldOrder' + ${rowStat.count} + '\');'" th:value="${data.fieldOrder}" type="text" th:id="'fieldOrder'+${rowStat.count}" /> 
+					                        	<span id="itemOrderNumAdd" th:onclick="'javascript:numAdd(\'#fieldOrder' + ${rowStat.count} + '\');'">+</span>					
+					                        </td>
+											<!-- <td align="center">
+												<span th:if="${data.editFlg=='1'}">
+													<input type="checkbox" th:onclick="'javascript:return '+${viewSearchCondition.operation!='show'}" checked="" th:value="${data.editFlg}" th:id="'childrenEditFlg'+${rowStat.count}" name="childrenEditFlg" />
+												</span>
+												<span th:unless="${data.editFlg=='1'}">
+													<input type="checkbox" th:onclick="'javascript:return '+${viewSearchCondition.operation!='show'}" th:value="${data.editFlg}" th:id="'childrenEditFlg'+${rowStat.count}" name="childrenEditFlg" />
+												</span>												
+											</td>											
+											<td th:id="${data.fieldId}">
+												<span th:if="${data.itemFlg=='1'}">
+													<input type="checkbox"  th:onclick="'javascript:return '+${viewSearchCondition.operation!='show'}" checked="" th:value="${data.itemFlg}" id="'childrenItemFlg'+${rowStat.count}" name="childrenItemFlg" />
+												</span>
+												<span th:unless="${data.itemFlg=='1'}">
+													<input type="checkbox" th:onclick="'javascript:return '+${viewSearchCondition.operation!='show'}" value="${data.itemFlg}" id="'childrenItemFlg'+${rowStat.count}" name="childrenItemFlg" />
+												</span>	
+												<span id="itemOrderNumDec" th:onclick="'javascript:numDec(\'#itemOrder' + ${rowStat.count} + '\');'">-</span> 
+												<input style="width:20px;height:15px;padding-bottom: 2px;margin:2px" th:onkeyup="'javascript:check(\'#itemOrder' + ${rowStat.count} + '\');'"  th:value="${data.itemOrder}" type="text" th:id="'itemOrder'+${rowStat.count}" /> 
+												<span id="itemOrderNumAdd" th:onclick="'javascript:numAdd(\'#itemOrder' + ${rowStat.count} + '\');'">+</span>
+											</td> -->
+										</tr>
+									</tbody>
+	                            </table>
+ 								<table th:if="${viewSearchCondition.viewType=='2'}" style="width:95%; margin-top:0px;margin-left:10px;" border="1px" cellspacing="0" cellpadding="1" class="Table_01">
+											<thead>
+												<tr>
+													<th style="width:40px;">序号</th>
+													<th style="width:60px;">列名</th>
+													<th style="width:100px;">列名描述</th>
+													<th style="width:80px;">列表项</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr th:each="data,rowStat:${fieldsList}">
+													<td th:text="${rowStat.count}" th:id="${data.viewFieldId}" align="center">1</td>
+													<td align="left" th:text="${data.fieldName}"></td>
+													<td align="left" th:text="${data.fieldDesc}"></td>
+													<td  th:id="${data.fieldId}">
+														<span th:if="${data.itemFlg=='1'}">
+															<input type="checkbox"  th:onclick="'javascript:return '+${viewSearchCondition.operation!='show'}" checked="" th:value="${data.itemFlg}" id="'childrenItemFlg'+${rowStat.count}" name="childrenItemFlg" />
+														</span>
+														<span th:unless="${data.itemFlg=='1'}">
+															<input type="checkbox" th:onclick="'javascript:return '+${viewSearchCondition.operation!='show'}" value="${data.itemFlg}" id="'childrenItemFlg'+${rowStat.count}" name="childrenItemFlg" />
+														</span>	
+														<span id="itemOrderNumDec" th:onclick="'javascript:numDec(\'#itemOrder' + ${rowStat.count} + '\');'">-</span> 
+														<input style="width:20px;height:15px;padding-bottom: 2px;margin:2px" th:onkeyup="'javascript:check(\'#itemOrder' + ${rowStat.count} + '\');'" th:value="${data.itemOrder}" type="text" th:id="'itemOrder'+${rowStat.count}" /> 
+														<span id="itemOrderNumAdd" th:onclick="'javascript:numAdd(\'#itemOrder' + ${rowStat.count} + '\');'">+</span>
+													</td>
+												</tr>
+											</tbody>
+			                            </table>
+		                           								
+	                        </div>						
+						</td>
+                    </tr>
+                </table>				
+            </div>
+		</form>
+	</div>
+</body>
+</html>

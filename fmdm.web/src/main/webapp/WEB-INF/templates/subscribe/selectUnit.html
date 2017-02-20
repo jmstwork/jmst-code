@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>科室列表</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" /> 
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" /> 
+     <style>
+		fieldset { padding:0; border:0; margin-top:3px; }
+		.ui-dialog .ui-state-error { padding: .3em; }
+		.validateTips { border: 1px solid transparent; }
+		.ui-widget-header { border: 1px solid #aaaaaa; background: #cccccc url(images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x; color: #222222; font-weight: bold; }
+	</style>
+	     <div th:fragment="styles">
+	    <link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/layout.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/table.css" type="text/css"  rel="stylesheet" />
+	    <link rel="stylesheet" href="../styles/themes/base/jquery.ui.all.css"/>
+	    <link href="../styles/monitor-search.css" type="text/css"  rel="stylesheet" />
+    </div>
+   	<script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+    <script type="text/javascript" src="../scripts/paging.js"></script>
+    <div th:fragment="scripts">
+	    <script src="../scripts/ui/jquery.ui.core.js"></script>
+		<script src="../scripts/ui/jquery.ui.widget.js"></script>
+		<script src="../scripts/ui/jquery.ui.mouse.js"></script>
+		<script src="../scripts/ui/jquery.ui.button.js"></script>
+		<script src="../scripts/ui/jquery.ui.draggable.js"></script>
+		<script src="../scripts/ui/jquery.ui.position.js"></script>
+		<script src="../scripts/ui/jquery.ui.resizable.js"></script>
+		<script src="../scripts/ui/jquery.ui.dialog.js"></script>
+		<script src="../scripts/ui/jquery.ui.effect.js"></script>
+		<script type="text/javascript" src="../scripts/subscribe/selectUnit.js"></script>
+   
+   </div>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+<body>
+	<div style="margin: 1px; padding: 2px; border: 1px solid #aacbee; background: #f8f8f8;">
+		<form id="DataForm2" name="DataForm2" method="post" action="../subscribe/selectUnit.html" th:object="${subscribeSearchCondition}" >
+			<input type="submit" id="submitBtn" style="display:none;" />
+			<input type="hidden" id="hospitalCode" th:field="*{hospitalCode}" />
+			<table cellpadding="0" cellspacing="0" border="0" width="100%">
+				<tr>
+					<td class="Table_title"><img src="../images/icon_01.gif" />&nbsp;科室列表
+					</td>
+				</tr>
+			</table>
+            <div id="searchDiv" class="Graybg">
+                <table class="Table_s">
+                    <tr>
+                        <td class="label" width="70px">科室ID</td>
+                   		<td>
+                   			<input style="height:20px;" type="text" name="unitId" id="unitId" th:field="*{unitId}"/>
+                   		</td>
+                   		<td style="width: 15px;"></td>
+						<td class="label" width="70px">科室名称</td>
+                        <td>
+                            <input style="height:20px;" type="text" name="unitName" id="unitName" th:field="*{unitName}"/>
+                        </td>
+                        <td style="width: 15px;"></td>
+                        <td>
+							<button  id="seachBtn" name='seachBtn' type="button" style="width: 85px;height:25px;cursor:pointer;" class="btn01">
+								<img src="../images/btn/search.gif" style="vertical-align: middle;"/>&nbsp;搜索
+							</button>
+						</td>
+						<td>
+							<button  id="cleanBtn" name='cleanBtn' type="button" style="width: 85px;height:25px;cursor:pointer;" class="btn01">
+								<img src="../images/btn/clean.gif" style="vertical-align: middle;"/>&nbsp;清空
+							</button>
+						</td>
+                    </tr>
+                   
+                </table>
+                <p style="height:5px;"></p>
+            </div>
+            <input type="hidden" name="currentPage" value="1" th:field="*{currentPage}"/>
+            <input type="hidden" name="totalPage"   value="5" th:field="*{totalPage}"/>
+            <input type="hidden" name="jumpToPage" id="jumpToPage"  value="" />
+            <input type="hidden" name="backMsg" id="backMsg" th:value="${backMsg}" />
+		</form>
+		<hr />
+		<div id="dataTable" style="padding-top: 3px; border: 0px solid #aacbee;">
+			<table style="width: 100%; margin-top: 1px;" border="1px" cellspacing="0" cellpadding="1" class="Table_01">
+				<thead>
+					<tr>
+						<th style="width:10%;"><input align="center" type="checkbox" id="parentBox" name="parentBox" onclick="javascript:checkParent();"/></th>
+						<th style="width:10%;" align="center" >序号</th>
+						<th style="width:20%;">科室ID</th>
+						<th style="width:30%;">科室名称</th>
+						<th style="width:30%;">拼音码</th>
+					</tr>
+				</thead>
+				<tbody class="tbody">
+					<tr style="cursor: pointer;" th:each="item : ${unitGroupDetailList}" >
+						<td align="center"><input type="checkbox" id="childrenBox" name="childrenBox" onclick="javascript:checkChildren();" th:id="${item.unitId}"/></td>
+						<td align="center" th:text="${#ids.seq('')}">1</td>
+						<td th:text="${item.unitId}"></td>
+						<td th:text="${item.unitName}"></td>
+						<td th:text="${item.pyCode}"></td>
+					</tr>
+				</tbody>
+				<tfoot>
+				<tr th:unless="${#lists.isEmpty(unitGroupDetailList)}" class="datatable-paging">
+	                 <td colspan="3" class="datatable-paging-info">
+	                     <span class="datatable-paging-count">第<span th:text="${subscribeSearchCondition.currentPage}">1</span>页/共<span th:text="${subscribeSearchCondition.totalPage}">550</span>页</span>
+	                     <span class="datatable-paging-total">总共<span th:text="${subscribeSearchCondition.totalSize}">5500</span>条数据</span>
+	                 </td>
+	                 <td colspan="3" class="datatable-paging-page">
+	                     <span class="datatable-paging-first" th:style="${subscribeSearchCondition.currentPage == 1 ? 'display: none;' : ''}" onclick="firstPage(document.DataForm2);">首页</span>
+	                     <span class="datatable-paging-previous" th:style="${subscribeSearchCondition.currentPage == 1 ? 'display: none;' : ''}" onclick="prevPage(document.DataForm2);">上一页</span>
+	                     <span class="datatable-paging-next" th:style="${subscribeSearchCondition.currentPage == subscribeSearchCondition.totalPage ? 'display: none;' : ''}" onclick="nextPage(document.DataForm2);">下一页</span>
+	                     <span class="datatable-paging-last" th:style="${subscribeSearchCondition.currentPage == subscribeSearchCondition.totalPage ? 'display: none;' : ''}" onclick="lastPage(document.DataForm2);">尾页</span>
+	                     <span class="datatable-paging-jump" th:style="${subscribeSearchCondition.totalPage == 1 ? 'display: none;' : ''}">
+	                         <span>跳转到：</span>
+	                         <input type="text" class="datatable-paging-jump-input" id="jumpToInput" />
+	                         <span class="datatable-paging-jump-go" onclick="jumpToPage(document.DataForm2, document.getElementById('jumpToInput'));"></span>
+	                     </span>
+	                 </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(unitGroupDetailList)}" class="datatable-paging">
+                    <td colspan="8" class="datatable-paging-info">
+                        <span>没有查询结果，请修改检索条件重新检索。</span>
+                    </td>
+                </tr>
+			</tfoot>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+
+</head>
+<body style="height: 400px;">
+	<div th:fragment="content"
+		style="margin: 5px; padding: 2px; border: 1px solid #aacbee; background: #f8f8f8;">
+		<div align="center" style="padding-top: 15px;">
+			<img th:src="'../images/'+${#wpload.loadProperty('SYSTEM_WELCOME_PICTURE')}"></img>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>科室组列表</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" /> 
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" /> 
+     <style>
+		fieldset { padding:0; border:0; margin-top:3px; }
+		.ui-dialog .ui-state-error { padding: .3em; }
+		.validateTips { border: 1px solid transparent; }
+		.ui-widget-header { border: 1px solid #aaaaaa; background: #cccccc url(images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x; color: #222222; font-weight: bold; }
+	</style>
+    <div th:fragment="styles">
+	    <link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/layout.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/table.css" type="text/css"  rel="stylesheet" />
+	    <link rel="stylesheet" href="../styles/themes/base/jquery.ui.all.css"/>
+	    <link href="../styles/monitor-search.css" type="text/css"  rel="stylesheet" />
+    </div>
+   	<script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+    <script type="text/javascript" src="../scripts/paging.js"></script>
+    <div th:fragment="scripts">
+	    <script src="../scripts/ui/jquery.ui.core.js"></script>
+		<script src="../scripts/ui/jquery.ui.widget.js"></script>
+		<script src="../scripts/ui/jquery.ui.mouse.js"></script>
+		<script src="../scripts/ui/jquery.ui.button.js"></script>
+		<script src="../scripts/ui/jquery.ui.draggable.js"></script>
+		<script src="../scripts/ui/jquery.ui.position.js"></script>
+		<script src="../scripts/ui/jquery.ui.resizable.js"></script>
+		<script src="../scripts/ui/jquery.ui.dialog.js"></script>
+		<script src="../scripts/ui/jquery.ui.effect.js"></script>
+		<script type="text/javascript" src="../scripts/subscribe/unitGrouplist.js"></script>
+   
+   </div>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+<body>
+	<div th:fragment="content" style="height:490px;margin: 5px; padding: 2px; border: 1px solid #aacbee; background: #f8f8f8; min-width: 1020px;">
+		<form id="DataForm" name="DataForm" method="post" action="" th:object="${subscribeSearchCondition}">
+			<table cellpadding="0" cellspacing="0" border="0" width="100%">
+				<tr>
+					<td class="Table_title"><img src="../images/icon_01.gif" /> 科室组列表</td>
+				</tr>
+			</table>
+            <div id="searchDiv" class="Graybg">
+                <table class="Table_s">
+                    <tr>
+                        <td class="label">科室组ID</td>
+                        <td><input type="text" name="unitGroupId" id="unitGroupId" th:field='*{unitGroupId}' /></td>
+                          <td class="label">科室组名称</td>
+                        <td><input type="text" name="unitGroupName" id="unitGroupName" th:field='*{unitGroupName}' /></td>
+						<td class="label">医疗机构
+                    		<select name="hospitalCode" id="hospitalCode"  style="width:160px;height:22px;" th:field="*{hospitalCode}">
+								<option value="">请选择</option>
+                                <option th:each="item : ${hospitalList}" th:value="${item['cd_div']}" th:text="${item['cd_value']}"></option>
+                            </select>
+                         </td>
+                         <td style="width: 55px;"></td>
+                        <td>
+							<button  id="seachBtn" name='seachBtn' type="button" style="width: 85px;height:25px;" class="btn01">
+								<img src="../images/btn/search.gif" style="vertical-align: middle;"/>&nbsp;搜索
+							</button>
+						</td>
+						<td>
+							<button  id="cleanBtn" name='cleanBtn' type="button" style="width: 85px;height:25px;cursor:pointer;" class="btn01">
+								<img src="../images/btn/clean.gif" style="vertical-align: middle;"/>&nbsp;清空
+							</button>
+						</td>
+                    </tr>
+                    <tr style="height:1px;">
+                        <td></td>
+                        <td></td>
+						<td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+            <input type="hidden" name="currentPage" value="1" th:field="*{currentPage}"/>
+            <input type="hidden" name="totalPage"   value="5" th:field="*{totalPage}"/>
+            <input type="hidden" name="jumpToPage" id="jumpToPage"  value="" />
+            <input type="hidden" name="backMsg" id="backMsg" th:value="${backMsg}" />
+		</form>
+		<hr />
+		<div id="dataTable" style="padding-top: 5px; border: 0px solid #aacbee;">
+			<div align="left">
+				 <table>
+					<tbody>
+						<tr>
+							<td align="left">
+								<button  id="addBtn" type="button" style="overflow:visible;width:auto;height:25px;"  class="btn01" >
+								<img src="../images/btn/add.gif"
+									style="vertical-align: middle;" />新增
+								</button>
+							</td>
+						</tr>
+					</tbody>
+				 </table>
+			</div>
+			<p style="height:5px;"></p>
+			<table style="width: 100%; margin-top: 1px;" border="1px" cellspacing="0" cellpadding="1" class="Table_01">
+				<thead>
+					<tr>
+						<th style="width:50px;" align="center">序号</th>
+						<th style="width:100px;">科室组ID</th>
+						<th style="width:150px;">科室组名称</th>
+						<th style="width:150px;">科室组类别</th>
+						<th style="width:150px;">医疗机构</th>
+						<!-- <th style="width:150px;">包含科室</th> -->
+						<th style="width:150px;">科室组描述</th>
+						<th style="">操作</th>
+					</tr>
+				</thead>
+				<tbody class="tbody">
+					<tr style="cursor: pointer;" th:each="item : ${unitGroupList}" >
+							<td align="center" th:text="${#ids.seq('')}">1</td>
+							<td th:text="${item.unitGroupId}"></td>
+							<td th:text="${item.unitGroupName}"></td>
+							<td th:text="${item.unitGroupType}"></td>
+							<td th:text="${item.hospitalName}"></td>
+							<!-- <td align="center">
+								<a href="#" th:onclick="'javascript:unitGroupDetail(\''+${item.unitGroupId}+'\',\''+${item.hospitalCode}+'\');'" style="color:blue;text-decoration:underline; " >详细</a>
+							</td> -->
+							<td th:title="${item.unitGroupDesc}"><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:300px;"><nobr><label th:text="${item.unitGroupDesc}"></label></nobr></div></td>
+							<td align="center">
+								<a th:onclick="'javascript:editUG(\'' + ${item.unitGroupId} + '\');'" style="color:blue;text-decoration:underline; " class="Linkblue" target="_self">编辑</a>
+								&nbsp;&nbsp;&nbsp;<a th:onclick="'javascript:deleteUG(\'' + ${item.unitGroupId} +'\',this);'" style="color:blue;text-decoration:underline; " class="Linkblue" target="_self">删除</a>
+								&nbsp;&nbsp;&nbsp;<a th:onclick="'javascript:unitSet(\'' + ${item.unitGroupId} +'\');'" style="color:blue;text-decoration:underline; " class="Linkblue" target="_self">科室设定</a>
+							</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr th:unless="${#lists.isEmpty(unitGroupList)}" class="datatable-paging">
+		                 <td colspan="6" class="datatable-paging-info">
+		                     <span class="datatable-paging-count">第<span th:text="${subscribeSearchCondition.currentPage}">1</span>页/共<span th:text="${subscribeSearchCondition.totalPage}">550</span>页</span>
+		                     <span class="datatable-paging-total">总共<span th:text="${subscribeSearchCondition.totalSize}">5500</span>条数据</span>
+		                 </td>
+		                 <td colspan="6" class="datatable-paging-page">
+		                     <span class="datatable-paging-first" th:style="${subscribeSearchCondition.currentPage == 1 ? 'display: none;' : ''}" onclick="firstPage(document.DataForm);">首页</span>
+		                     <span class="datatable-paging-previous" th:style="${subscribeSearchCondition.currentPage == 1 ? 'display: none;' : ''}" onclick="prevPage(document.DataForm);">上一页</span>
+		                     <span class="datatable-paging-next" th:style="${subscribeSearchCondition.currentPage == subscribeSearchCondition.totalPage ? 'display: none;' : ''}" onclick="nextPage(document.DataForm);">下一页</span>
+		                     <span class="datatable-paging-last" th:style="${subscribeSearchCondition.currentPage == subscribeSearchCondition.totalPage ? 'display: none;' : ''}" onclick="lastPage(document.DataForm);">尾页</span>
+		                     <span class="datatable-paging-jump" th:style="${subscribeSearchCondition.totalPage == 1 ? 'display: none;' : ''}">
+		                         <span>跳转到：</span>
+		                         <input type="text" class="datatable-paging-jump-input" id="jumpToInput" />
+		                         <span class="datatable-paging-jump-go" onclick="jumpToPage(document.DataForm, document.getElementById('jumpToInput'));"></span>
+		                     </span>
+		                 </td>
+	                </tr>
+                    <tr th:if="${#lists.isEmpty(unitGroupList)}" class="datatable-paging">
+	                    <td colspan="8" class="datatable-paging-info">
+	                        <span>没有查询结果，请修改检索条件重新检索。</span>
+	                    </td>
+	                </tr>
+				</tfoot>
+			</table>
+			<div id="dialog-form"  title="科室组详细信息" style="margin: 5px; padding: 1px;  solid :#aacbee; background: #f8f8f8;overflow:hidden" >
+			<iframe id="dataIframe" width="820px" height="420px;" frameborder="0" scrolling="no" src=""></iframe>
+		</div>
+		</div>
+	</div>
+</body>
+</html>

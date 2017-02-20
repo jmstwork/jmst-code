@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>	
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<script>
+
+	</script>
+</head>
+<body>
+	<table th:if="${viewType=='0'}" style="width: 95%; margin-top: 0px;margin-left:10px;" border="1px" cellspacing="0" cellpadding="1" class="Table_01">
+			<thead>
+				<tr>
+					<th style="width:40px;">序号</th>
+					<th style="width:60px;">列名</th>
+					<th style="width:100px;">列名描述</th>
+					<th style="width:80px;">列表项</th>
+					<th style="width:80px;">检索项</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="data,rowStat:${fieldsList}">
+					<td th:text="${rowStat.count}" th:id="${data.viewFieldId}" align="center">1</td>
+					<td align="left" th:text="${data.fieldName}"></td>
+					<td align="left" th:text="${data.fieldDesc}"></td>
+					<td align="center" th:id="${data.fieldId}">
+						<span th:if="${data.itemFlg=='1'}">
+							<input type="checkbox"  checked="" th:value="${data.itemFlg}" id="'childrenItemFlg'+${rowStat.count}" name="childrenItemFlg" />
+						</span>
+						<span th:unless="${data.itemFlg=='1'}">
+							<input type="checkbox" value="${data.itemFlg}" id="'childrenItemFlg'+${rowStat.count}" name="childrenItemFlg" />
+						</span>	
+						<span id="itemOrderNumDec" th:onclick="'javascript:numDec(\'#itemOrder' + ${rowStat.count} + '\');'">-</span> 
+						<input style="width:20px;height:15px;padding-bottom: 2px;margin:2px" th:onkeyup="'javascript:check(\'#itemOrder' + ${rowStat.count} + '\');'" th:value="${data.itemOrder}" type="text" th:id="'itemOrder'+${rowStat.count}" /> 
+						<span id="itemOrderNumAdd" th:onclick="'javascript:numAdd(\'#itemOrder' + ${rowStat.count} + '\');'">+</span>
+					</td>
+					<td align="center">
+						<span th:if="${data.retrievalFlg=='1'}">
+							<input type="checkbox" checked="" th:value="${data.retrievalFlg}" th:id="'childrenRetrievalFlg'+${rowStat.count}" name="childrenRetrievalFlg" />
+						</span>
+						<span th:unless="${data.retrievalFlg=='1'}">
+							<input type="checkbox" th:value="${data.retrievalFlg}" th:id="'childrenRetrievalFlg'+${rowStat.count}" name="childrenRetrievalFlg" />
+						</span>												
+						<span id="fieldOrderNumDec" th:onclick="'javascript:numDec(\'#fieldOrder' + ${rowStat.count} + '\');'">-</span> 
+							<input style="width:20px;height:15px;padding-bottom: 2px;" th:onkeyup="'javascript:check(\'#fieldOrder' + ${rowStat.count} + '\');'" th:value="${data.fieldOrder}" type="text" th:id="'fieldOrder'+${rowStat.count}" /> 
+						<span id="fieldOrderNumAdd"  th:onclick="'javascript:numAdd(\'#fieldOrder' + ${rowStat.count} + '\');'">+</span>												
+					</td>
+				</tr>
+			</tbody>
+	    </table>	
+			<table th:if="${viewType=='1'}" style="width: 95%; margin-top:0px;margin-left:10px;" border="1px" cellspacing="0" cellpadding="1" class="Table_01">
+			<thead>
+				<tr>
+					<th style="width:40px;">序号</th>
+					<th style="width:60px;">列名</th>
+					<th style="width:100px;">列名描述</th>
+					<!-- <th style="width:80px;">编辑</th>
+					<th style="width:80px;">列表项</th> -->
+					<th style="width:80px;">状态</th>
+					<th style="width:80px;">列表顺序</th>
+					<th style="width:80px;">检索顺序</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="data,rowStat:${fieldsList}">
+					<td th:text="${rowStat.count}" th:id="${data.viewFieldId}" align="center">1</td>
+					<td align="left" th:text="${data.fieldName}"></td>
+					<td align="left" th:text="${data.fieldDesc}"></td>
+					<td align="center" style="width:100px;">
+                        <select id="viewType01" class="selected01" style="width: 80px;">
+                        		<option value="0">编辑</option>
+                        		<option value="1">检索</option>
+			        	    	<option value="2">显示</option>
+			        	    	<option value="3">隐藏</option>
+					 	</select>	
+					</td>
+					<!-- <td align="center">
+						<span th:if="${data.retrievalFlg=='1'}">
+							<input type="checkbox" checked="" th:value="${data.retrievalFlg}" th:id="'childrenRetrievalFlg'+${rowStat.count}" name="childrenRetrievalFlg" />
+						</span>
+						<span th:unless="${data.retrievalFlg=='1'}">
+							<input type="checkbox" th:value="${data.retrievalFlg}" th:id="'childrenRetrievalFlg'+${rowStat.count}" name="childrenRetrievalFlg" />
+						</span>												
+					</td> -->
+					<td th:id="${data.fieldId}" align="center">
+					 	<span id="itemOrderNumDec" th:onclick="'javascript:numDec(\'#itemOrder' + ${rowStat.count} + '\');'">-</span> 
+							<input style="width:20px;height:15px;padding-bottom: 2px;margin:2px"  th:onkeyup="'javascript:check(\'#itemOrder' + ${rowStat.count} + '\');'" th:value="${data.itemOrder}" type="text" th:id="'itemOrder'+${rowStat.count}" /> 
+						<span id="itemOrderNumAdd" th:onclick="'javascript:numAdd(\'#itemOrder' + ${rowStat.count} + '\');'">+</span>					
+					</td>
+					<td th:id="${data.fieldId}" align="center">
+					 	<span id="itemOrderNumDec" th:onclick="'javascript:numDec(\'#fieldOrder' + ${rowStat.count} + '\');'">-</span> 
+							<input style="width:20px;height:15px;padding-bottom: 2px;margin:2px"  th:onkeyup="'javascript:check(\'#fieldOrder' + ${rowStat.count} + '\');'" th:value="${data.fieldOrder}" type="text" th:id="'fieldOrder'+${rowStat.count}" /> 
+						<span id="itemOrderNumAdd" th:onclick="'javascript:numAdd(\'#fieldOrder' + ${rowStat.count} + '\');'">+</span>					
+					</td>
+					<!-- <td align="center">
+						<span th:if="${data.editFlg=='1'}">
+							<input type="checkbox" checked="" th:value="${data.editFlg}" th:id="'childrenEditFlg'+${rowStat.count}" name="childrenEditFlg" />
+						</span>
+						<span th:unless="${data.editFlg=='1'}">
+							<input type="checkbox" th:value="${data.editFlg}" th:id="'childrenEditFlg'+${rowStat.count}" name="childrenEditFlg" />
+						</span>												
+					</td>			 								
+					<td th:id="${data.fieldId}">
+						<span th:if="${data.itemFlg=='1'}">
+							<input type="checkbox" checked="" th:value="${data.itemFlg}" id="'childrenItemFlg'+${rowStat.count}" name="childrenItemFlg" />
+						</span>
+						<span th:unless="${data.itemFlg=='1'}">
+							<input type="checkbox" value="${data.itemFlg}" id="'childrenItemFlg'+${rowStat.count}" name="childrenItemFlg" />
+						</span>	
+						<span id="itemOrderNumDec" th:onclick="'javascript:numDec(\'#itemOrder' + ${rowStat.count} + '\');'">-</span> 
+							<input style="width:20px;height:15px;padding-bottom: 2px;margin:2px"  th:onkeyup="'javascript:check(\'#itemOrder' + ${rowStat.count} + '\');'" th:value="${data.itemOrder}" type="text" th:id="'itemOrder'+${rowStat.count}" /> 
+						<span id="itemOrderNumAdd" th:onclick="'javascript:numAdd(\'#itemOrder' + ${rowStat.count} + '\');'">+</span>
+					</td> -->
+				</tr>
+			</tbody>
+	    </table>
+			<table th:if="${viewType=='2'}" style="width: 95%; margin-top: 0px;margin-left:10px;" border="1px" cellspacing="0" cellpadding="1" class="Table_01">
+					<thead>
+						<tr>
+							<th style="width:40px;">序号</th>
+							<th style="width:60px;">列名</th>
+							<th style="width:100px;">列名描述</th>
+							<th style="width:80px;">列表项</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="data,rowStat:${fieldsList}">
+							<td th:text="${rowStat.count}" th:id="${data.viewFieldId}" align="center">1</td>
+							<td align="left" th:text="${data.fieldName}"></td>
+							<td align="left" th:text="${data.fieldDesc}"></td>
+							<td  th:id="${data.fieldId}">
+								<span th:if="${data.itemFlg=='1'}">
+									<input type="checkbox" checked="" th:value="${data.itemFlg}" id="'childrenItemFlg'+${rowStat.count}" name="childrenItemFlg" />
+								</span>
+								<span th:unless="${data.itemFlg=='1'}">
+									<input type="checkbox" value="${data.itemFlg}" id="'childrenItemFlg'+${rowStat.count}" name="childrenItemFlg" />
+								</span>	
+								<span id="itemOrderNumDec" th:onclick="'javascript:numDec(\'#itemOrder' + ${rowStat.count} + '\');'">-</span> 
+								<input style="width:20px;height:15px;padding-bottom: 2px;margin:2px"  th:onkeyup="'javascript:check(\'#itemOrder' + ${rowStat.count} + '\');'" th:value="${data.itemOrder}" type="text" th:id="'itemOrder'+${rowStat.count}" /> 
+								<span id="itemOrderNumAdd" th:onclick="'javascript:numAdd(\'#itemOrder' + ${rowStat.count} + '\');'">+</span>
+							</td>
+						</tr>
+					</tbody>
+	            </table>
+</body>
+</html>

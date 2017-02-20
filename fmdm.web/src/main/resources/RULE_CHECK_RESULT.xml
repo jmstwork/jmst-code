@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 规则校验信息结果数据-规则校验信息结果数据-消息定义 -->
+<msg>
+	<!-- 消息类别代码 -->
+	<msgId>MS908</msgId>
+	<!-- 消息名称 -->
+	<msgName>规则校验信息结果数据</msgName>
+	<!-- 消息源系统编码 -->
+	<sourceSysCode>S028</sourceSysCode>
+	<!-- 消息目标系统编码 由平台统一管理 可以为空 -->
+	<targetSysCode>S015</targetSysCode>
+	<!-- 消息创建时间 -->
+	<createTime>20090101121330</createTime>
+</msg>

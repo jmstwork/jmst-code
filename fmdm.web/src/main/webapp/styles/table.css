@@ -1,0 +1,90 @@
+@charset "utf-8";
+.label {text-align: right; font-weight: bold;}
+.datatable-even
+{
+background-color: #fff;
+}
+.datatable-odd
+{
+background-color: #edf5ff;
+}
+.jqplot-dataSelect 
+{
+background-color: #6ECBE2;
+}
+.jqplot-dataMouseOver 
+{
+	background-color: #6ECBE2;
+	color: #464646;
+}
+.datatable-paging
+{
+    background: url("../images/page_bg.gif") repeat-x scroll 0 0 transparent;
+    height: 26px;
+    line-height: 26px;
+    padding: 0;
+    border: 1px solid #A9C3D0;
+    color: #2F2F2F;
+    margin: 0;
+    font-family: "arial";
+    font-size: 12px;
+}
+td.datatable-paging-info {
+padding-left: 10px;
+padding-top: 2px;
+border: 0px;
+}
+.datatable-paging-count {
+padding-right: 20px;
+}
+td.datatable-paging-page {
+text-align: right;
+border: 0px;
+}
+.datatable-paging-first {
+background: url(../images/paging/first.gif) no-repeat 0 0;
+padding-left: 15px;
+margin-right: 10px;
+cursor: pointer;
+}
+.datatable-paging-previous {
+background: url(../images/paging/previous.gif) no-repeat 0 0;
+padding-left: 15px;
+margin-right: 10px;
+cursor: pointer;
+}
+.datatable-paging-next {
+background: url(../images/paging/next.gif) no-repeat top right;
+padding-right: 15px;
+cursor: pointer;
+}
+.datatable-paging-last {
+background: url(../images/paging/last.gif) no-repeat top right;
+margin-left: 10px;
+margin-right: 10px;
+padding-right: 15px;
+cursor: pointer;
+}
+.datatable-paging-jump {
+margin-left: 10px;
+}
+.datatable-paging-jump-input {
+margin: 0 5px 0 5px;
+width: 30px;
+height: 18px;
+}
+.datatable-paging-jump-go {
+display: inline-block;
+width: 21px;
+height: 15px;
+background: url(../images/paging/go.gif) no-repeat top right;
+cursor: pointer;
+margin-left: 2px;
+margin-right: 5px;
+margin-bottom: -4px;
+}
+.selected03 {
+	width: 150px;
+	line-height: 20px;
+	height: 20px;
+}

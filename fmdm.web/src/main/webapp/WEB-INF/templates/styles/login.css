@@ -1,0 +1,94 @@
+.login-bg
+{
+    position: relative; 
+    background: url(../images/login/background.png); 
+    margin: auto; 
+    width: 631px; 
+    height: 358px; 
+}
+.login-building
+{
+    position: absolute; 
+    top: 0px; 
+    right: 1px; 
+    background: url(../images/login/bg-hospital.png) no-repeat; 
+    width: 254px; 
+    height: 308px;
+}
+.login-hospital
+{
+    position: absolute; 
+    top: 74px; 
+    left: 33px; 
+    background: url(../images/login/logo.png); 
+    width: 344px; 
+    height: 68px;
+}
+.login-title
+{
+    position: absolute; 
+    width: 630px;
+    top: 174px; 
+    left: 0px; 
+    height: 68px;
+    color: #fff; 
+    font-size: 28pt; 
+    font-family: 华文新魏;
+    text-align: center;
+}
+.login-form-label
+{
+    position: absolute; 
+    height: 30px; 
+    text-align: right;
+    color: #000; 
+    font-size: 14px; 
+    font-family: 宋体; 
+    font-weight: bold; 
+    line-height: 30px;
+}
+.login-user-label
+{
+    top: 318px; 
+    left: 11px; 
+}
+.login-form-input
+{
+    position: absolute; 
+    width: 107px;
+    height: 23px; 
+    line-height: 23px;
+}
+.login-user-input
+{
+    top: 318px; 
+    left: 67px; 
+}
+.login-pass-label
+{
+    top: 318px; 
+    left: 179px; 
+    width: 55px; 
+}
+.login-pass-input
+{
+    top: 318px; 
+    left: 230px; 
+}
+.login-button
+{
+    width: 81px; 
+    height: 30px;
+}
+.login-submit
+{
+    position: absolute; 
+    top: 318px; 
+    left: 375px; 
+}
+.login-reset
+{
+    position: absolute; 
+    top: 318px; 
+    left: 470px; 
+}

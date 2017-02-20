@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>选择角色</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" /> 
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" /> 
+     <style>
+		fieldset { padding:0; border:0; margin-top:3px; }
+		.ui-dialog .ui-state-error { padding: .3em; }
+		.validateTips { border: 1px solid transparent; }
+		.ui-widget-header { border: 1px solid #aaaaaa; background: #cccccc url(images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x; color: #222222; font-weight: bold; }
+	</style>
+	    <link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/layout.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/table.css" type="text/css"  rel="stylesheet" />
+	    <link rel="stylesheet" href="../styles/themes/base/jquery.ui.all.css"/>
+	    <link href="../styles/monitor-search.css" type="text/css"  rel="stylesheet" />
+   		<script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+    	<script type="text/javascript" src="../scripts/paging.js"></script>
+	    <script src="../scripts/ui/jquery.ui.core.js"></script>
+		<script src="../scripts/ui/jquery.ui.widget.js"></script>
+		<script src="../scripts/ui/jquery.ui.mouse.js"></script>
+		<script src="../scripts/ui/jquery.ui.button.js"></script>
+		<script src="../scripts/ui/jquery.ui.draggable.js"></script>
+		<script src="../scripts/ui/jquery.ui.position.js"></script>
+		<script src="../scripts/ui/jquery.ui.resizable.js"></script>
+		<script src="../scripts/ui/jquery.ui.dialog.js"></script>
+		<script src="../scripts/ui/jquery.ui.effect.js"></script>
+		<script type="text/javascript" src="../scripts/sysmgt/selectRoles.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+<body>
+	<div style="margin: 1px; padding: 2px; border: 1px solid #aacbee; background: #f8f8f8;">
+		<form id="roleForm" name="roleForm" method="post" action="../user/selectRole.html" th:object="${sysUserSearchCondition}">
+			<input type="submit" id="submitBtn" style="display:none;" />
+			<input type="hidden" name="currentPage" value="1" th:field="*{currentPage}"/>
+            <input type="hidden" name="totalPage"   value="5" th:field="*{totalPage}"/>
+            <input type="hidden" name="jumpToPage" id="jumpToPage"  value="" />
+            <input type="hidden" name="backMsg" id="backMsg" th:value="${backMsg}" />
+            <input type="hidden" name="userAccount" id="userAccount" th:value="${userAccount}" />
+            
+			<table cellpadding="0" cellspacing="0" border="0" width="100%">
+				<tr>
+					<td class="Table_title" ><img src="../images/icon_01.gif" /> 可选角色列表</td>
+				</tr>
+			</table>
+            <div id="searchDiv" class="Graybg">
+                <table class="Table_s">
+                    <tr>
+                        <td class="label" width="70px">角色名</td>
+                   		<td>
+                   			<input style="height:20px;" type="text" name="roleName" id="roleName" th:value="${sysUserSearchCondition.roleName}"/>
+                   		</td>
+                        <td style="width: 15px;"></td>
+                        <td>
+							<button  id="seachBtn" name='seachBtn' type="button" style="overflow:visible;width:auto;height:25px;" class="btn01">
+								<img src="../images/btn/search.gif" style="vertical-align: middle;"/>&nbsp;搜索
+							</button>
+						</td>
+						<td>
+							<button  id="cleanBtn" name='cleanBtn' type="button" style="overflow:visible;width:auto;height:25px;" class="btn01">
+								<img src="../images/btn/clean.gif" style="vertical-align: middle;"/>&nbsp;清空
+							</button>
+						</td>
+                    </tr>
+                    <tr style="height:2px;">
+                        <td></td>
+                        <td></td>
+						<td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+			<hr />
+		</form>
+		<div id="dataTable" style="padding-top: 1px; border: 0px solid #aacbee;">
+			<p style="height:5px;"></p>
+			<table style="width: 100%; margin-top: 1px;" border="1px" cellspacing="0" cellpadding="1" class="Table_01">
+				<thead>
+					<tr>
+						<th style="width:50px;" align="center"	><input style="align:center" type="checkbox" id="parentBox" name="parentBox" onclick="javascript:checkParent();"/></th>
+						<th style="width:50px;" align="center" >序号</th>
+						<th style="width:150px;">角色名</th>
+						<th style="width:200px;">备注</th>
+					</tr>
+				</thead>
+				<tbody class="tbody">
+					<tr  style="cursor: pointer;" th:each="item : ${roleList}" >
+						<td align="center" ><input type="checkbox" id="childrenBox" name="childrenBox" onclick="javascript:checkChildren();" th:value="${item.roleId}" /></td>
+						<td align="center" th:text="${#ids.seq('')}">1</td>
+						<td th:text="${item.roleName}"></td>
+						<td th:text="${item.memo}"></td>
+					</tr>
+				</tbody>
+				<tfoot>
+				<tr th:unless="${#lists.isEmpty(roleList)}" class="datatable-paging">
+	                 <td colspan="2" class="datatable-paging-info">
+	                     <span class="datatable-paging-count">第<span th:text="${sysUserSearchCondition.currentPage}">1</span>页/共<span th:text="${sysUserSearchCondition.totalPage}">550</span>页</span>
+	                     <span class="datatable-paging-total">总共<span th:text="${sysUserSearchCondition.totalSize}">5500</span>条数据</span>
+	                 </td>
+	                 <td colspan="2" class="datatable-paging-page">
+	                     <span class="datatable-paging-first" th:style="${sysUserSearchCondition.currentPage == 1 ? 'display: none;' : ''}" onclick="firstPage(document.roleForm);">首页</span>
+	                     <span class="datatable-paging-previous" th:style="${sysUserSearchCondition.currentPage == 1 ? 'display: none;' : ''}" onclick="prevPage(document.roleForm);">上一页</span>
+	                     <span class="datatable-paging-next" th:style="${sysUserSearchCondition.currentPage == sysUserSearchCondition.totalPage ? 'display: none;' : ''}" onclick="nextPage(document.roleForm);">下一页</span>
+	                     <span class="datatable-paging-last" th:style="${sysUserSearchCondition.currentPage == sysUserSearchCondition.totalPage ? 'display: none;' : ''}" onclick="lastPage(document.roleForm);">尾页</span>
+	                     <span class="datatable-paging-jump" th:style="${sysUserSearchCondition.totalPage == 1 ? 'display: none;' : ''}">
+	                         <span>跳转到：</span>
+	                         <input type="text" class="datatable-paging-jump-input" id="jumpToInput" />
+	                         <span class="datatable-paging-jump-go" onclick="jumpToPage(document.roleForm, document.getElementById('jumpToInput'));"></span>
+	                     </span>
+	                 </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(roleList)}" class="datatable-paging">
+                    <td colspan="4" class="datatable-paging-info">
+                        <span>没有查询结果，请修改检索条件重新检索。</span>
+                    </td>
+                </tr>
+			</tfoot>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

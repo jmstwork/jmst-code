@@ -1,0 +1,12 @@
+#authority {font:13px verdana,arial,sans-serif; width:100%; padding:0 0 0 0; line-height:24px;}
+#authority div.off {color:#000; height:24px; margin-right:0px; line-height:33px; padding:0 20px; float:left; background:url(tabs_0.gif) repeat-x left bottom; border:1px solid #ddd; border-bottom-color:red; cursor:pointer; position:relative; z-index:20;}
+#authority div.on {height:24px; line-height:24px; color:#c00; padding:0 20px; margin-right:0px; margin-top:1px; float:left; background:url(tabs_2.gif) repeat-x left bottom; border:1px solid #aacbee; cursor:pointer; border-bottom:0; position:relative; z-index:100;}
+
+
+div.hide {display:none; width:0; overflow:hidden;}
+div.show {clear:left; background:#fff; width:98%; margin-top:0; top:-1px; border:1px solid #aacbee;padding:10px; position:relative; z-index:50; font:11px verdana, arial, sans-serif; line-height:20px;}
+div.show img {float:left; margin:0 10px 10px 0;}
+.clear {clear:both;}
+
+
+

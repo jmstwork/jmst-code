@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>审计服务信息</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" /> 
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" /> 
+    <div th:fragment="styles">
+	    <link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/themes/base/jquery.ui.all.css" rel="stylesheet" />
+	    <link href="../styles/layout.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/table.css" type="text/css"  rel="stylesheet" />
+		<link href="../styles/asyncbox/asyncbox.css" type="text/css"  rel="stylesheet" />
+    </div>
+    <script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+    <div th:fragment="scripts">
+    	<script type="text/javascript" src="../scripts/audit/auditInformation.js"></script> 
+    	<script type="text/javascript" src="../scripts/My97DatePicker/WdatePicker.js"></script> 
+    	<script type="text/javascript" src="../scripts/paging.js"></script>
+   </div>
+</head>
+<body>
+	<div th:fragment="content" style="height:490px;margin: 5px; padding: 2px; border: 1px solid #aacbee; background: #f8f8f8; min-width: 1020px;">
+		<form action="" id="DataForm" name="DataForm" method="post" th:object="${auditSearchCondition}" >
+			<p class="space10"></p>
+			<table cellpadding="0" cellspacing="0" border="0" width="100%">
+				<tr>
+					<td class="Table_title"><img src="../images/icon_01.gif" />&nbsp;&nbsp;查询审计信息</td>
+				</tr>
+			</table>
+			<div class="Graybg">
+				<table class="Table_s">
+					<tr>
+						<td align="right" class="label">院区</td>
+						<td align="left">
+							<select id="hospitalCode" name="hospitalCode" class="selected03" th:field="*{hospitalCode}" style="height: 25px;">
+								<option selected="selected" value="">请选择</option>
+	                        	<option th:each="item : ${hospitalMap}" th:text="${item.value}" th:value="${item.key}"></option>
+						</select></td>
+						<td align="right" style="width:60px;" class="label">审计事件</td>
+						<td align="left">
+							<select id="eventCode" name="eventCode" class="selected03" th:field="*{eventCode}" style="height: 25px;">
+								<option selected="selected" value="">请选择</option>
+								<option style="width:2000px" th:each="auditEventName : ${auditEventName}" th:text="${auditEventName.eventName}" th:value="${auditEventName.eventCode}"></option>
+							</select>
+						</td>
+						<td  align="right" style="width:60px;" class="label">操作日期</td>
+						<td align="left" colspan="4">
+							<table align="left" border="0">
+								<tr align="left">
+									<td align="left" style="padding-top: 0px; padding-left: 0px" >
+									<input type="text" onclick="display()" onchange="dateChange()" th:value="*{optDt1}" id="optDt1" name="optDt1" style="width: 140px; height: 20px;"/></td>
+									<td align="left" style="padding-top: 0px; padding-left: 0px" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										<input type="text" onclick="display()" onchange="dateChange()" th:value="*{optDt2}" id="optDt2" name="optDt2" style="width: 140px; height: 20px;"/>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td  align="right" class="label">审计系统</td>
+						<td  align="left">
+							<select id="sysId" name="sysId" class="selected03" th:field="*{sysId}" style="height: 25px;">
+								<option selected="selected" value="">请选择</option>
+								<option th:each="auditSysName : ${auditSysName}" th:text="${auditSysName.sysName}" th:value="${auditSysName.sysId}"></option>
+							</select>
+						</td>
+						<td align="right" class="label">科室</td>
+						<td align="left">
+							<!-- <div class="selectDeptDict" style="z-index: 200"> -->
+								<input type="text" id="deptName" name="deptName" th:value="*{deptName}" style="width:145px;"/>
+							<!-- </div> -->
+							<input id="deptCode" type="hidden" value="" />
+						</td>
+						<td align="right" class="label"> 用户ID </td>
+						<td align="left"> <input id="userNo" name="userNo" style="width:140px;" th:value="*{userNo}" type="text" size="23" /> </td>
+						<td align="right" class="label">用户名</td>
+						<td align="left"><input id="userName" name="userName" th:value="*{userName}" type="text" size="19" /> </td>
+						<td align="left"> </td>
+						<td align="right"> </td>
+						<td><button type="button" style="width: 85px;height:25px;" class="btn01" onclick="doSearch();">
+							<img src="../images/btn/search.gif" style="vertical-align: middle;"/>&nbsp;搜索
+							</button></td>
+						<td><button type="button" style="width: 85px;height:25px;" class="btn01" onclick="doClear();">
+							<img src="../images/btn/clean.gif" style="vertical-align: middle;"/>&nbsp;清空
+							</button></td>
+					</tr>
+				</table>
+				<p class="space10"></p>
+			</div>
+		<input type="hidden" name="currentPage" value="1" th:field="*{currentPage}"/>
+        <input type="hidden" name="totalPage"   value="5" th:field="*{totalPage}"/>
+        <input type="hidden" name="jumpToPage" id="jumpToPage"  value="" />
+        <input type="hidden" name="backMsg" id="backMsg" th:value="${backMsg}" />
+	</form>
+	<div id="dataTable" style="padding-top: 5px; border: 0px solid #aacbee;height:400px;" scroll="auto">
+		<p style="height:5px;"></p>
+			<table style="width: 100%; margin-top: 1px;" border="1px" cellspacing="0" cellpadding="1" class="Table_01">
+				<thead>
+					<tr>
+						<th style="width:30px;">列号</th>
+						<th style="width:200px;">操作日期</th>
+						<th style="width:150px;">院区名称</th>
+						<th style="width:100px;">审计系统</th>
+						<th style="width:200px;">审计事件</th>
+						<th style="width:50px;">用户ID</th>
+						<th style="width:90px;">用户名</th>
+						<th style="width:90px;">科室</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="item,itemStatus : ${resultSet}">
+						<td th:text="${item.rownum}"></td>
+						<td th:text="${item.optDate}"></td>
+						<td th:text="${item.hospitalName}"></td>
+						<td th:text="${item.sysName}"></td>
+						<td th:text="${item.eventName}"></td>
+						<td th:text="${item.userId}"></td>
+						<td th:text="${item.userName}"></td>
+						<td th:text="${item.deptName}"></td>
+						<td align="center" style="color:#2d56a5;cursor:pointer;"><a  class="Linkblue" th:onclick="'javascript:searchDetail(\'' + ${item.audId} + '\');'">详细</a></td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr th:unless="${#lists.isEmpty(resultSet)}" class="datatable-paging">
+		                 <td colspan="2" class="datatable-paging-info">
+		                     <span class="datatable-paging-count">第<span th:text="${auditSearchCondition.currentPage}">1</span>页/共<span th:text="${auditSearchCondition.totalPage}">550</span>页</span>
+		                     <span class="datatable-paging-total">总共<span th:text="${auditSearchCondition.totalSize}">5500</span>条数据</span>
+		                 </td>
+		                 <td colspan="7" class="datatable-paging-page">
+		                     <span class="datatable-paging-first" th:style="${auditSearchCondition.currentPage == 1 ? 'display: none;' : ''}" onclick="firstPage(document.DataForm);">首页</span>
+		                     <span class="datatable-paging-previous" th:style="${auditSearchCondition.currentPage == 1 ? 'display: none;' : ''}" onclick="prevPage(document.DataForm);">上一页</span>
+		                     <span class="datatable-paging-next" th:style="${auditSearchCondition.currentPage == auditSearchCondition.totalPage ? 'display: none;' : ''}" onclick="nextPage(document.DataForm);">下一页</span>
+		                     <span class="datatable-paging-last" th:style="${auditSearchCondition.currentPage == auditSearchCondition.totalPage ? 'display: none;' : ''}" onclick="lastPage(document.DataForm);">尾页</span>
+		                     <span class="datatable-paging-jump" th:style="${auditSearchCondition.totalPage == 1 ? 'display: none;' : ''}">
+		                         <span>跳转到：</span>
+		                         <input type="text" class="datatable-paging-jump-input" id="jumpToInput" />
+		                         <span class="datatable-paging-jump-go" onclick="jumpToPage(document.DataForm, document.getElementById('jumpToInput'));"></span>
+		                     </span>
+		                 </td>
+	                </tr>
+                    <tr th:if="${#lists.isEmpty(resultSet)}" class="datatable-paging">
+	                    <td colspan="9" class="datatable-paging-info">
+	                        <span>没有查询结果，请修改检索条件重新检索。</span>
+	                    </td>
+	                </tr>
+				</tfoot>
+			</table>
+	</div>
+		<div id="dialog-form" title="详细情况"
+				style="margin: 5px; padding: 1px; solid: #aacbee; background: #f8f8f8;">
+				
+			</div>
+	</div>
+</body>
+</html>

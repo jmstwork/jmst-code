@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>科室组新增列表</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" /> 
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" /> 
+     <style>
+		fieldset { padding:0; border:0; margin-top:3px; }
+		.ui-dialog .ui-state-error { padding: .3em; }
+		.validateTips { border: 1px solid transparent; }
+		.ui-widget-header { border: 1px solid #aaaaaa; background: #cccccc url(images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x; color: #222222; font-weight: bold; }
+	</style>
+    <div th:fragment="styles">
+	    <link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/layout.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/table.css" type="text/css"  rel="stylesheet" />
+	    <link rel="stylesheet" href="../styles/themes/base/jquery.ui.all.css"/>
+	    <link href="../styles/monitor-search.css" type="text/css"  rel="stylesheet" />
+    </div>
+   	<script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+    <script type="text/javascript" src="../scripts/paging.js"></script>
+    <div th:fragment="scripts">
+	    <script src="../scripts/ui/jquery.ui.core.js"></script>
+		<script src="../scripts/ui/jquery.ui.widget.js"></script>
+		<script src="../scripts/ui/jquery.ui.mouse.js"></script>
+		<script src="../scripts/ui/jquery.ui.button.js"></script>
+		<script src="../scripts/ui/jquery.ui.draggable.js"></script>
+		<script src="../scripts/ui/jquery.ui.position.js"></script>
+		<script src="../scripts/ui/jquery.ui.resizable.js"></script>
+		<script src="../scripts/ui/jquery.ui.dialog.js"></script>
+		<script src="../scripts/ui/jquery.ui.effect.js"></script>
+		<script type="text/javascript" src="../scripts/subscribe/unitGroupEdit.js"></script>
+   </div>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+<body>
+	<div th:fragment="content" style=" overflow-y:no;height:95%;margin: 3px; padding: 1px; border: 1px solid #aacbee; background: #f8f8f8;">
+		<p id="unitGroup" class="validateTips" style="color:red;" ></p>
+		<form id="DataForm" name="DataForm" method="post" action="" th:object="${unitGroup}">
+			<table cellpadding="0" cellspacing="0" border="0" width="100%" >
+				<tr>
+					<td class="Table_title" ><img src="../images/icon_01.gif" th:text="${title}"/></td>
+				</tr>
+			</table>
+            <div id="searchDiv" class="Graybg">
+            	<input type="hidden" id="flag"  th:value="${flag}"/>
+             	<input type="hidden" id="id"  th:value="*{id}"/>
+          	 	<input type="hidden" name="initHospital" id="initHospital"  value="" />
+                <table class="Table_s" align="center" style="width:100%">
+                	<tr align="center">
+                		<td class="label" style="width:180px;">
+                			<font color="red" style=" top:2px;">*</font>科室组ID
+                		</td>
+                		<td align="left">
+                        	<input type="text" name="unitGroupId" id="unitGroupId" th:value="*{unitGroupId}" th:style="${flag == 0?'':'background-color: #cbcbcb;'}" th:readonly="${flag == 0?false:true}" />
+                        </td>
+                        <td id="unitGroupIdDesc" style="width:120px;" align="left"></td>
+                    </tr>
+                     <tr>
+                        <td class="label" >
+                        	<font color="red" style="top:2px;">*</font>科室组名称
+                        </td>
+                        <td><input type="text" name="unitGroupName" id="unitGroupName" th:value="*{unitGroupName}"/></td>
+                        <td id="unitGroupNameDesc" style="width:120px;"></td>
+                    </tr>
+                    <tr >
+                    	<td class="label" style="text-align: right; ">
+                    		<font color="red" style="top:2px;">*</font>医疗机构 
+                    	</td>
+                    	<td >
+                    		<select name="hospitalCode" id="hospitalCode"  th:style="${flag == 0?'width:131px;height:25px;':'width:131px;height:25px;background-color: #cbcbcb;'}" th:field="*{hospitalCode}" th:readonly="${flag == 0?false:true}" th:disabled="${flag == 0?false:true}">
+								<option value="">请选择</option>
+                                <option th:each="item : ${hospitalList}" th:value="${item['cd_div']}" th:text="${item['cd_value']}" ></option>
+                            </select>
+                        </td>
+                        <td id="hospitalCodeDesc" style="width:120px;"></td>
+                     </tr>
+                     <tr>
+                    	<td class="label" style="text-align: right;">
+                    		<font color="red" style=" top:2px;">*</font>科室组类别
+                    	</td>
+                    	<td >
+                    		<select name="unitGroupType" id="unitGroupType"  style="width:131px;height:25px;" th:field="*{unitGroupType}" >
+								<option value="">请选择</option>
+                                <option th:each="item : ${unitGroupTypeList}" th:value="${item['cd_div']}" th:text="${item['cd_value']}"></option>
+                            </select>
+                         </td>
+                         <td id="unitGroupTypeDesc" style="width:120px;"></td>
+                     </tr>
+                     <tr>
+                        <td class="label">科室组描述</td>
+                        <td><input type="text" name="unitGroupDesc" id="unitGroupDesc"  th:value="*{unitGroupDesc}"/></td>
+                        <td style="width:120px;"></td>
+                    </tr>
+                </table>
+            </div>
+		</form>
+	</div>
+</body>
+</html>

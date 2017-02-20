@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>字典项目一览</title>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+   <link rel="icon" type="image/x-icon" href="../favicon.ico" /> 
+   <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" /> 
+   <div th:fragment="styles">
+   <link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+   <link href="../styles/layout.css" type="text/css"  rel="stylesheet" />
+   <link href="../styles/table.css" type="text/css"  rel="stylesheet" />
+   <link rel="stylesheet" href="../styles/themes/base/jquery.ui.all.css"/>
+   <link href="../styles/monitor-search.css" type="text/css"  rel="stylesheet" />
+   </div>
+</head>
+<body>
+<div id="mgrSqlDialog" title="SQL管理">
+<form id="mgrSql" name="mgrSql">
+	<fieldset>
+	  	<div id="searchDiv" class="Graybg">
+            <table class="Table_s">
+                <tr>
+                    <td class="label">时间范围</td>
+                    <td onclick="WdatePicker({skin:'whyGreen'})">
+                    <input id="d421" class="Wdate" type="text" />
+                    </td>
+                    <td>-</td>
+                    <td onclick="WdatePicker({skin:'whyGreen'})">
+                        <input id="d42221" class="Wdate" type="text"/>
+
+                    </td>
+                   </tr>
+                   <tr>
+                   <td class="label">执行结果</td>
+					<td>
+	                    <select id="type" name="type" class="selected01" style="width: 150px;">
+		               		<option value="">请选择...</option>
+		               		<option value="Y">成功</option>
+		               		<option value="N">失败</option>
+						</select>
+					</td>
+                    <td class="label">类型</td>
+                    <td>
+                        <select id="type" name="type" class="selected01" style="width: 150px;">
+	                		<option value="">请选择...</option>
+	                		<option value="Y">归档</option>
+	                		<option value="N">未归档</option>
+						</select>
+					</td>
+					<td><button  type="button" style="overflow:visible;width:80px;height:25px;vertical-align:middle;"  class="btn01"  id="search" name="search">
+						<img src="../images/btn/search.gif"
+							style="vertical-align: middle;" />搜索
+						</button>
+				    </td>
+                </tr>
+                <tr style="height:1px;">
+                    <td style="width: 60px;"></td>
+                    <td style="width: 80px;"></td>
+                    <td style="width: 30px;"></td>
+                    <td style="width: 80px;"></td>
+                    <td style="width: 55px;"></td>
+                    <td style="width: 55px;"></td>
+                    <td style=""></td>
+                </tr>
+            </table>
+        </div>
+		<div align="center">
+			<table style="width: 100%; margin-top: 2px;" cellspacing="0" cellpadding="0" class="Table_01"  border="0">
+				<tr>
+					<th width="40px;">序号</th>
+					<th>异常SQL</th>
+					<th>异常信息</th>
+					<th>原记录</th>
+					<th>执行时间</th>
+					<th>执行结果</th>
+					<th>操作</th>
+				</tr>
+				<tr th:each="data:${list}">
+					<td style="display:none" th:text="${data.dictSql}"></td>
+					<td align="center" th:text="${data.errorMsg}"></td>
+					<td th:text="${data.serviceId}"></td>
+					<td th:text="${data.originalData}"></td>
+					<td th:text="${data.lastUpdateTime}"></td>
+					<td  align="center" style="color:#2d56a5;cursor:pointer;"><a  class="Linkblue" th:onclick="'javascript:editTermStruct(\'' + ${data.dictId} + '\');'">归档</a></td>
+				</tr>
+				 <tr th:if="${#lists.isEmpty(list)}" class="datatable-paging">
+	                 <td colspan="8" class="datatable-paging-info">
+	                     <span>没有查询结果，请修改检索条件重新检索。</span>
+	                 </td>
+                 </tr>
+			</table>
+		</div>
+	</fieldset>
+	</form>
+</div>
+</body>
+</html>

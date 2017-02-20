@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>${page_title}</title>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" /> 
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" /> 
+    <div th:fragment="styles">
+    <link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+    <link href="../styles/layout.css" type="text/css"  rel="stylesheet" />
+    <link href="../styles/table.css" type="text/css"  rel="stylesheet" />
+    <link href="../styles/monitor-search.css" type="text/css"  rel="stylesheet" />
+    <link href="../styles/asyncbox/asyncbox.css" type="text/css"
+		rel="Stylesheet" />
+    </div>
+    <script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+    <script type="text/javascript" src="../scripts/AsyncBox.v1.4.5.js"></script>
+    <div th:fragment="scripts">
+    <script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+    <script type="text/javascript" src="../scripts/paging.js"></script>
+    <script type="text/javascript" src="../scripts/rule/ruleDetailsList.js"></script>
+    <script src="../scripts/AsyncBox.v1.4.5.js"></script>
+    </div>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+<body>
+	<div th:fragment="content" style="margin: 5px; padding: 2px; border: 1px solid #aacbee; background: #f8f8f8; min-width: 1020px;">
+		<form id="dataForm" name="dataForm" method="post" th:object="${rlmgRuleCondition}">
+			<input type="hidden" id="currentPage" name="currentPage" value="1" th:field="*{currentPage}"/>
+            <input type="hidden" name="totalPage"   value="5" th:field="*{totalPage}"/>
+            <input type="hidden" name="jumpToPage" id="jumpToPage"  value="" />
+            <input type="hidden" name="ruleId" id="ruleId"  th:value="*{ruleId}" />
+            <input type="hidden" name="ruleName" id="ruleName"  th:value="*{ruleName}" />
+            <input type="hidden" name="backMsg" id="backMsg" th:value="${backMsg}" />
+			<!-- <table cellpadding="0" cellspacing="0" border="0" width="100%">
+				<tr>
+					<td class="Table_title"><img src="../images/icon_01.gif" />规则详细</td>
+				</tr>
+			</table> -->
+			<table >
+				<tr>
+					<td style="background: url(../images/title_bg.gif) repeat-x;height:25px;border-left:1px solid #aacbee;border-right:none;border-top:1px solid #aacbee;border-bottom:1px solid #aacbee;"><img src="../images/icon_01.gif" /></td>
+					<td class="Table_title" style="border-left:none;border-right:1px solid #aacbee;border-top:1px solid #aacbee;border-bottom:1px solid #aacbee;" th:text="'规则[' + *{ruleName} + ']详细'" ></td>
+				</tr>
+			</table>
+			
+			
+			<div id="searchDiv" class="Graybg">
+			<table class="Table_s">
+                    <tr>
+                        <td class="label" width="70px">关键字</td>
+                        <td><input type="text" id="description" name="description" value="" th:field="*{description}"/></td>
+						<td>&nbsp;</td>
+						<td align="right">
+							<button  id="seachBtn" name='seachBtn' style="width: 85px;height:25px;cursor:pointer;" class="btn01">
+								<img src="../images/btn/search.gif" style="vertical-align: middle;"/>&nbsp;搜索
+							</button>
+						</td>
+						<td align="left">
+							<button  id="cleanBtn" name='cleanBtn' style="width: 85px;height:25px;cursor:pointer;" class="btn01">
+								<img src="../images/btn/clean.gif" style="vertical-align: middle;"/>&nbsp;清空
+							</button>
+						</td>
+                    </tr>
+                    <tr style="height:1px;">
+                        <td style="width: 85px;"></td>
+                        <td style="width: 120px;"></td>
+                        <td style="width: 55px;"></td>
+                        <td style="width: 145px;"></td>
+                        <td style="width: 55px;"></td>
+                        <td style="width: 145px;"></td>
+                        <td style="width: 55px;"></td>
+                        <td style="width: 145px;"></td>
+                        <td style="width: 55px;"></td>
+                        <td style=""></td>
+                    </tr>
+              </table>
+              </div>
+		</form>
+            <hr />
+		
+		<div id="dataTable" style="padding-top: 5px; border: 0px solid #aacbee;OVERFLOW-X: auto; width:1132px;">
+			<div align="left">
+					<button  id="agreeBtn" name="agreeBtn" style="height:25px;cursor:pointer;" class="btn01">
+								<img src="../images/btn/agree.png" style="vertical-align: middle;"/>同意
+					</button>
+					<button  id="rejectBtn" name="rejectBtn" style="height:25px;cursor:pointer;" class="btn01">
+								<img src="../images/btn/reject.png" style="vertical-align: middle;"/>驳回
+					</button>
+					<button  id="returnBtn" name="returnBtn" style="height:25px;cursor:pointer;" class="btn01">
+								<img src="../images/btn/back.gif" style="vertical-align: middle;"/>返回
+					</button>
+			</div>
+			<p style="height:5px;"></p>
+			<table th:if="${colSize>=9}" style="width: 200%; margin-top: 1px;" border="1px" cellspacing="0" cellpadding="1" class="Table_01">
+				<thead>
+					<tr>
+						<th style="width: 50px;">列号</th>
+						<th th:each="item : ${colList}">
+							<span th:text="${item.ruleItemName}">规则名</span>
+							<!-- <span th:text="${item.ruleItemId}">ruleItemId</span> -->
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="item : ${resultList}">
+						<td th:text="${#ids.seq('')}" align="center">序列号</td>
+						<div th:each="col : ${colList}"> 
+							<div th:each="maps : ${item}"> 
+								<!-- <td th:if="${#strings.equals(maps.key, col.ruleItemId)}" th:text="${maps.value}"></td> -->
+								<td th:if="${#strings.equals(maps.key, col.ruleItemId)}" th:title="${maps.value}">
+									<div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:120px;">
+										<nobr><label th:text="${maps.value}"></label></nobr>
+									</div>
+								</td>
+							</div>
+					    </div>
+					</tr>
+				</tbody>
+				<tfoot>
+                    <tr th:unless="${#lists.isEmpty(resultList)}" class="datatable-paging">
+                    	<!-- <td th:text="${colSize}"></td> -->
+		                 <td colspan="3" class="datatable-paging-info">
+		                     <span class="datatable-paging-count">第<span th:text="${rlmgRuleCondition.currentPage}">1</span>页/共<span th:text="${rlmgRuleCondition.totalPage}">550</span>页</span>
+		                     <span class="datatable-paging-total">总共<span th:text="${rlmgRuleCondition.totalSize}">5500</span>条数据</span>
+		                 </td>
+		                <!-- <td th:text="${colSize}"></td> -->
+		                 <td th:colspan="${colSize-2}" class="datatable-paging-page">
+		                     <span class="datatable-paging-first" th:style="${rlmgRuleCondition.currentPage == 1 ? 'display: none;' : ''}" th:onclick="'javascript:firstPage(document.dataForm);'">首页</span>
+		                     <span class="datatable-paging-previous" th:style="${rlmgRuleCondition.currentPage == 1 ? 'display: none;' : ''}" th:onclick="'javascript:prevPage(document.dataForm);'">上一页</span>
+		                     <span class="datatable-paging-next" th:style="${rlmgRuleCondition.currentPage == rlmgRuleCondition.totalPage ? 'display: none;' : ''}" th:onclick="'javascript:nextPage(document.dataForm);'">下一页</span>
+		                     <span class="datatable-paging-last" th:style="${rlmgRuleCondition.currentPage == rlmgRuleCondition.totalPage ? 'display: none;' : ''}" th:onclick="'javascript:lastPage(document.dataForm);'">尾页</span>
+		                     <span class="datatable-paging-jump" th:style="${rlmgRuleCondition.totalPage == 1 ? 'display: none;' : ''}">
+		                         <span>跳转到：</span>
+		                         <input type="text" class="datatable-paging-jump-input" id="jumpToInput" />
+		                         <span class="datatable-paging-jump-go" 
+		                         th:onclick="'javascript:jumpToPage(document.dataForm);'"></span>
+		                     </span>
+		                 </td>
+	                </tr>
+                    <tr th:if="${#lists.isEmpty(resultList)}" class="datatable-paging">
+	                    <td th:colspan="${colSize+1}" class="datatable-paging-info">
+	                        <span>没有查询结果，请修改检索条件重新检索。</span>
+	                    </td>
+	                </tr>
+				</tfoot>
+			</table>
+			<table th:unless="${colSize>=9}" style="width: 100%; margin-top: 1px;" border="1px" cellspacing="0" cellpadding="1" class="Table_01">
+				<thead>
+					<tr>
+						<th style="width: 50px;">列号</th>
+						<th th:each="item : ${colList}">
+							<span th:text="${item.ruleItemName}" style="width:10%;">规则名</span>
+							<!-- <span th:text="${item.ruleItemId}">ruleItemId</span> -->
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="item : ${resultList}">
+						<td th:text="${#ids.seq('')}" align="center">序列号</td>
+						<div th:each="col : ${colList}"> 
+							<div th:each="maps : ${item}"> 
+								<!-- <td th:if="${#strings.equals(maps.key, col.ruleItemId)}" th:text="${maps.value}"></td> -->
+								<td th:if="${#strings.equals(maps.key, col.ruleItemId)}" th:title="${maps.value}">
+									<div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:120px;">
+										<nobr><label th:text="${maps.value}"></label></nobr>
+									</div>
+								</td>
+							</div>
+					    </div>
+					</tr>
+				</tbody>
+				<tfoot>
+                    <tr th:unless="${#lists.isEmpty(resultList)}" class="datatable-paging">
+                    	<!-- <td th:text="${colSize}"></td> -->
+		                 <td colspan="2" class="datatable-paging-info">
+		                     <span class="datatable-paging-count">第<span th:text="${rlmgRuleCondition.currentPage}">1</span>页/共<span th:text="${rlmgRuleCondition.totalPage}">550</span>页</span>
+		                     <span class="datatable-paging-total">总共<span th:text="${rlmgRuleCondition.totalSize}">5500</span>条数据</span>
+		                 </td>
+		                 <td th:colspan="${colSize-1}" class="datatable-paging-page">
+		                     <span class="datatable-paging-first" th:style="${rlmgRuleCondition.currentPage == 1 ? 'display: none;' : ''}" th:onclick="'javascript:firstPage(document.dataForm);'">首页</span>
+		                     <span class="datatable-paging-previous" th:style="${rlmgRuleCondition.currentPage == 1 ? 'display: none;' : ''}" th:onclick="'javascript:prevPage(document.dataForm);'">上一页</span>
+		                     <span class="datatable-paging-next" th:style="${rlmgRuleCondition.currentPage == rlmgRuleCondition.totalPage ? 'display: none;' : ''}" th:onclick="'javascript:nextPage(document.dataForm);'">下一页</span>
+		                     <span class="datatable-paging-last" th:style="${rlmgRuleCondition.currentPage == rlmgRuleCondition.totalPage ? 'display: none;' : ''}" th:onclick="'javascript:lastPage(document.dataForm);'">尾页</span>
+		                     <span class="datatable-paging-jump" th:style="${rlmgRuleCondition.totalPage == 1 ? 'display: none;' : ''}">
+		                         <span>跳转到：</span>
+		                         <input type="text" class="datatable-paging-jump-input" id="jumpToInput" />
+		                         <span class="datatable-paging-jump-go" 
+		                         th:onclick="'javascript:jumpToPage(document.dataForm);'"></span>
+		                     </span>
+		                 </td>
+	                </tr>
+                    <tr th:if="${#lists.isEmpty(resultList)}" class="datatable-paging">
+	                    <td th:colspan="${colSize+1}" class="datatable-paging-info">
+	                        <span>没有查询结果，请修改检索条件重新检索。</span>
+	                    </td>
+	                </tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

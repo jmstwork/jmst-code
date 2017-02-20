@@ -1,0 +1,1 @@
+select max(to_number(UNI_KEY)) from /*#tableName*/

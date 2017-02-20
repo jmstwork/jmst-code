@@ -1,0 +1,58 @@
+div {
+overflow: hidden;
+margin-right: auto;
+margin-left: auto;
+}
+* {
+margin: 0;
+padding: 0;
+word-wrap: break-word;
+}
+.tong {
+width: 100%;
+padding: 0px;
+clear: both;
+text-align: left;
+}
+
+table {
+margin-right: auto;
+margin-left: auto;
+font-size: 12px;
+color: #000;
+line-height: 18px;
+text-align: left;
+border-spacing: 0px;
+padding: 0px;
+}
+A:link, A:visited {
+FONT-SIZE: 9pt;
+FONT-FAMILY: "宋体";
+text-decoration: none;
+color: #000;
+}
+input {
+border: 1px solid #2B6A6A;
+}
+
+.mainNav, .subNav
+{
+    list-style-type:none;
+}
+.subNav
+{
+    margin-top: 5px;
+    margin-left: 10px;
+}
+.mainNav li, .subNav li
+{
+    float: left;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-left: solid 2px #CCC;
+    font-size: 11pt;
+}
+li.first
+{
+    border-left: none;
+}

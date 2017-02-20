@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title th:text="${#wpload.loadProperty('SYSTEM_LOGO_STYLE')}+'-'+${page_title}">管理系统</title>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+        <link rel="icon" type="image/x-icon" href="../favicon.ico" /> 
+        <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" /> 
+        <link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+		<!-- link rel="stylesheet" type="text/css" media="all" href="../styles/elastic.css" / -->
+        <link rel="stylesheet" type="text/css" media="all" href="../styles/header.css" />
+        <link rel="stylesheet" type="text/css" media="all" href="../styles/layout.css" />
+        <link rel="stylesheet" href="../styles/themes/base/jquery.ui.all.css"/>
+        <link href="../styles/autocomplete/autocomplete.css" type="text/css"  rel="stylesheet" />
+        <link href="../styles/asyncbox/asyncbox.css" type="text/css" rel="stylesheet" />
+        <link th:substituteby="${frag_content} :: styles" rel="stylesheet" type="text/css" media="all" href="../styles/layout.css" />
+        <style>
+			fieldset { padding:0; border:0; margin-top:3px; }
+			.ui-dialog .ui-state-error { padding: .3em; }
+			.validateTips { border: 1px solid transparent; }
+			
+			.ui-widget-header{
+		     	border:1px solid #aaaaaa;
+				background: -webkit-gradient(linear, left top, left bottom, from(#E4F1F7), to(#C2DEED));
+				background: -moz-linear-gradient(top,  #E4F1F7,  #C2DEED);
+				background: -ms-linear-gradient(top,  #E4F1F7,  #C2DEED);
+		     }
+		
+		</style>
+        <script type="text/javascript" charset="utf-8" src="../scripts/jquery-1.7.1.js"></script>
+        <script type="text/javascript" src="../scripts/asyncBox.v1.4.js" charset="utf-8"></script>
+        <script type="text/javascript" src="../scripts/jquery.ba-resize.min.js"></script>
+        <script src="../scripts/ui/jquery.ui.core.js"></script>
+		<script src="../scripts/ui/jquery.ui.widget.js"></script>
+		<script src="../scripts/ui/jquery.ui.mouse.js"></script>
+		<script src="../scripts/ui/jquery.ui.button.js"></script>
+		<script src="../scripts/ui/jquery.ui.draggable.js"></script>
+		<script src="../scripts/ui/jquery.ui.position.js"></script>
+		<script src="../scripts/ui/jquery.ui.resizable.js"></script>
+		<script src="../scripts/ui/jquery.ui.dialog.js"></script>
+		<script src="../scripts/ui/jquery.ui.tabs.js"></script>
+		<script src="../scripts/ui/jquery.ui.effect.js"></script>
+		<script src="../scripts/term/editPasswd.js"></script>
+        
+		<!-- script type="text/javascript" charset="utf-8" src="../scripts/elastic.js"></script -->
+        <script type="text/javascript" charset="utf-8" src="../scripts/paging.js"></script>
+        <!-- <script src="../scripts/ui/jquery.ui.extend.js"></script> -->
+        <script src="../scripts/template-table.js"></script>
+        <script th:substituteby="${frag_content} :: scripts" type="text/javascript" charset="utf-8" src="../scripts/paging.js"></script>
+	</head>
+	<body>
+        <table style="width: 100%;">
+            <!-- Header -->
+            <tr>
+                <td colspan="2">
+                    <div class="container">
+                        <div class="header">
+                         	<div class="header-logo">
+                            	<img th:src="'../'+${mainBgPic}" width="260" height="56" /> 
+                            </div>
+                            <div class="header-bj" style="font-family:'微软雅黑';font-size:25px; color:#fff;" th:text="${'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+#wpload.loadProperty('SYSTEM_LOGO_STYLE')}">主数据管理系统</div>
+                            <div class="fd-logo"></div>
+                            <input type="hidden" id="oldP" th:value="${session.SPRING_SECURITY_CONTEXT.authentication.principal.password}" />
+						 	<input type="hidden" id="loginName" th:value="${session.SPRING_SECURITY_CONTEXT.authentication.principal.username}" />
+						 	<input type="hidden" id="realName" th:value="${session.SPRING_SECURITY_CONTEXT.authentication.principal.realName}" />
+                        </div>
+                        <table border="0" cellspacing="0" cellpadding="0" width="100%" height="100%">
+                            <tbody>
+                                <tr>
+                                    <td align="left" class="Sysname" height="32px">
+                                        <p class="left" th:text="' 欢迎用户：'+${session.SPRING_SECURITY_CONTEXT.authentication.principal.realName}+'&nbsp;&nbsp;登录本系统！'" >
+                                           	 欢迎用户：超级管理员&nbsp;&nbsp;登录本系统！
+                                        </p>
+                                        <p class="right">
+                                            <span id="mpwd">
+                                            	<a class="flag1" href="#" onclick="javascript:modifyPasswd()">
+                                            		<img src="../images/lock_edit.png" />修改密码
+                                            	</a>
+                                            	<img src="../images/line.gif" /> 
+                                            </span> 
+                                            <a href="../j_spring_security_logout" >
+                                                <img src="../images/door_out.png" /> 退出系统
+                                            </a>
+                                        </p>
+                                   </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            <!-- Content -->
+            <tr>
+                <td style="width: 197px; vertical-align: top; overflow: hidden;">
+                    <div class="container full-height">
+                        <nobr>
+                        <div class="sideblock">
+                            <div class="leftmenutop"></div>
+                            <div id="leftmenu">
+                           		<ul th:each="item : ${menus}">
+						  			  <li th:id="${item.id}" class="parent" href="javascript:void(0);">
+		                                <a th:text="${item.name}" class="mainMenu" href="javascript:void(0);" >系统管理</a>
+		                                <ul th:each="childMenu:${item.child}" class="nav_menu"> 
+		                                    <li><a th:text="${childMenu.name}" class="secondMenu" th:href="@{${childMenu.url}}">日志管理</a></li>
+		                                </ul>
+		                            </li>
+								</ul>
+                            </div>
+                        </div>
+                        </nobr>
+                    </div>
+                </td>
+                <td style="vertical-align: top; width: 100%;">
+                    <div th:substituteby="${frag_content} :: content" class="container full-height" style="padding: 0 4px 0 4px;">
+                        <p><strong>MAIN</strong></p>
+                        <p><strong>Width: Elastic</strong></p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                    </div>
+                </td>
+            </tr>
+             <!-- Footer -->
+            <tr>
+                <td colspan="2">
+                    <div th:fragment="footer" class="unit footer footerwarp">
+                        <div class="container" >
+                         	<!-- 
+						     * $Author :yang_mingjie
+						     * $Date : 2014/06/16 10:09$
+						     * [BUG]0045328 MODIFY BEGIN 
+							-->
+                            <span style="width: 100%; text-align: center; color: white; height: 29px;"><font style="font-family:方正黑体简体">Copyright&nbsp;©&nbsp;2016</font><font style="font-family:Arial">&nbsp;北大医疗信息技术有限公司</font><font style="font-family:Arial">&nbsp;All Rights Reserved</font>
+					<span style="position: absolute; color:#87CEEB;left:870px;">(CDR_T49_20121123)</span></span>
+                        <!-- [BUG]0045328 MODIFY End -->
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+	</body>
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<title>规则新建向导</title>
+<link rel="icon" type="image/x-icon" href="../favicon.ico" />
+<link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" />
+<link rel="stylesheet" type="text/css"
+	href="../styles/autocomplete/jquery.autocomplete.css" />
+<div th:fragment="styles">
+	<link href="../styles/monitor.css" type="text/css" rel="stylesheet" />
+	<link href="../styles/layout.css" type="text/css" rel="stylesheet" />
+	<link href="../styles/table.css" type="text/css" rel="stylesheet" />
+	<link href="../styles/monitor-search.css" type="text/css"
+		rel="stylesheet" />
+	<link href="../styles/asyncbox/asyncbox.css" type="text/css"
+		rel="stylesheet" />
+	<link rel="stylesheet"
+		href="../styles/themes/base/minified/jquery-ui.min.css" />
+	<link rel="stylesheet" href="../styles/style.css" />
+</div>
+<script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+<script type="text/javascript"
+	src="../autocomplete/thickbox-compressed.js"></script>
+<script type="text/javascript" src="../scripts/ui/jquery.ui.button.js"></script>
+
+<div th:fragment="scripts">
+	<script type="text/javascript"
+		src="../scripts/rule/initCopyRuleDataPage.js"></script>
+	<script type="text/javascript"
+		src="../scripts/ui/minified/jquery-ui.min.js"></script>
+	<script src="../scripts/AsyncBox.v1.4.5.js"></script>
+</div>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+<body>
+	<div th:fragment="content"
+		style="margin: 5px; padding: 2px; border: 1px solid #aacbee; background: #f8f8f8; min-width: 1020px;">
+		<!-- <table cellpadding="0" cellspacing="0" border="0" width="100%">
+			<tr>
+				<td class="Table_title"><img src="../images/icon_01.gif" />
+				&nbsp;&nbsp;
+				<span th:text="${page_title}">title</span> 
+				</td>
+				<input type="hidden" th:value="${itemList}" id="itemList"/>
+			</tr>
+		</table> -->
+		<table>
+			<tr>
+				<td
+					style="background: url(../images/title_bg.gif) repeat-x; height: 25px; border-left: 1px solid #aacbee; border-right: none; border-top: 1px solid #aacbee; border-bottom: 1px solid #aacbee;"><img
+					src="../images/icon_01.gif" /></td>
+				<td class="Table_title"
+					style="border-left: none; border-right: 1px solid #aacbee; border-top: 1px solid #aacbee; border-bottom: 1px solid #aacbee;"
+					th:text="'编辑规则[' + ${rule.ruleName} + ']数据'"></td>
+			</tr>
+		</table>
+		<form id="ruleForm" name="ruleForm" action="" method="post">
+			<input type="submit" name="submitBtn" id="submitBtn" style="display: none;" /> 
+			<input type="hidden" name="titles" id="titles" /> 
+			<input type="hidden" name="exe" id="exe" th:value="${exe}" /> 
+			<input type="hidden" name="dictDepartmentJson" id="dictDepartmentJson" th:value="${dictDepartmentJson}" /> 
+			<input type="hidden" name="data" id="data" /> 
+			<input type="hidden" id="ruleId" name="ruleId" size="18" th:value="${rule.ruleId}" /> 
+			<input type="hidden" id="ruleName" th:value="${rule.ruleName}" /> 
+			<input type="hidden" id="opt" th:value="${opt}" /> 
+			<input id="deptCode" type="hidden" th:value="${deptCode}" />
+			<div id="searchDiv" class="Graybg">
+				<table class="Table_s">
+					<tr>
+						<td class="label">关键字</td>
+						<td><input type="text" name="description" id="description"
+							th:value="${description}" /></td>
+						<td>&nbsp;</td>
+						<td align="right">
+							<button id="seachBtn" name='seachBtn'
+								style="width: 85px; height: 25px; cursor: pointer;"
+								class="btn01">
+								<img src="../images/btn/search.gif"
+									style="vertical-align: middle;" />&nbsp;搜索
+							</button>
+						</td>
+						<td align="left">
+							<button id="cleanBtn" name='cleanBtn'
+								style="width: 85px; height: 25px; cursor: pointer;"
+								class="btn01">
+								<img src="../images/btn/clean.gif"
+									style="vertical-align: middle;" />&nbsp;清空
+							</button>
+						</td>
+					</tr>
+					<tr style="height: 1px;">
+						<td style="width: 85px;"></td>
+						<td style="width: 120px;"></td>
+						<td style="width: 55px;"></td>
+						<td style="width: 145px;"></td>
+						<td style="width: 55px;"></td>
+						<td style="width: 145px;"></td>
+						<td style="width: 55px;"></td>
+						<td style="width: 145px;"></td>
+						<td style="width: 55px;"></td>
+						<td style=""></td>
+					</tr>
+				</table>
+			</div>
+		</form>
+		<div style="width: 1150px; height: 90%; overflow: auto;">
+			<table id="mainTable" border="0" cellpadding="0" cellspacing="0"
+				class="Table_01" th:unless="${#lists.size(itemList) >= 9}"
+				style="width: 100%;">
+				<thead>
+					<tr id="column_title">
+						<th rowspan="2" align="center" width="80px;">操作</th>
+						<th rowspan="2" width="40px;" align="center">序号</th>
+						<th th:each="item:${itemList }" th:if="${item.itemType eq 0}"
+							width="40px;" rowspan="2"
+							th:type="${item.ruleItemId }" th:text="${item.ruleItemName}"></th>
+						<th th:each="item:${itemList }" th:if="${item.itemType ne 0}"
+							th:type="${item.ruleItemId }" th:id="${item.ruleItemName }"
+							th:name="${item.itemType }" th:class="${item.editType }"
+							th:text="${item.ruleItemName}"></th>
+
+					</tr>
+					<tr id="column_exe">
+						<td th:each="item:${itemList }" th:if="${item.itemType ne 0}"
+							th:id="${item.ruleItemId }"><span
+							th:text="${item.itemExpression }"></span> <input type="hidden"
+							name="val" th:value="${item.defaultValue }" /></td>
+						<!-- <c:forEach items="${itemList }" var="item">
+							<c:if test="${item.itemType ne 0}">
+								<td style='width:8%;height:10px;word-break:keep-all;white-space:nowrap;'
+								id="${item.ruleItemId }">${item.itemExpression }</td>
+							</c:if>
+						</c:forEach> -->
+					</tr>
+				</thead>
+				<tbody class="tbody">
+					<tr th:each="r:${dataMap }">
+						<td align="center" width="30px;"><a class="Linkblue"
+							href="javascript:void(0);" onclick="addRow();">添加</a>&nbsp;&nbsp;<a
+							class="Linkblue" href="javascript:void(0);"
+							onclick="deleteRow(this);">删除</a></td>
+						<td   align="center" th:text="${r.key+1 }"></td>
+						<td th:each="d:${r.value }" th:id="${d.value.dataId}"
+							ondblclick="javascript:editTD(this);"
+							th:text="${d.value.dataValue}"></td>
+
+					</tr>
+				</tbody>
+			</table>
+			<table id="mainTable" border="0" cellpadding="0" cellspacing="0"
+				class="Table_01" th:if="${#lists.size(itemList) >= 9}"
+				style="width: 250%;">
+				<thead>
+					<tr id="column_title">
+						<th rowspan="2" align="center" width="80px;">操作</th>
+						<th rowspan="2" width="40px;" align="center">序号</th>
+						<th th:each="item:${itemList }" th:if="${item.itemType eq 0}"
+							width="40px;" rowspan="2"
+							th:type="${item.ruleItemId }" th:text="${item.ruleItemName}"></th>
+						<th th:each="item:${itemList }" th:if="${item.itemType ne 0}"
+							th:type="${item.ruleItemId }" th:id="${item.ruleItemName }"
+							th:name="${item.itemType }" th:class="${item.editType }"
+							th:text="${item.ruleItemName}"></th>
+
+					</tr>
+					<tr id="column_exe">
+						<td th:each="item:${itemList }" th:if="${item.itemType ne 0}"
+							th:id="${item.ruleItemId }"><span
+							th:text="${item.itemExpression }"></span> <input type="hidden"
+							name="val" th:value="${item.defaultValue }" /></td>
+						<!-- <c:forEach items="${itemList }" var="item">
+							<c:if test="${item.itemType ne 0}">
+								<td style='width:8%;height:10px;word-break:keep-all;white-space:nowrap;'
+								id="${item.ruleItemId }">${item.itemExpression }</td>
+							</c:if>
+						</c:forEach> -->
+					</tr>
+				</thead>
+				<tbody class="tbody">
+					<tr th:each="r:${dataMap }">
+						<td align="center" width="30px;"><a class="Linkblue"
+							href="javascript:void(0);" onclick="addRow();">添加</a>&nbsp;&nbsp;<a
+							class="Linkblue" href="javascript:void(0);"
+							onclick="deleteRow(this);">删除</a></td>
+						<td  align="center" th:text="${r.key+1 }"></td>
+						<td th:each="d:${r.value }" th:id="${d.value.dataId}"
+							ondblclick="javascript:editTD(this);"
+							th:text="${d.value.dataValue}" ></td>
+
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<p class="space20" style="margin-top: 5px;"></p>
+		<div>
+			<table cellpadding="0" cellspacing="0" border="0" align="center">
+				<tr>
+					<td>
+						<button id="saveBtn" type="button" onclick="saveRuleData()"
+							style="overflow: visible; width: auto; height: 23px;"
+							class="btn01">
+							<img src="../images/btn/save.gif" style="vertical-align: middle;" />保存
+						</button>
+					</td>
+
+					<td>
+						<button id="returnBtn" type="button"
+							th:onclick="'returnRule(\''+${opt}+'\')'"
+							style="overflow: visible; width: auto; height: 23px;"
+							class="btn01">
+							<img src="../images/btn/back.gif" style="vertical-align: middle;" />返回
+						</button>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<p class="space20"></p>
+		<div id="setResult"></div>
+	</div>
+</body>
+</html>

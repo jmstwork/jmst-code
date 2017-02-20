@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312"/>
+    <title>术语映射新增</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" /> 
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" /> 
+     <style>
+            input{ vertical-align:middle; margin:0; padding:0}
+			.file-box{ position:relative;width:340px}
+			.txt{ height:22px; border:1px solid #cdcdcd; width:300px;}
+			.btn{ background-color:#FFF; border:1px solid #CDCDCD;height:24px; width:70px;}
+			.file{ position:absolute; top:0; right:80px; height:30px; filter:alpha(opacity:0);opacity: 0;width:70px }
+        </style>
+    <div th:fragment="styles">
+    	<link href="../styles/autocomplete/jquery.autocomplete.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/autocomplete/thickbox.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/style.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+
+	    <link rel="stylesheet" href="../styles/themes/base/jquery.ui.all.css"/>
+	    <link href="../styles/layout.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/table.css" type="text/css"  rel="stylesheet" />
+		<link href="../styles/asyncbox/asyncbox.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/monitor-search.css" type="text/css"  rel="stylesheet" />
+	    <style>
+	    	.red{color:#ff0000;font-family:"宋体";font-weight:normal;}
+	    </style>
+    </div>
+    <script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+    <div th:fragment="scripts">
+    	<script type="text/javascript" src="../scripts/AsyncBox.v1.4.5.js"></script>
+	    <script type="text/javascript" src="../scripts/paging.js"></script>
+	    <script type="text/javascript" src="../scripts/ui/jquery.ui.core.js"></script>
+	  	<script type="text/javascript" src="../scripts/ui/jquery.ui.widget.js"></script>
+	  	<script type="text/javascript" src="../scripts/ui/jquery.ui.mouse.js"></script>
+	  	<script type="text/javascript" src="../scripts/ui/jquery.ui.button.js"></script>
+	  	<script type="text/javascript" src="../scripts/ui/jquery.ui.draggable.js"></script>
+	  	<script type="text/javascript" src="../scripts/ui/jquery.ui.position.js"></script>
+	  	<script type="text/javascript" src="../scripts/ui/jquery.ui.resizable.js"></script>
+	  	<script type="text/javascript" src="../scripts/ui/jquery.ui.dialog.js"></script>
+	  	<script type="text/javascript" src="../scripts/ui/jquery.ui.effect.js"></script>
+	  	<script type="text/javascript" src="../scripts/My97DatePicker/WdatePicker.js"></script>
+	  	<script type="text/javascript" src="../scripts/jquery.form.js"></script>
+  	    <script type="text/javascript" src="../scripts/term/termsMappingadd.js"></script>
+  	    <script type="text/javascript" src="../scripts/jquery.processing.waterfall.js"></script>
+  	    
+  	    <!-- <script type="text/javascript" src="../scripts/autocomplete/jquery.bgiframe.min.js"></script> -->
+  	    <script type="text/javascript" src="../scripts/autocomplete/jquery.bgiframe.js"></script>
+	    <script type="text/javascript" src="../scripts/autocomplete/jquery.ajaxQueue.js"></script>
+	    <script type="text/javascript" src="../scripts/autocomplete/thickbox-compressed.js"></script>
+	    <script type="text/javascript" src="../scripts/autocomplete/jquery.autocomplete.js"></script>
+	    <script type="text/javascript" src="../scripts/term/myautocomplete.js"></script>
+	    <script type="text/javascript" src="../scripts/term/myautocompleteCode.js"></script>
+  	    <script>
+  	        $(function(){
+  	            var aa = $("#operation").val();
+  	            if(aa != ""){
+  	                 $(".conditiontr").find(":input").attr("disabled","disabled");
+  	                 $(".fix").attr("disabled","disabled");
+  	            }  
+  	         myDropDownList("sourceTable","./selectNodeInfo.html",1,10,"sourceName");
+	         myDropDownList("sourceName","./selectNodeInfo.html",1,10,"sourceTable");
+	         myDropDownList("targetTable","./selectNodeInfo.html",1,10,"targetName");
+	         myDropDownList("targetName","./selectNodeInfo.html",1,10,"targetTable");
+  	        });
+  	    </script>
+    </div>
+</head>
+<body>
+	<div th:fragment="content" style="height:490px;margin: 5px; padding: 2px; border: 1px solid #aacbee; background: #f8f8f8; min-width: 1020px;">
+		<form id="tsform" name="tsform" method="post" action="" th:object="${mapCodeSearchCondition}">
+		    <input type="hidden" id="operation" name="operation" th:value="${operation}"/>
+			<!-- <input type="hidden" id="dictId" name="dictId" th:field="*{dictId}"/>
+			<input type="hidden" id="autoOpen" name="autoOpen" th:value="${autoOpen}"/>
+			<input type="hidden" id="tableIsExist" name="tableIsExist" th:value="${tableIsExist}"/>  -->  
+			<table cellpadding="0" cellspacing="0" border="0" width="100%">
+				<tr>
+					<td class="Table_title" th:unless="${#lists.isEmpty(operation)}"><img src="../images/icon_01.gif" /> 修改术语映射</td>
+					<td class="Table_title" th:if="${#lists.isEmpty(operation)}"><img src="../images/icon_01.gif" /> 新增术语映射</td>
+				</tr>
+			</table>   
+          <div id="searchDiv" class="Graybg">
+          	<p class="mainValidateTips" style="color:red;"></p>
+             	<table width="100%" align="left" class="Table_s">
+	                  <tr class="conditiontr">
+	                        <td class="label"><span class="red">*</span>源</td>
+	                        <td>
+	                           <input type="text" name="sourceTable" id="sourceTable" th:field="*{sourceTable}"/>
+	                        </td>
+	                        <td class="label">源表名</td>
+	                        <td><input type="text" name="sourceName" id="sourceName"  th:field="*{sourceName}"/></td>
+	                        <td class="label"><span class="red">*</span>目标</td>
+	                        <td>
+	                        	<input type="text" name="targetTable" id="targetTable"  th:field="*{targetTable}"/>
+	                        </td>
+	                        <td class="label">目标表名</td>
+	                        <td>
+		                        <input type="text" name="targetName" id="targetName"  th:field="*{targetName}"/>
+							</td>
+							<td style="width:350px;"></td>
+					  </tr>
+					  <tr style="height:1px;">
+	                        <td style="width: 55px;" colspan="8"></td>
+	                  </tr>
+				  </table>
+				  <hr/>
+				  <p style="height:5px;"></p>
+				  <table>
+					  <tr>
+							<td>
+						    <button id="addMappingrow" name="addrow" type="button" style="overflow:visible;width:auto;height:25px;" onclick="addorfix()"  class="btn01" >
+										<img src="../images/btn/add.gif"
+												style="vertical-align: middle;" />新增
+							</button>
+							</td>
+							<td style="width: 5px;"></td>
+							 <td th:if="${#lists.isEmpty(operation)}">
+								 <button id="addrow" name="addrow" type="button" onclick="addexcel()"  style="overflow:visible;width:auto;height:25px;"  class="btn01" >
+									<img src="../images/btn/import.png"
+									           style="vertical-align: middle;" />导入
+								 </button>
+							 </td> 
+							 <td  th:unless="${#lists.isEmpty(operation)}">
+								<button  type="button" style="overflow:visible;width:auto;height:25px;"  class="btn01"
+								  onclick="javascript:location.href='../term/termMappingList.html';">
+							       <img src="../images/btn/back.gif"
+									           style="vertical-align: middle;" />返回
+				                 </button>
+							 </td>
+				  </tr>
+            </table>
+          </div>
+          
+            <input type="hidden" name="currentPage" value="1" th:field="*{currentPage}"/>
+            <input type="hidden" name="totalPage"   value="5" th:field="*{totalPage}"/>
+            <input type="hidden" name="jumpToPage" id="jumpToPage"  value="" />
+		</form>
+		<div id="dataTable" style="padding-top: 5px; border: 0px solid #aacbee;">
+			    <div style="height:400px;">
+					<table id="fieldTable" style="width: 100%; margin-top: 1px;" border="1px" cellspacing="0" cellpadding="1" class="Table_01">
+						<thead>
+							<tr>
+								<th style="width:5%;">序号</th>
+								<th style="width:10%;">源编码</th>
+								<th style="width:15%;">源编码名称</th>
+								<th style="width:15%;">源编码版本号</th>
+								<th style="width:10%;">目标编码</th>
+								<th style="width:15%;">目标编码名称</th>
+								<th style="width:15%;">目标编码版本号</th>
+								<th style="width:15%;">操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="data,rowStat:${dfList}" th:id="'tr_'+${rowStat.count}">
+							    <input type="hidden" name="sourceTableRecord" th:value="${data.sourceTable}" />
+								<input type="hidden" name="targetTableRecord" th:value="${data.targetTable}" />
+								<input type="hidden" name="srcUniKey" th:value="${data.srcUniKey}" />
+								<input type="hidden" name="tarUniKey" th:value="${data.tarUniKey}" />
+								<td align="center" th:text="${rowStat.count}"></td>
+								<td th:text="${data.sourceCode}"></td>
+					            <td th:text="${data.sourceCodeContent}"></td>
+					            <!-- 版本号 -->
+					            <td th:text="${data.sourceCodeVersion}"></td>
+					            <td th:text="${data.targetCode}"></td>
+					            <td th:text="${data.targetCodeContent}"></td>
+					            <!-- 版本号 -->
+					            <td th:text="${data.targetCodeVersion}"></td>
+				            
+								<td  align="center" style="color:#2d56a5;cursor:pointer;">
+								<a th:onclick="'javascript:addorfix(\''+${rowStat.count}+'\');'" style="color:#2d56a5;" >编辑</a>
+								&nbsp;&nbsp;&nbsp;&nbsp;<a style="color:#2d56a5;"  th:onclick="'javascript:deleteRow(\''+${rowStat.count}+'\',this);'">删除</a></td>
+							</tr>
+						</tbody>
+						 <tfoot>
+							<tr th:unless="${#lists.isEmpty(dfList)}" class="datatable-paging">
+				                 <td colspan="3" class="datatable-paging-info">
+				                     <span class="datatable-paging-count">第<span th:text="${mapCodeSearchCondition.currentPage}">1</span>页/共<span th:text="${mapCodeSearchCondition.totalPage}">550</span>页</span>
+				                     <span class="datatable-paging-total">总共<span th:text="${mapCodeSearchCondition.totalSize}">5500</span>条数据</span>
+				                 </td>
+				                 <td colspan="5" class="datatable-paging-page">
+				                     <span class="datatable-paging-first" th:style="${mapCodeSearchCondition.currentPage == 1 ? 'display: none;' : ''}" onclick="firstPage1(document.tsform);">首页</span>
+				                     <span class="datatable-paging-previous" th:style="${mapCodeSearchCondition.currentPage == 1 ? 'display: none;' : ''}" onclick="prevPage1(document.tsform);">上一页</span>
+				                     <span class="datatable-paging-next" th:style="${mapCodeSearchCondition.currentPage == mapCodeSearchCondition.totalPage ? 'display: none;' : ''}" onclick="nextPage1(document.tsform);">下一页</span>
+				                     <span class="datatable-paging-last" th:style="${mapCodeSearchCondition.currentPage == mapCodeSearchCondition.totalPage ? 'display: none;' : ''}" onclick="lastPage1(document.tsform);">尾页</span>
+				                     <span class="datatable-paging-jump" th:style="${mapCodeSearchCondition.totalPage == 1 ? 'display: none;' : ''}">
+				                         <span>跳转到：</span>
+				                         <input type="text" class="datatable-paging-jump-input" id="jumpToInput" />
+				                         <span class="datatable-paging-jump-go" onclick="jumpToPage1(document.tsform, document.getElementById('jumpToInput'));"></span>
+				                     </span>
+				                 </td>
+			                </tr>
+		                    <tr th:if="${#lists.isEmpty(dfList)}" class="datatable-paging">
+			                    <td colspan="8" class="datatable-paging-info">
+			                        <span>没有查询结果，请修改检索条件重新检索。</span>
+			                    </td>
+			                </tr>
+				      </tfoot>
+					</table>
+			
+			    </div>
+		</div>
+		 <div id="addMappingrowdialog" title="术语映射新增列">
+				<p class="fieldValidateTips" style="color:red;"></p>
+				<form id="fieldform" name="fieldform"  th:object="${mapCodeSearchCondition}">
+					<input type="hidden" id="optRow" name="optRow" value="0"/>
+					<input type="hidden" name="sourceTable" id="sourceTable" th:field="*{sourceTable}"/>
+					<input type="hidden" name="sourceName" id="sourceName"  th:field="*{sourceName}"/>
+					<input type="hidden" name="targetTable" id="targetTable"  th:field="*{targetTable}"/>
+					<input type="hidden" name="targetName" id="targetName"  th:field="*{targetName}"/>
+					<input type="hidden" name="operation" th:value="${operation}"/>
+					
+					<!-- sourceItemName:原编码名称，sourceTableName：原表名	 -->
+					<input type="hidden" name="sourceItemName" id="sourceItemName"/>
+					<input type="hidden" name="targetItemName" id="targetItemName"/>
+					<input type="hidden" name="sourceTableName" id="sourceTableName"/>
+					<input type="hidden" name="targetTableName" id="targetTableName"/>
+				
+					
+					
+					<!--<input type="hidden" name="sourceCode_y" id="sourceCode_y"/>
+					<input type="hidden" name="sourceCodeContent_y" id="sourceCodeContent_y"/>
+					<input type="hidden" name="targetCode_y" id="targetCode_y"/>
+					<input type="hidden" name="targetCodeContent_y" id="targetCodeContent_y"/>  -->
+					<input type="hidden" name="srcUniKey_y" id="srcUniKey_y"/>
+					<input type="hidden" name="tarUniKey_y" id="tarUniKey_y"/>
+
+					
+					<fieldset>
+						<div align="center">
+							<table style="width: 100%; margin-top: 2px;" cellspacing="0" cellpadding="0" class="Table_02"  border="0">
+								<tr>
+									<td class="label"><label for="sourceCode"><span class="red">*</span>源编码：</label></td>
+									<td colspan="3" align="left">
+									    <input type="hidden" name="srcUniKey" class="fix" id="srcUniKey" />
+										<input type="text" name="sourceCode" class="fix" id="sourceCode" /></td>
+								</tr>
+								<tr>
+									<td class="label"><label for="sourceCodeContent"><span class="red">*</span>源编码名称：</label></td>
+									<td colspan="3" align="left">
+										<input type="text" name="sourceCodeContent"  class="fix" id="sourceCodeContent" /></td>
+								</tr>
+								<!-- 版本号 -->
+								<tr>
+									<td class="label"><label for="sourceCodeVersion"><span class="red"></span>源编码版本号：</label></td>
+									<td colspan="3" align="left">
+										<input type="text" name="sourceCodeVersion"  class="fix" id="sourceCodeVersion" readonly="true"/></td>
+								</tr>
+								<tr>
+									<td class="label"><label for="targetCode"><span class="red">*</span>目标编码：</label></td>
+									<td colspan="3" align="left">
+									    <input type="hidden" name="tarUniKey" id="tarUniKey" />
+										<input type="text" name="targetCode" id="targetCode" /></td>
+								</tr>
+								<tr>
+									<td class="label"><label for="targetCodeContent"><span class="red">*</span>目标编码名称：</label></td>
+									<td colspan="3" align="left">
+										<input type="text" name="targetCodeContent" id="targetCodeContent" /></td>
+								</tr>
+								<!-- 版本号 -->
+								<tr>
+									<td class="label"><label for="targetCodeVersion"><span class="red"></span>目标编码版本号：</label></td>
+									<td colspan="3" align="left">
+										<input type="text" name="targetCodeVersion" id="targetCodeVersion" readonly="true"/></td>
+								</tr>
+							</table>
+						</div>
+					</fieldset>
+				</form>
+		 </div>
+        
+		 <div class="file-box"  id="addExcel" title="术语映射文件导入">
+			  <form action="./importexceldata.html" method="post" name="excelform" id="excelform" ENCTYPE="multipart/form-data">
+				 <input type='text' name='textfield' id='textfield' class='txt' readonly="true" />
+				 <input type='button' class='btn01' value='浏览...' onclick="clickScanBtn()"/>
+				 <input type="file" hidden="true" name="fileField" class="file" id="fileField" accept=".xls,.xlsx" size="38" onchange="checkfiletype(this.value)" />
+		      </form> 
+		 </div>
+	</div>
+</body>
+</html>

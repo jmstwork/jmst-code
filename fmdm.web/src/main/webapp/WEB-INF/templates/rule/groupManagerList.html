@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>${page_title}</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<link rel="icon" type="image/x-icon" href="../favicon.ico" />
+<link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" />
+
+<div th:fragment="styles">
+	<link href="../styles/monitor.css" type="text/css" rel="stylesheet" />
+	<link href="../styles/layout.css" type="text/css" rel="stylesheet" />
+	<link href="../styles/table.css" type="text/css" rel="stylesheet" />
+	<link href="../styles/monitor-search.css" type="text/css" rel="stylesheet" />
+	<link href="../styles/asyncbox/asyncbox.css" type="text/css" rel="stylesheet" />
+</div>
+
+<script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="../scripts/AsyncBox.v1.4.js"></script>
+
+
+<div th:fragment="scripts">
+	<script type="text/javascript" src="../scripts/paging.js"></script>
+	<script type="text/javascript" src="../scripts/rule/groupManagerList.js"></script>
+</div>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+<body>
+	<div th:fragment="content"
+		style="margin: 5px; padding: 2px; border: 1px solid #aacbee; background: #f8f8f8; min-width: 1020px;">
+		<form id="groupForm" name="groupForm" method="post" th:object="${groupManagerCondition}">
+		
+		
+			<input type="hidden" name="currentPage" value="1" th:field="*{currentPage}" /> 
+			<input type="hidden" name="totalPage" value="5" th:field="*{totalPage}" /> 
+			<input type="hidden" name="jumpToPage" id="jumpToPage" value="" /> 
+			<input type="hidden" name="backMsg" id="backMsg" th:value="${backMsg}" />
+			
+			<table cellpadding="0" cellspacing="0" border="0" width="100%">
+				<tr>
+					<td class="Table_title"><img src="../images/icon_01.gif" />规则组管理</td>
+				</tr>
+			</table>
+			<div id="searchDiv" class="Graybg">
+				
+				<table class="Table_s">
+					<tr>
+						<td style="width:20px;"></td>
+						<td class="label">规则组名</td>
+						<td><input type="text" name="condGroName" id="condGroName" /></td>
+						<td style="width: 120px;"><label id="tipcondGroName" class="validateTips" style="color:red;"></label>&nbsp;</td>
+						
+						
+						<td class="label">规则组英文名</td>
+						<td><input type="text" name="condGroNameEn" id="condGroNameEn" /></td>
+						<td style="width: 130px;"><label id="tipcondGroNameEn" class="validateTips" style="color:red;"></label>&nbsp;</td>
+						
+						
+						<td align="right">
+							<button id="addBtn" name='addBtn' type="button"
+								style="width: 85px; height: 25px; cursor: pointer;"
+								class="btn01" onclick="addGroup()">
+								<img src="../images/btn/add.gif" style="vertical-align: middle;" />&nbsp;增加
+							</button>
+						</td>
+					</tr>
+					<tr style="height:1px;">
+                        <td colspan="8"></td>
+                    </tr>
+				</table>
+			</div>
+		</form>
+		<hr />
+		<div id="dataTable"
+			style="padding-top: 5px; border: 0px solid #aacbee;">
+			<table style="width: 100%; margin-top: 1px;" border="1px"
+				cellspacing="0" cellpadding="1" class="Table_01">
+				<thead>
+					<tr>
+						<th width="5%" align="center">列号</th>
+						<th width="35%">组名</th>
+						<th width="35%">英文名</th>
+						<th width="25%">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="item : ${grolist}">
+						<td th:text="${#ids.seq('')}" align="center">BS001</td>
+						<td th:text="${item.rulegroupName}" align="left">证件类型</td>
+						<td th:text="${item.rulegroupEnName}" align="left">aaa</td>
+						<td align="center">
+							<a href="#" th:onclick="'javascript:updateGroupManager(\''+${item.rulegroupId}+'\');'" class="Linkblue">编辑</a>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+							<a href="#" th:onclick="'javascript:deleteGroupManager(\''+${item.rulegroupId}+'\',this);'"  class="Linkblue">删除</a></td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr th:unless="${#lists.isEmpty(grolist)}" class="datatable-paging">
+						<td colspan="2" class="datatable-paging-info"><span
+							class="datatable-paging-count">第<span
+								th:text="${groupManagerCondition.currentPage}">1</span>页/共<span
+								th:text="${groupManagerCondition.totalPage}">550</span>页
+						</span> <span class="datatable-paging-total">总共<span
+								th:text="${groupManagerCondition.totalSize}">5500</span>条数据
+						</span></td>
+						<td colspan="5" class="datatable-paging-page"><span
+							class="datatable-paging-first"
+							th:style="${groupManagerCondition.currentPage == 1 ? 'display: none;' : ''}"
+							onclick="firstPage(document.groupForm);">首页</span> <span
+							class="datatable-paging-previous"
+							th:style="${groupManagerCondition.currentPage == 1 ? 'display: none;' : ''}"
+							onclick="prevPage(document.groupForm);">上一页</span> <span
+							class="datatable-paging-next"
+							th:style="${groupManagerCondition.currentPage == groupManagerCondition.totalPage ? 'display: none;' : ''}"
+							onclick="nextPage(document.groupForm);">下一页</span> <span
+							class="datatable-paging-last"
+							th:style="${groupManagerCondition.currentPage == groupManagerCondition.totalPage ? 'display: none;' : ''}"
+							onclick="lastPage(document.groupForm);">尾页</span> <span
+							class="datatable-paging-jump"
+							th:style="${groupManagerCondition.totalPage == 1 ? 'display: none;' : ''}">
+								<span>跳转到：</span> <input type="text"
+								class="datatable-paging-jump-input" id="jumpToInput" /> <span
+								class="datatable-paging-jump-go"
+								onclick="jumpToPage(document.groupForm, document.getElementById('jumpToInput'));"></span>
+						</span></td>
+					</tr>
+					<tr th:if="${#lists.isEmpty(grolist)}" class="datatable-paging">
+						<td colspan="8" class="datatable-paging-info"><span>没有查询结果，请修改检索条件重新检索。</span>
+						</td>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

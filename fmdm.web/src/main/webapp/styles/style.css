@@ -1,0 +1,44 @@
+﻿.pager td
+{
+	font-size:12px;
+}
+.pager .first
+{
+	background:url('../images/pager/page-first.gif') no-repeat;
+	width:16px;
+	height:16px;
+	cursor:hand;
+}
+.pager .prev
+{
+	background:url('../images/pager/page-prev.gif') no-repeat;
+	width:16px;
+	height:16px;
+	cursor:hand;
+}
+.pager .next
+{
+	background:url('../images/pager/page-next.gif') no-repeat;
+	width:16px;
+	height:16px;
+	cursor:hand;
+}
+.pager .last
+{
+	background:url('../images/pager/page-last.gif') no-repeat;
+	width:16px;
+	height:16px;
+	cursor:hand;
+}
+.pager .refresh
+{
+	background:url('../images/pager/refresh.gif') no-repeat;
+	width:16px;
+	height:16px;
+	cursor:hand;
+}
+#pager_currentIndex
+{
+	width:30px;
+}body {
+}

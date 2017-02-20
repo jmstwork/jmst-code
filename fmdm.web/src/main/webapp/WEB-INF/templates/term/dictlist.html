@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>${page_title}</title>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" /> 
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" /> 
+    <div th:fragment="styles">
+    <link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+    <link href="../styles/layout.css" type="text/css"  rel="stylesheet" />
+    <link href="../styles/table.css" type="text/css"  rel="stylesheet" />
+    <link href="../styles/monitor-search.css" type="text/css"  rel="stylesheet" />
+    </div>
+    <script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+    <script type="text/javascript" src="../scripts/AsyncBox.v1.4.5.js"></script>
+    <div th:fragment="scripts">
+    <script type="text/javascript" src="../scripts/paging.js"></script>
+    <script type="text/javascript" src="../scripts/term/dictlist.js"></script>
+    </div>
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+<body>
+	<div th:fragment="content" style="margin: 5px; padding: 2px; border: 1px solid #aacbee; background: #f8f8f8; min-width: 1020px;">
+		<form id="DataForm" name="DataForm" method="post" action="./dictlist.html" th:object="${termMainCondition}">
+			<input type="hidden" id="titleFlag" name="titleFlag" th:value="${termMainCondition.title}" />
+			<table cellpadding="0" cellspacing="0" border="0" width="100%">
+				<tr>
+					<td class="Table_title" th:text="*{titleName}"><img src="../images/icon_01.gif" />术语一览</td>
+				</tr>
+			</table>
+            <div id="searchDiv" class="Graybg">
+                <table class="Table_s">
+                    <tr>
+                        <td class="label">术语ID</td>
+                        <td><input type="text" name="serviceId" id="serviceId" value="" th:field="*{serviceId}"/></td>
+						<td class="label">术语名称</td>
+                        <td><input type="text" name="dictName" id="dictName" value="" th:field="*{dictName}"/></td>
+                        <td th:if="*{title == '0'}" class="label">状态</td>
+                        <td th:if="*{title == '0'}" >
+                            <select name="status" id="status"  style="width:100px;" th:field="*{status}">
+								<option value="">请选择</option>
+                                <option th:each="item : ${dictStatusList}" th:value="${item['statuscode']}" th:text="${item['statusvalue']}">待审批</option>
+                            </select>
+                        </td>
+						<td align="right"><button  type="button" style="width: 85px;height:25px;"  class="btn01" id="searchBtn">
+						<img src="../images/btn/search.gif"
+							style="vertical-align: middle;" />&nbsp;搜索
+						</button></td>
+						<td align="left">
+							<button  id="cleanBtn" name='cleanBtn' type="button" style="width: 85px;height:25px;cursor:pointer;" class="btn01">
+								<img src="../images/btn/clean.gif" style="vertical-align: middle;"/>&nbsp;清空
+							</button>
+						</td>
+						<td>&nbsp;</td>
+                    </tr>
+                    <tr style="height:1px;">
+                        <td style="width: 85px;"></td>
+                        <td style="width: 120px;"></td>
+                        <td style="width: 55px;"></td>
+                        <td style="width: 145px;"></td>
+                        <td style="width: 55px;"></td>
+                        <td style="width: 145px;"></td>
+                        <td style="width: 55px;"></td>
+                        <td style="width: 145px;"></td>
+                        <td style="width: 55px;"></td>
+                        <td style=""></td>
+                    </tr>
+                </table>
+            </div>
+            <input type="hidden" name="currentPage" value="1" th:field="*{currentPage}"/>
+            <input type="hidden" name="totalPage"   value="5" th:field="*{totalPage}"/>
+            <input type="hidden" name="jumpToPage" id="jumpToPage" value="" />
+            <input type="hidden" name="title" value="*{title}" th:field="*{title}"/>
+		</form>
+		<hr />
+		<div id="dataTable" style="padding-top: 5px; border: 0px solid #aacbee;">
+			<table style="width: 100%; margin-top: 1px;" border="1px" cellspacing="0" cellpadding="1" class="Table_01">
+				<thead>
+					<tr>
+						<th width="10%">术语ID</th>
+						<th width="25%">术语名称</th>
+						<th width="20%">对应表名</th>
+						<th width="20%">主数据源</th>
+						<th th:if="*{termMainCondition.title == '0'}" width="10%">状态</th>
+						<th th:if="*{termMainCondition.title == '0'}" width="15%">操作</th>
+						<th th:if="*{termMainCondition.title != '0'}" width="25%">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr style="cursor: pointer;" th:each="item : ${dictMainList}" >
+						<td th:text="${item.serviceId}" align="left">BS001</td>
+						<td th:text="${item.dictName}" align="left">证件类型</td>
+						<td th:text="${#strings.toUpperCase(item.tableName)}" align="left">aaa</td>
+						<td th:text="${item.supplySysName}" align="left">RIS</td>
+						<td th:if="*{termMainCondition.title == '0'}" th:text="${item.statusValue}" align="left">已发布</td>
+						<td align="center">
+							<a  href="./admindictitemlist.html" th:if="${userName == 'admin'}" th:href="@{./admindictitemlist.html(dictId=${item.dictId},title=*{termMainCondition.title},dictName=${item.dictName},tableName=${item.tableName},searchAll=*{termMainCondition.title}=='0' ? '' : 'on')}" th:text="*{jumpToItem}"  class="Linkblue"  target="_self"  >术语项目列表/变更详细</a>
+							<a  href="./dictitemlist.html" th:unless="${userName == 'admin'}" th:href="@{./dictitemlist.html(viewTypeId=${item.viewTypeId},dictId=${item.dictId},title=*{termMainCondition.title},dictName=${item.dictName},tableName=${item.tableName},searchAll=*{termMainCondition.title}=='0' ? '' : 'on')}" th:text="*{jumpToItem}"  class="Linkblue"  target="_self"  >术语项目列表/变更详细</a>
+						</td>
+						
+					</tr>
+				</tbody>
+				<tfoot>
+                    <tr th:unless="${#lists.isEmpty(dictMainList)}" class="datatable-paging">
+		                 <td colspan="2" class="datatable-paging-info">
+		                     <span class="datatable-paging-count">第<span th:text="${termMainCondition.currentPage}">1</span>页/共<span th:text="${termMainCondition.totalPage}">550</span>页</span>
+		                     <span class="datatable-paging-total">总共<span th:text="${termMainCondition.totalSize}">5500</span>条数据</span>
+		                 </td>
+		                 <td colspan="5" class="datatable-paging-page">
+		                     <span class="datatable-paging-first" th:style="${termMainCondition.currentPage == 1 ? 'display: none;' : ''}" onclick="firstPage(document.DataForm);">首页</span>
+		                     <span class="datatable-paging-previous" th:style="${termMainCondition.currentPage == 1 ? 'display: none;' : ''}" onclick="prevPage(document.DataForm);">上一页</span>
+		                     <span class="datatable-paging-next" th:style="${termMainCondition.currentPage == termMainCondition.totalPage ? 'display: none;' : ''}" onclick="nextPage(document.DataForm);">下一页</span>
+		                     <span class="datatable-paging-last" th:style="${termMainCondition.currentPage == termMainCondition.totalPage ? 'display: none;' : ''}" onclick="lastPage(document.DataForm);">尾页</span>
+		                     <span class="datatable-paging-jump" th:style="${termMainCondition.totalPage == 1 ? 'display: none;' : ''}">
+		                         <span>跳转到：</span>
+		                         <input type="text" class="datatable-paging-jump-input" id="jumpToInput" />
+		                         <span class="datatable-paging-jump-go" onclick="jumpToPage(document.DataForm, document.getElementById('jumpToInput'));"></span>
+		                     </span>
+		                 </td>
+	                </tr>
+                    <tr th:if="${#lists.isEmpty(dictMainList)}" class="datatable-paging">
+	                    <td colspan="8" class="datatable-paging-info">
+	                        <span>没有查询结果，请修改检索条件重新检索。</span>
+	                    </td>
+	                </tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

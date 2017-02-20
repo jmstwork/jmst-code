@@ -1,0 +1,40 @@
+<assembly xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/assembly-1.0.0.xsd">
+	<id>bin</id>
+	<formats>
+		<format>zip</format>
+	</formats>
+	<dependencySets>
+		<dependencySet>
+			<outputDirectory>lib</outputDirectory>
+		</dependencySet>
+	</dependencySets>
+	<fileSets>
+		<fileSet>
+			<outputDirectory>/</outputDirectory>
+			<includes>
+				<include>README.txt</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>src/main/scripts</directory>
+			<outputDirectory>/bin</outputDirectory>
+			<includes>
+				<include>run.sh</include>
+				<include>ReaderRun.bat</include>
+				<include>SyncRun.bat</include>
+				<include>setCP.bat</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>src/main/resources</directory>
+			<outputDirectory>/config</outputDirectory>
+			<includes>
+				<include>logback.xml</include>
+				<include>fmdm.properties</include>
+				<include>setting-dev.properties</include>
+				<include>setting-pro.properties</include>
+			</includes>
+		</fileSet>
+	</fileSets>
+</assembly>

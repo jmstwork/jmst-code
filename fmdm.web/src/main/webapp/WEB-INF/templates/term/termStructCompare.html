@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>术语结构与物理表差异比较</title>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" /> 
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" /> 
+    <div th:fragment="styles">
+	    <link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/layout.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/table.css" type="text/css"  rel="stylesheet" />
+	    <link rel="stylesheet" href="../styles/themes/base/jquery.ui.all.css"/>
+	    <link href="../styles/monitor-search.css" type="text/css"  rel="stylesheet" />
+    </div>
+  
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+<body>
+		<form id="compareform" name="compareform">
+			<div align="center" title="术语结构与物理表差异比较" style="width:520px">
+				<table style="width: 100%; margin-top: 2px;" cellspacing="0" cellpadding="0" class="Table_01"  border="0">
+					<tr>
+						<td colspan="3">术语结构：</td>
+						<td colspan="3"><input type="text" readOnly="true" th:value="${dictName}"/></td>
+						<td colspan="3">物理表:</td>
+						<td colspan="3"><input type="text" readOnly="true" th:value="${tableName}"/></td>
+					</tr>
+					<tr>
+						<th colspan="6">术语结构信息</th>
+						<th colspan="6">物理表信息</th>
+					</tr>
+					<tr th:if="${status==2}">
+						<td colspan="6" align="left">列名: 类型 , 长度, 精度, 必须项, 默认值</td>
+						<td colspan="6" align="left">列名: 类型 , 长度, 精度, 必须项, 默认值</td>
+					</tr>
+					<tr th:each="data:${resultList}" th:if="${status==2}">
+						<td colspan="6" th:text="${data['sfieldname']  + data['sfieldtype'] + data['slength']  + data['sprecision'] + data['sismust'] + data['sdefaultvalue']}" align="left"></td>
+						<td colspan="6" th:text="${data['tfieldname']  + data['tfieldtype'] + data['tlength']  + data['tprecision'] + data['tismust'] + data['tdefaultvalue']}" align="left"></td>
+					</tr>
+					<tr th:if="${status==1}">
+						<td colspan="12" align="left">术语结构和物理表一致!</td>
+					</tr>
+					<tr th:if="${status==0}">
+						<td colspan="12" align="left">忘记了创建物理表?! <a th:href="@{./editTermStruct.html(dictId=${dictId},autoOpen='true')}" style="cunsor:hand;color:#2d56a5;">立刻进行物理表创建>>></a></td>
+					</tr>
+					<tr th:if="${status==3}">
+						<td colspan="12" align="left">忘记了完善术语结构?! <a th:href="@{./editTermStruct.html(dictId=${dictId})}" style="cunsor:hand;color:#2d56a5;">立刻完善术语结构>>></a></td>
+					</tr>
+				</table>
+			</div>
+		</form>
+</body>
+</html>

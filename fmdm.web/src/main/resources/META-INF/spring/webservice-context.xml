@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:context="http://www.springframework.org/schema/context"  
+    xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans  
+                        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd     
+                        http://www.springframework.org/schema/context     
+                        http://www.springframework.org/schema/context/spring-context-3.0.xsd  
+                        http://cxf.apache.org/jaxws       
+                        http://cxf.apache.org/schemas/jaxws.xsd">  
+      
+    <import resource="classpath:META-INF/cxf/cxf.xml" />  
+    <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />  
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />  
+
+	<!-- licenseValidator -->
+<!-- 	<bean id="licenseValidator" class="com.founder.web.license.LicenseValidator" init-method="init" />
+ -->	
+	
+    <bean id="ruleCheckWebserviceImpl" class="com.founder.web.webservice.impl.RuleCheckWebserviceImpl" /> 
+	<jaxws:server id="ruleCheckWebservice" serviceClass="com.founder.web.webservice.RuleCheckWebservice"  
+        address="/ruleCheckWebservice">  
+        <jaxws:serviceBean>  
+            <ref bean="ruleCheckWebserviceImpl" />  
+        </jaxws:serviceBean>  
+    </jaxws:server>
+    
+    <bean id="checkMsgRuleWebserviceImpl" class="com.founder.web.webservice.impl.CheckMsgRuleWebserviceImpl" /> 
+	<jaxws:server id="checkMsgRuleWebservice" serviceClass="com.founder.web.webservice.CheckMsgRuleWebservice"  
+        address="/checkMsgRuleWebservice">  
+        <jaxws:serviceBean>  
+            <ref bean="checkMsgRuleWebserviceImpl" />  
+        </jaxws:serviceBean>  
+    </jaxws:server>
+
+</beans>

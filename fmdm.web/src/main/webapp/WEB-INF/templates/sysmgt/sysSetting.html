@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<title>系统设定</title>
+<script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+<!--[if IE 6]>
+<![endif]-->
+<div th:fragment="styles">
+	<link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+	<link href="../styles/layout.css" type="text/css"  rel="stylesheet" />
+	<link href="../styles/table.css" type="text/css"  rel="stylesheet" />
+</div>
+<div th:fragment="scripts">
+	<script type="text/javascript" src="../scripts/sysmgt/sysSetting.js"></script>
+</div>
+</head>
+<body>
+	<div th:fragment="content" style="height:490px;margin: 5px; padding: 2px; border: 1px solid #aacbee; background: #f8f8f8; min-width: 1020px;">
+			<form action="./sysSettingSave.html" name="indexFrom" id="indexFrom">
+				<input type="hidden" name="backMsg"  id="backMsg" value="1" th:value="${backMsg}"/>
+				<table cellpadding="0" cellspacing="0" border="0" width="100%">
+					<tr>
+						<td class="Table_title" ><img src="../images/icon_01.gif"/> 系统设置</td>
+					</tr>
+				</table>
+				<p class="space10"></p>
+				<div class="panel" style="text-align:left">
+					
+				</div>
+				<table width="100%" border="1" cellpadding="0" cellspacing="0"
+					class="Table_01">
+					<tr>
+						<td width="229">
+							<div align="left">
+								默认密码生成规则
+							</div>
+						</td>
+						<td width="776">
+							<p>
+								<input id="pwdCreateRule" name="pwdCreateRule" type="radio" value="1" th:checked="${pwdCreateRule==1}"/>
+								和用户ID一样&nbsp;&nbsp;&nbsp;
+								<input id="pwdCreateRule" name="pwdCreateRule" type="radio" align="right" value="2" th:checked="${pwdCreateRule==2}" />
+								&nbsp;系统随机生成
+							</p>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							创建用户或重置密码的提醒方式 
+						</td>
+						<td>
+							<input id="messageMode" name="messageMode" type="checkbox" value="1" th:checked="${remindMode==1 || remindMode==3}" />
+							&nbsp;&nbsp;短信提醒 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<input id="emailMode" name="emailMode" type="checkbox" align="right" value="2" th:checked="${remindMode==2 || remindMode==3}" />
+							&nbsp;&nbsp;&nbsp;邮件提醒
+						</td>
+					</tr>
+					
+					<tr>
+						<td width="229">
+							<div align="left">
+								MQ消息发送异常XML存储路径 
+							</div>
+						</td>
+						<td width="776">
+								<input type="text" id="mqExceptionPath" name="mqExceptionPath" th:value="${mqExceptionPath}" size="100" nullable="false" nullString="false" maxSize="50" />
+						</td>
+					</tr>
+				</table>
+				<p class="space20"></p>
+				<p align="center"/>
+				<table align="center">
+				<tr>
+					<td>
+						<button  id="saveButton" type="button" style="overflow:visible;width:auto;height:25px;"  class="btn01">
+							<img src="../images/btn/save.gif" style="vertical-align: middle;" />保存
+						</button>
+					</td>
+				</tr>
+				</table>
+				<p class="space20"></p>
+			</form>
+		</div>
+		
+	</body>
+</html>

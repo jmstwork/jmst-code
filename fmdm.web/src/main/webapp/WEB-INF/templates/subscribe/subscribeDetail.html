@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>订阅详细</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" /> 
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" /> 
+    
+    <div th:fragment="styles">
+	    <link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/layout.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/table.css" type="text/css"  rel="stylesheet" />
+	    <link rel="stylesheet" href="../styles/themes/base/jquery.ui.all.css"/>
+	    <link href="../styles/monitor-search.css" type="text/css"  rel="stylesheet" />
+	    <style>
+		fieldset { padding:0; border:0; margin-top:3px; }
+		.ui-dialog .ui-state-error { padding: .3em; }
+		.red{color:#ff0000;font-family:"宋体";font-weight:normal;}
+		.validateTips { border: 1px solid transparent; }
+		.ui-widget-header { border: 1px solid #aaaaaa; background: #cccccc url(images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x; color: #222222; font-weight: bold; }
+	</style>
+    </div>
+   	<script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+	    <script src="../scripts/ui/jquery.ui.core.js"></script>
+		<script src="../scripts/ui/jquery.ui.widget.js"></script>
+		<script src="../scripts/ui/jquery.ui.mouse.js"></script>
+		<script src="../scripts/ui/jquery.ui.button.js"></script>
+		<script src="../scripts/ui/jquery.ui.draggable.js"></script>
+		<script src="../scripts/ui/jquery.ui.position.js"></script>
+		<script src="../scripts/ui/jquery.ui.resizable.js"></script>
+		<script src="../scripts/ui/jquery.ui.dialog.js"></script>
+		<script src="../scripts/ui/jquery.ui.effect.js"></script>
+    	<script type="text/javascript" src="../scripts/paging.js"></script>
+    <div th:fragment="scripts">
+    	<script type="text/javascript" src="../scripts/subscribe/subscribeDetail.js"></script>
+   </div>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+<body>
+	<div th:fragment="content" style="height:550px;margin: 5px; padding: 2px; border: 1px solid #aacbee; background: #f8f8f8; min-width: 1020px;">
+		<form id="serviceForm" name="serviceForm" method="post" action="../subscribe/detail.html" th:object="${subscribeSearchCondition}">
+			<input type="hidden" name="paramSysId" id="paramSysId" value="1" th:field="*{paramSysId}"/>
+            <input type="hidden" name="paramSysName"  id="paramSysName"  value="5" th:field="*{paramSysName}"/>
+			<input type="hidden" name="currentPage" value="1" th:field="*{currentPage}"/>
+            <input type="hidden" name="totalPage"   value="5" th:field="*{totalPage}"/>
+            <input type="hidden" name="jumpToPage" id="jumpToPage"  value="" />
+            <input type="hidden" name="sysId" id="sysId" value="" />
+            
+            
+            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+				<tr>
+					<td class="Table_title" ><img src="../images/icon_01.gif"/><label th:text="*{paramSysName}"></label>(<label th:text="*{paramSysId}"></label>) - 订阅详细</td>
+				</tr>
+			</table>
+            <div id="searchDiv" class="Graybg">
+                <table class="Table_s">
+                    <tr>
+                        <td class="label" width="70px">服务ID</td>
+                   		<td>
+                   			<input style="height:20px;" type="text" name="serviceId" id="serviceId" th:field="*{serviceId}"/>
+                   		</td>
+						
+						<td class="label" width="70px">服务名称</td>
+                        <td>
+                            <input style="height:20px;" type="text" name="serviceName" id="serviceName" th:field="*{serviceName}"/>
+                        </td>
+                        <td class="label" width="70px">医疗机构</td>
+                        <td>
+	                        <select id="hospitalCode" name="hospitalCode" class="selected01" style="width: 150px;" th:field="*{hospitalCode}">
+		                		<option value="000">请选择...</option>
+		                		<option value="*">不区分</option>
+								<option th:each="item : ${codeList}" th:text="${item.cdValue}" th:value="${item.cdDiv}"></option>
+							</select>
+                        </td>
+                        <td style="width: 15px;"></td>
+                        <td>
+							<button  id="seachBtn" name='seachBtn' type="button" style="overflow:visible;width:70px;height:25px;padding-left:4px;" class="btn01">
+								<img src="../images/btn/search.gif" style="vertical-align: middle;"/>&nbsp;搜索
+							</button>
+						</td>
+						<td>
+							<button  id="cleanBtn" name='cleanBtn' type="button" style="overflow:visible;width:70px;height:25px;padding-left:4px;" class="btn01">
+								<img src="../images/btn/clean.gif" style="vertical-align: middle;"/>&nbsp;清空
+							</button>
+						</td>
+						<td style="width: 20%;"></td>
+                    </tr>
+                    <tr style="height:1px;">
+                        <td colspan="8"></td>
+                    </tr>
+                </table>
+            </div>
+          </form>
+			<hr />
+			<div id="dataTable" style="padding-top: 5px; border: 0px solid #aacbee;">
+				<p style="height:2px;"></p>
+				<div>
+					<button id="addBtn" name="addBtn" type="button" style="overflow:visible;width:100px;height:25px;padding-left:4px;"  class="btn01" >
+				  	   <img src="../images/btn/add.gif" style="vertical-align: middle;" />新增订阅
+				    </button>
+				  	<button id="deleteBtn" name="deleteBtn" type="button" style="overflow:visible;width:100px;height:25px;padding-left:4px;"  class="btn01" >
+				  	   <img src="../images/btn/delete.gif" style="vertical-align: middle;" />删除订阅
+				    </button>
+				  	 <button id="backBtn" name="backBtn" type="button" style="overflow:visible;width:70px;height:25px;padding-left:4px;"  class="btn01" >
+				  	   <img src="../images/btn/back.gif" style="vertical-align: middle;" />返回
+				    </button>
+				</div>
+				<p style="height:3px;"></p>
+				<table style="width: 100%; margin-top: 1px;" border="1px" cellspacing="0" cellpadding="1" class="Table_01">
+					<thead>
+						<tr>
+							<th style="width:5%;" align="center" ><input type="checkbox" id="parentBox" name="parentBox" onclick="checkParent();" /></th>
+							<th style="width:5%;" align="center" >序号</th>
+							<th style="width:7%;">服务ID</th>
+							<th style="width:5%;">服务名称</th>
+							<th style="width:7%;">医疗机构</th>
+							<th style="width:9%;">申请科室组</th>
+							<th style="width:7%;">执行科室组</th>
+							<th style="width:7%;">发送系统</th>
+							<th style="width:10%;">就诊类型</th>
+							<th th:if="${msgHeaderType == '08'}" style="width:10%;">医嘱执行分类</th>
+							<th style="width:6%;">扩展码</th>
+							<th style="width:12%;">输出队列</th>
+							<th style="width:10%;">订阅描述</th>
+						</tr>
+					</thead>
+					<tbody class="tbody">
+						<tr style="cursor: pointer;" th:each="item : ${serviceList}" >
+							<td align="center"><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:40px;"><nobr><input type="checkbox" name="childrenBox" id="childrenBox"  onclick="checkChildren();" th:value="${item.subsId} + '_' + ${item.serviceName}"/></nobr></div></td>
+							<td align="center" ><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:50px;"><nobr><label th:text="${#ids.seq('')}"></label></nobr></div></td>
+							<td th:title="${item.serviceId}"><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:60px;"><nobr><label th:text="${item.serviceId}"></label></nobr></div></td>
+							<td th:title="${item.serviceName}"><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100px;"><nobr><label th:text="${item.serviceName}"></label></nobr></div></td>
+							<td th:if="${item['hospitalId'] == '*'}" >不区分(*)</td>
+							<td th:if="${item['hospitalId'] != '*'}" th:title="${item.hospitalName}">
+								<div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100px;"><nobr><label th:text="${item.hospitalName}"></label></nobr></div>
+							</td>
+							<td th:if="${item['applyUnitGroupId'] eq '*'}" th:text="${item.applyUnitGroupName} + '('+${item.applyUnitGroupId}+')'">
+							</td>
+							<td th:if="${item['applyUnitGroupId'] != '*'}" th:title="${item.applyUnitGroupName}">
+								<a href="#" th:onclick="'javascript:unitGroupDetail(\''+${item.applyUnitGroupId}+'\',\''+${item.hospitalId}+'\');'" style="color:blue;text-decoration:underline; " >
+									<div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:80px;"><nobr><label th:text="${item.applyUnitGroupName}"></label></nobr></div>
+								</a>
+							</td>
+							<td th:if="${item['execUnitGroupId'] != '*'}" th:title="${item.execUnitGroupName}">
+								<a href="#" th:onclick="'javascript:unitGroupDetail(\''+${item.execUnitGroupId}+'\',\''+${item.hospitalId}+'\');'" style="color:blue;text-decoration:underline; " >
+									<div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:80px;"><nobr><label th:text="${item.execUnitGroupName}"></label></nobr></div>
+								</a>
+							</td>
+							<td th:if="${item['execUnitGroupId'] eq '*'}" th:text="${item.execUnitGroupName} + '('+${item.execUnitGroupId}+')'">
+							</td>
+							
+							<!-- 发送系统ID -->
+							<td th:if="${item['sendSysId'] == '*'}" >不区分(*)</td>
+							<td th:if="${item['sendSysId'] != '*'}" th:title="${item.sendSysName}">
+								<div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100px;"><nobr><label th:text="${item.sendSysName}"></label></nobr></div>
+							</td>
+							
+							<td th:if="${item['visitTypeId'] == '*'}" >不区分(*)</td>
+							<td th:if="${item['visitTypeId'] != '*'}" th:title="${item.visitTypeName} + '('+${item.visitTypeId}+')'">
+								<div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:70px;"><nobr><label th:text="${item.visitTypeName} + '('+${item.visitTypeId}+')'"></label></nobr></div>
+							</td>
+							
+							<td th:if="${msgHeaderType == '08' and item['orderExecName'] == '*'}">不区分(*)</td>
+							<td th:if="${msgHeaderType == '08' and item['orderExecName'] != '*'}" th:title="${item.orderExecName} + '('+${item.orderExecId}+')'">
+								<div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:70px;"><nobr><label th:text="${item.orderExecName} + '('+${item.orderExecId}+')'"></label></nobr></div>
+							</td>															
+							<!--
+							<td th:title="${item.domainName}"><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:50px;"><nobr><label th:text="${item.domainName}"></label></nobr></div></td>
+							-->
+							<td th:title="${item.extendSubId}"><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:30px;"><nobr><label th:text="${item.extendSubId}"></label></nobr></div></td>
+							<td th:title="${item.outputQueueName}"><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:120px;"><nobr><label th:text="${item.outputQueueName}"></label></nobr></div></td>
+							<td th:title="${item.subsDesc}"><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:80px;"><nobr><label th:text="${item.subsDesc}"></label></nobr></div></td>
+						</tr>
+					</tbody>
+					<tfoot>
+					<tr th:unless="${#lists.isEmpty(serviceList)}" class="datatable-paging">
+		                 <td colspan="5" class="datatable-paging-info">
+		                     <span class="datatable-paging-count">第<span th:text="${subscribeSearchCondition.currentPage}">1</span>页/共<span th:text="${subscribeSearchCondition.totalPage}">550</span>页</span>
+		                     <span class="datatable-paging-total">总共<span th:text="${subscribeSearchCondition.totalSize}">5500</span>条数据</span>
+		                 </td>
+		                 <td th:if="${msgHeaderType == '08'}" colspan="8" class="datatable-paging-page">
+		                     <span class="datatable-paging-first" th:style="${subscribeSearchCondition.currentPage == 1 ? 'display: none;' : ''}" onclick="firstPage(document.serviceForm);">首页</span>
+		                     <span class="datatable-paging-previous" th:style="${subscribeSearchCondition.currentPage == 1 ? 'display: none;' : ''}" onclick="prevPage(document.serviceForm);">上一页</span>
+		                     <span class="datatable-paging-next" th:style="${subscribeSearchCondition.currentPage == subscribeSearchCondition.totalPage ? 'display: none;' : ''}" onclick="nextPage(document.serviceForm);">下一页</span>
+		                     <span class="datatable-paging-last" th:style="${subscribeSearchCondition.currentPage == subscribeSearchCondition.totalPage ? 'display: none;' : ''}" onclick="lastPage(document.serviceForm);">尾页</span>
+		                     <span class="datatable-paging-jump" th:style="${subscribeSearchCondition.totalPage == 1 ? 'display: none;' : ''}">
+		                         <span>跳转到：</span>
+		                         <input type="text" class="datatable-paging-jump-input" id="jumpToInput" />
+		                         <span class="datatable-paging-jump-go" onclick="jumpToPage(document.serviceForm, document.getElementById('jumpToInput'));"></span>
+		                     </span>
+		                 </td>
+						 <td th:if="${msgHeaderType == '07'}" colspan="7" class="datatable-paging-page">
+		                     <span class="datatable-paging-first" th:style="${subscribeSearchCondition.currentPage == 1 ? 'display: none;' : ''}" onclick="firstPage(document.serviceForm);">首页</span>
+		                     <span class="datatable-paging-previous" th:style="${subscribeSearchCondition.currentPage == 1 ? 'display: none;' : ''}" onclick="prevPage(document.serviceForm);">上一页</span>
+		                     <span class="datatable-paging-next" th:style="${subscribeSearchCondition.currentPage == subscribeSearchCondition.totalPage ? 'display: none;' : ''}" onclick="nextPage(document.serviceForm);">下一页</span>
+		                     <span class="datatable-paging-last" th:style="${subscribeSearchCondition.currentPage == subscribeSearchCondition.totalPage ? 'display: none;' : ''}" onclick="lastPage(document.serviceForm);">尾页</span>
+		                     <span class="datatable-paging-jump" th:style="${subscribeSearchCondition.totalPage == 1 ? 'display: none;' : ''}">
+		                         <span>跳转到：</span>
+		                         <input type="text" class="datatable-paging-jump-input" id="jumpToInput" />
+		                         <span class="datatable-paging-jump-go" onclick="jumpToPage(document.serviceForm, document.getElementById('jumpToInput'));"></span>
+		                     </span>
+		                 </td>
+	                </tr>
+                    <tr th:if="${#lists.isEmpty(serviceList)}" class="datatable-paging">
+	                    <td th:if="${msgHeaderType == '08'}" colspan="13" class="datatable-paging-info">
+	                        <span>没有查询结果，请修改检索条件重新检索。</span>
+	                    </td>
+	                    <td th:if="${msgHeaderType == '07'}" colspan="12" class="datatable-paging-info">
+	                        <span>没有查询结果，请修改检索条件重新检索。</span>
+	                    </td>						
+	                </tr>
+				</tfoot>
+				</table>
+				<div id="dialog-form"  title="科室组详细信息" style="margin: 5px; padding: 1px;  solid :#aacbee; background: #f8f8f8;overflow:hidden" >
+				<iframe id="dataIframe" width="800px" height="420px;" frameborder="0" scrolling="no" src=""></iframe>
+				</div>
+			</div>
+	</div>
+</body>
+</html>

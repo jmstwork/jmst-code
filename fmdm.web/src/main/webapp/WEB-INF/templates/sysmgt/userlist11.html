@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>用户管理</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" /> 
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" /> 
+     <style>
+		fieldset { padding:0; border:0; margin-top:3px; }
+		.ui-dialog .ui-state-error { padding: .3em; }
+		.validateTips { border: 1px solid transparent; }
+		.ui-widget-header { border: 1px solid #aaaaaa; background: #cccccc url(images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x; color: #222222; font-weight: bold; }
+	</style>
+    <div th:fragment="styles">
+	    <link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/layout.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/table.css" type="text/css"  rel="stylesheet" />
+	    <link rel="stylesheet" href="../styles/themes/base/jquery.ui.all.css"/>
+	    <link href="../styles/monitor-search.css" type="text/css"  rel="stylesheet" />
+    </div>
+   	<script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+    <script type="text/javascript" src="../scripts/paging.js"></script>
+    <div th:fragment="scripts">
+	    <script src="../scripts/ui/jquery.ui.core.js"></script>
+		<script src="../scripts/ui/jquery.ui.widget.js"></script>
+		<script src="../scripts/ui/jquery.ui.mouse.js"></script>
+		<script src="../scripts/ui/jquery.ui.button.js"></script>
+		<script src="../scripts/ui/jquery.ui.draggable.js"></script>
+		<script src="../scripts/ui/jquery.ui.position.js"></script>
+		<script src="../scripts/ui/jquery.ui.resizable.js"></script>
+		<script src="../scripts/ui/jquery.ui.dialog.js"></script>
+		<script src="../scripts/ui/jquery.ui.effect.js"></script>
+		<script type="text/javascript" src="../scripts/term/userlist.js"></script>
+   
+   </div>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+<body>
+	<div th:fragment="content" style="height:490px;margin: 5px; padding: 2px; border: 1px solid #aacbee; background: #f8f8f8; min-width: 1020px;">
+		<form id="userForm" name="userForm" method="post" action="" th:object="${termSearchCondition}">
+			<table cellpadding="0" cellspacing="0" border="0" width="100%">
+				<tr>
+					<td class="Table_title"><img src="../images/icon_01.gif" /> 用户管理</td>
+				</tr>
+			</table>
+            <div id="searchDiv" class="Graybg">
+                <table class="Table_s">
+                    <tr>
+                    	<td class="label">账户ID</td>
+                        <td>
+                           <input type="text" name="userNo" id="userNo" th:field="*{userNo}"/>
+                        </td>
+                        <td class="label">账户名称</td>
+                        <td><input type="text" name="userName" id="userName"  th:field="*{userName}"/></td>
+                        <td class="label">状态</td>
+                        <td>
+                            <select id="statusName" name="statusName" class="selected01" style="width: 180px;" th:field="*{status}">
+		                    		<option value="">请选择...</option>
+									<option value="0">未启用</option>
+									<option value="1">已启用</option>
+									<option value="2"> 已停用</option>
+							 </select>
+                        </td>
+						<td style="width: 55px;"></td>
+                        <td>
+							<button  id="seachBtn" name='seachBtn' type="button" style="width: 85px;height:25px;" class="btn01" onclick="doSearch();">
+								<img src="../images/btn/search.gif" style="vertical-align: middle;"/>&nbsp;搜索
+							</button>
+						</td>
+                    </tr>
+                    <tr style="height:1px;">
+                        <td></td>
+                        <td></td>
+						<td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+            <input type="hidden" name="currentPage" value="1" th:field="*{currentPage}"/>
+            <input type="hidden" name="totalPage"   value="5" th:field="*{totalPage}"/>
+            <input type="hidden" name="jumpToPage" id="jumpToPage"  value="" />
+            <input type="hidden" name="backMsg" id="backMsg" th:value="${backMsg}" />
+		</form>
+		<hr />
+		<div id="dataTable" style="padding-top: 5px; border: 0px solid #aacbee;">
+			<div align="left">
+				 <table>
+					<tbody>
+						<tr>
+							<td align="left">
+								<button  id="addBtn" type="button" style="overflow:visible;width:auto;height:25px;"  class="btn01" >
+								<img src="../images/btn/add.gif"
+									style="vertical-align: middle;" />新增
+								</button>
+							</td>
+						</tr>
+					</tbody>
+				 </table>
+			</div>
+			<p style="height:5px;"></p>
+			<table style="width: 100%; margin-top: 1px;" border="1px" cellspacing="0" cellpadding="1" class="Table_01">
+				<thead>
+					<tr>
+						<th style="width:25px;" align="center">序号</th>
+						<th style="width:150px;">账户Id</th>
+						<th style="width:150px;">账户名</th>
+						<th style="width:100px;">性别</th>
+						<th style="">电话号码</th>
+						<th style="width:100px;">状态</th>
+						<th style="width:60px;">操作</th>
+					</tr>
+				</thead>
+				<tbody class="tbody">
+					<tr style="cursor: pointer;" th:each="item : ${userInfoList}" >
+						<td th:text="${#ids.seq('')}" align="center">1</td>
+						<td id="deleteId" th:text="${item.userNo}" th:name="${item.userNo}"></td>
+						<td th:text="${item.userName}"></td>
+						<td th:text="${item.sexName}"></td>
+						<td th:text="${item.mobile}"></td>
+						<td th:text="${item.statusName}"></td>
+						<td>
+							<a href="javascript:void(0);" th:onclick="'javascript:updateDatasource(\''+${item.userNo}+'\');'"  style="color:blue;text-decoration:underline; " >修改</a>&nbsp;&nbsp;
+							<a href="javascript:void(0);" style="color:blue;text-decoration:underline" th:onclick="'javascript:deleteRow(\''+${item.userNo}+'\');'" >删除</a>
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr th:unless="${#lists.isEmpty(userInfoList)}" class="datatable-paging">
+		                 <td colspan="5" class="datatable-paging-info">
+		                     <span class="datatable-paging-count">第<span th:text="${termSearchCondition.currentPage}">1</span>页/共<span th:text="${termSearchCondition.totalPage}">550</span>页</span>
+		                     <span class="datatable-paging-total">总共<span th:text="${termSearchCondition.totalSize}">5500</span>条数据</span>
+		                 </td>
+		                 <td colspan="5" class="datatable-paging-page">
+		                     <span class="datatable-paging-first" th:style="${termSearchCondition.currentPage == 1 ? 'display: none;' : ''}" onclick="firstPage(document.userForm);">首页</span>
+		                     <span class="datatable-paging-previous" th:style="${termSearchCondition.currentPage == 1 ? 'display: none;' : ''}" onclick="prevPage(document.userForm);">上一页</span>
+		                     <span class="datatable-paging-next" th:style="${termSearchCondition.currentPage == termSearchCondition.totalPage ? 'display: none;' : ''}" onclick="nextPage(document.userForm);">下一页</span>
+		                     <span class="datatable-paging-last" th:style="${termSearchCondition.currentPage == termSearchCondition.totalPage ? 'display: none;' : ''}" onclick="lastPage(document.userForm);">尾页</span>
+		                     <span class="datatable-paging-jump" th:style="${termSearchCondition.totalPage == 1 ? 'display: none;' : ''}">
+		                         <span>跳转到：</span>
+		                         <input type="text" class="datatable-paging-jump-input" id="jumpToInput" />
+		                         <span class="datatable-paging-jump-go" onclick="jumpToPage(document.userForm, document.getElementById('jumpToInput'));"></span>
+		                     </span>
+		                 </td>
+	                </tr>
+                    <tr th:if="${#lists.isEmpty(userInfoList)}" class="datatable-paging">
+	                    <td colspan="7" class="datatable-paging-info">
+	                        <span>没有查询结果，请修改检索条件重新检索。</span>
+	                    </td>
+	                </tr>
+				</tfoot>
+			</table>
+			
+		</div>
+	</div>
+</body>
+</html>

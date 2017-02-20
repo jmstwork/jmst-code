@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>术语映射列表</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" /> 
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" /> 
+    <div th:fragment="styles">
+        <link href="../styles/autocomplete/jquery.autocomplete.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/autocomplete/thickbox.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/style.css" type="text/css"  rel="stylesheet" />
+    
+	    <link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+	    <link rel="stylesheet" href="../styles/themes/base/jquery.ui.all.css"/>
+	    <link href="../styles/layout.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/table.css" type="text/css"  rel="stylesheet" />
+		<link href="../styles/asyncbox/asyncbox.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/monitor-search.css" type="text/css"  rel="stylesheet" />
+    </div>
+    <script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+    <div th:fragment="scripts">
+	    <script type="text/javascript" src="../scripts/paging.js"></script>
+	    <script type="text/javascript" src="../scripts/ui/jquery.ui.core.js"></script>
+	    <script type="text/javascript" src="../scripts/ui/jquery.ui.widget.js"></script>
+	    <script type="text/javascript" src="../scripts/ui/jquery.ui.mouse.js"></script>
+	    <script type="text/javascript" src="../scripts/ui/jquery.ui.button.js"></script>
+	    <script type="text/javascript" src="../scripts/ui/jquery.ui.draggable.js"></script>
+	    <script type="text/javascript" src="../scripts/ui/jquery.ui.position.js"></script>
+	    <script type="text/javascript" src="../scripts/ui/jquery.ui.resizable.js"></script>
+	    <script type="text/javascript" src="../scripts/ui/jquery.ui.dialog.js"></script>
+	    <script type="text/javascript" src="../scripts/ui/jquery.ui.effect.js"></script>
+	    <script type="text/javascript" src="../scripts/term/termstructlist.js"></script>
+	    
+	    <!-- <script type="text/javascript" src="../scripts/autocomplete/jquery.bgiframe.min.js"></script> -->
+	    <script type="text/javascript" src="../scripts/autocomplete/jquery.bgiframe.js"></script>
+	    <script type="text/javascript" src="../scripts/autocomplete/jquery.ajaxQueue.js"></script>
+	    <script type="text/javascript" src="../scripts/autocomplete/thickbox-compressed.js"></script>
+	    <script type="text/javascript" src="../scripts/autocomplete/jquery.autocomplete.js"></script>
+	    <script type="text/javascript" src="../scripts/term/myautocomplete.js"></script>
+	    <script>
+	        $(document).ready(function(){
+	         myDropDownList("sourceTable","./selectNodeInfo.html",1,10,"sourceName");
+	         myDropDownList("sourceName","./selectNodeInfo.html",1,10,"sourceTable");
+	         myDropDownList("targetTable","./selectNodeInfo.html",1,10,"targetName");
+	         myDropDownList("targetName","./selectNodeInfo.html",1,10,"targetTable");
+	    });
+	    </script>
+    </div>
+</head>
+<body>
+	<div th:fragment="content" style="height:490px;margin: 5px; padding: 2px; border: 1px solid #aacbee; background: #f8f8f8; min-width: 1020px;">
+		<form id="termStructForm" name="termStructForm" method="post" action="" th:object="${mapCodeSearchCondition}">
+			<table cellpadding="0" cellspacing="0" border="0" width="100%">
+				<tr>
+					<td class="Table_title"><img src="../images/icon_01.gif" />术语映射列表</td>
+				</tr>
+			</table>
+            <div id="searchDiv" class="Graybg">
+                <table class="Table_s">
+                    <tr class="conditiontr">
+                        <td class="label">源</td>
+                        <td>
+                           <input type="text" name="sourceTable" id="sourceTable" th:field="*{sourceTable}" onfocus="this.select()"/>
+                        </td>
+                        <td class="label">源表名</td>
+                        <td><input type="text" name="sourceName" id="sourceName"  th:field="*{sourceName}" onfocus="this.select()"/></td>
+                        <td class="label">目标</td>
+                        <td>
+                        	<input type="text" name="targetTable" id="targetTable"  th:field="*{targetTable}" onfocus="this.select()"/>
+                        </td>
+                        <td class="label">目标表名</td>
+                        <td>
+	                        <input type="text" name="targetName" id="targetName"  th:field="*{targetName}" onfocus="this.select()"/>
+						</td>
+                        <td><button  type="button" style="overflow:visible;width:80px;height:25px;vertical-align:middle;"  class="btn01"  id="mapsearch" name="search">
+								<img src="../images/btn/search.gif"
+									style="vertical-align: middle;" />搜索
+								</button>
+						</td>
+						<td>
+							<button  id="cleanBtn2" name='cleanBtn2' type="button" style="width: 85px;height:25px;cursor:pointer;" class="btn01">
+								<img src="../images/btn/clean.gif" style="vertical-align: middle;"/>&nbsp;清空
+							</button>
+						</td>
+						<td style="width:100px;">
+                        	
+						</td>
+                    </tr>
+                    <tr style="height:1px;">
+                        <td style="width: 55px;"></td>
+                        <td style="width: 120px;"></td>
+                        <td style="width: 55px;"></td>
+                        <td style="width: 145px;"></td>
+                        <td style="width: 55px;"></td>
+                        <td style="width: 145px;"></td>
+                        <td style="width: 55px;"></td>
+                        <td style="width: 145px;"></td>
+                        <td style="width: 55px;"></td>
+                        <td style=""></td>
+                    </tr>
+                </table>
+            </div>
+            <input type="hidden" name="currentPage" value="1" th:field="*{currentPage}"/>
+            <input type="hidden" name="totalPage"   value="5" th:field="*{totalPage}"/>
+            <input type="hidden" name="jumpToPage" id="jumpToPage"  value="" />
+            <input type="hidden" name="backMsg" id="backMsg" th:value="${backMsg}" />
+		</form>
+		<hr />
+		<div id="dataTable" style="padding-top: 5px; border: 0px solid #aacbee;height:400px;" scroll="auto">
+			
+			<p align="left" >
+				<button id="addMC" name="addMC" type="button" style="overflow:visible;width:auto;height:25px;"  class="btn01" >
+					<img src="../images/btn/add.gif" style="vertical-align: middle;" />新增术语映射
+				</button>
+		   </p>
+			<p style="height:5px;"></p>
+			<table style="width: 100%; margin-top: 1px;" border="1px" cellspacing="0" cellpadding="1" class="Table_01">
+				<thead>
+					<tr>
+						<th style="width:10%;">序号</th>
+						<th style="width:20%;">源</th>
+						<th style="width:20%;">源表名</th>
+						<th style="width:20%;">目标</th>
+						<th style="width:20%;">目标表名</th>
+						<th style="width:10%;">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="data,rowStat:${tslist}">
+						<td align="center" th:text="${rowStat.count}"></td>
+						<td th:text="${data.sourceTable}">源</td>
+						<td th:text="${data.sourceName}">源表名</td>
+						<td th:text="${data.targetTable}">目标</td>
+						<td th:text="${data.targetName}">目标表名</td>
+						<td  align="center" style="color:#2d56a5;cursor:pointer;">
+						<a  class="Linkblue" th:onclick="'javascript:editTermMap(\''+${data.sourceTable}+'\',\''+${data.sourceName}+'\',\''+${data.targetTable}+'\',\''+${data.targetName}+'\');'">编辑</a>
+						&nbsp;&nbsp;&nbsp;<a class="Linkblue" th:onclick="'javascript:deleteMappingCode(\''+${data.sourceTable}+'\',\''+${data.targetTable}+'\',this);'">删除</a>
+						&nbsp;&nbsp;&nbsp;
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr th:unless="${#lists.isEmpty(tslist)}" class="datatable-paging">
+		                 <td colspan="2" class="datatable-paging-info">
+		                     <span class="datatable-paging-count">第<span th:text="${mapCodeSearchCondition.currentPage}">1</span>页/共<span th:text="${mapCodeSearchCondition.totalPage}">550</span>页</span>
+		                     <span class="datatable-paging-total">总共<span th:text="${mapCodeSearchCondition.totalSize}">5500</span>条数据</span>
+		                 </td>
+		                 <td colspan="5" class="datatable-paging-page">
+		                     <span class="datatable-paging-first" th:style="${mapCodeSearchCondition.currentPage == 1 ? 'display: none;' : ''}" onclick="firstPage(document.termStructForm);">首页</span>
+		                     <span class="datatable-paging-previous" th:style="${mapCodeSearchCondition.currentPage == 1 ? 'display: none;' : ''}" onclick="prevPage(document.termStructForm);">上一页</span>
+		                     <span class="datatable-paging-next" th:style="${mapCodeSearchCondition.currentPage == mapCodeSearchCondition.totalPage ? 'display: none;' : ''}" onclick="nextPage(document.termStructForm);">下一页</span>
+		                     <span class="datatable-paging-last" th:style="${mapCodeSearchCondition.currentPage == mapCodeSearchCondition.totalPage ? 'display: none;' : ''}" onclick="lastPage(document.termStructForm);">尾页</span>
+		                     <span class="datatable-paging-jump" th:style="${mapCodeSearchCondition.totalPage == 1 ? 'display: none;' : ''}">
+		                         <span>跳转到：</span>
+		                         <input type="text" class="datatable-paging-jump-input" id="jumpToInput" />
+		                         <span class="datatable-paging-jump-go" onclick="jumpToPage(document.termStructForm, document.getElementById('jumpToInput'));"></span>
+		                     </span>
+		                 </td>
+	                </tr>
+                    <tr th:if="${#lists.isEmpty(tslist)}" class="datatable-paging">
+	                    <td colspan="8" class="datatable-paging-info">
+	                        <span>没有查询结果，请修改检索条件重新检索。</span>
+	                    </td>
+	                </tr>
+				</tfoot>
+			</table>
+		
+			<div id="dialog-compare" title="术语结构与物理表差异比较">
+			</div>
+		
+		</div>
+	</div>
+</body>
+</html>

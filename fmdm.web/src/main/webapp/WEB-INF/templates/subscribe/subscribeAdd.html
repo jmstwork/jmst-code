@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>新增订阅</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" /> 
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" /> 
+    
+    <div th:fragment="styles">
+	    <link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/layout.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/table.css" type="text/css"  rel="stylesheet" />
+	    <link rel="stylesheet" href="../styles/themes/base/jquery.ui.all.css"/>
+	    <link href="../styles/monitor-search.css" type="text/css"  rel="stylesheet" />
+	    <style>
+		fieldset { padding:0; border:0; margin-top:3px; }
+		.ui-dialog .ui-state-error { padding: .3em; }
+		.red{color:#ff0000;font-family:"宋体";font-weight:normal;}
+		.validateTips { border: 1px solid transparent; }
+		.Table_bo {border:solid 1px #aacbee;}
+		.Table_bo td{ padding:8px 0px 0px 5px;}
+		.ui-widget-header { border: 1px solid #aaaaaa; background: #cccccc url(images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x; color: #222222; font-weight: bold; }
+	</style>
+    </div>
+    	<script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+	    <script src="../scripts/ui/jquery.ui.core.js"></script>
+		<script src="../scripts/ui/jquery.ui.widget.js"></script>
+		<script src="../scripts/ui/jquery.ui.mouse.js"></script>
+		<script src="../scripts/ui/jquery.ui.button.js"></script>
+		<script src="../scripts/ui/jquery.ui.draggable.js"></script>
+		<script src="../scripts/ui/jquery.ui.position.js"></script>
+		<script src="../scripts/ui/jquery.ui.resizable.js"></script>
+		<script src="../scripts/ui/jquery.ui.dialog.js"></script>
+		<script src="../scripts/ui/jquery.ui.effect.js"></script>
+    	<script type="text/javascript" src="../scripts/paging.js"></script>
+    <div th:fragment="scripts">
+    	<script type="text/javascript" src="../scripts/subscribe/subscribeAdd.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				
+			});
+		</script>
+   </div>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+<body>
+	<div th:fragment="content" style="height:550px;margin: 5px; padding: 2px; border: 1px solid #aacbee; background: #f8f8f8; min-width: 1020px;">
+		   <form id="addForm" name="addForm" action="" method="post" th:object="${subscribeSearchCondition}">
+				<input type="hidden" name="paramSysId" id="paramSysId" value="" th:field="*{paramSysId}"/>
+		        <input type="hidden" name="paramSysName"  id="paramSysName"  value="" th:field="*{paramSysName}"/>
+		        <input type="hidden" name="subsIds"  id="subsIds"  value="" />
+		        <input type="hidden" name="subscribeId"  id="subscribeId"  value="" />
+		        <input type="hidden" name="sysId" id="sysId" value="" />
+		        <input type="hidden" name="method" id="method" value="" />
+		        <input type="hidden" name="msgHeaderType"  id="msgHeaderType"  value="" th:field="*{msgHeaderType}"/>
+				<table cellpadding="0" cellspacing="0" border="0" width="100%">
+					<tr>
+						<td class="Table_title" ><img src="../images/icon_01.gif"/><label th:text="*{paramSysName}"></label>(<label th:text="*{paramSysId}"></label>) - 新增订阅</td>
+					</tr>
+				</table>
+				<p style="height:5px;"></p>
+				<table width="100%" align="left" class="Table_bo" style="">
+		            <tr>
+		               <td class="label" width="375" align="right"><span class="red">*</span>服务ID</td>
+		               <td width="260">
+		               		<span>
+			                 <input type="text" name="serviceId" id="serviceId" value="" size="22"/>
+			                 <button id="chooseBtn" name="chooseBtn" type="button" style="overflow:visible;width:100px;height:25px;padding-left:4px;"  class="btn01" >
+						  	    <img src="../images/btn/choose.gif" style="vertical-align: middle;" />选择服务
+						     </button>
+							 </span>
+		               </td>
+		               <td>
+		                   <p id="serviceIdMsg" class="validateTips red"></p>
+					   </td>
+		            </tr>
+		            <tr>
+		               <td class="label" width="150" ><span class="red">*</span>服务名称</td>
+		               <td width="120">
+			                <input type="text" name="serviceName" id="serviceName" value="" size="42" readOnly="true" style="background-color:#cbcbcb;"/>
+		               </td>
+		               <td>
+		                   <p id="serviceNameMsg" class="validateTips red"></p>
+					   </td>
+		            </tr>
+		            <tr>
+		               <td class="label" width="100" ><span class="red">*</span>医疗机构</td>
+		               <td width="120" id="hosptailNameTd">
+			                <select id="hospitalName" name="hospitalName" class="selected01" style="width: 250px;">
+	                    		<option value="000">请选择...</option>
+	                    		<option value="*">不区分</option>
+								<option th:each="item : ${codeList}" th:text="${item.cdValue}" th:value="${item.cdDiv}"></option>
+							</select>
+		               </td>
+		               <td>
+		                   <p id="hospitalNameMsg" class="validateTips red"></p>
+					   </td>
+		            </tr>
+		            <tr>
+		               <td class="label" width="100" ><span class="red">*</span>申请科室组</td>
+		               <td width="120">
+			                <select id="applyUnitGroupName" name="applyUnitGroupName" class="selected01" style="width: 250px;">
+	                    		<option value="000">请选择...</option>
+	                    		<option value="*">不区分</option>
+								<option th:each="item : ${applyList}" th:text="${item.unitGroupName}" th:value="${item.unitGroupId}"></option>
+							</select>
+		               </td>
+		               <td>
+		                   <p id="applyUnitGroupNameMsg" class="validateTips red"></p>
+					   </td>
+		            </tr>
+		            <tr>
+		               <td class="label" width="100" ><span class="red">*</span>执行科室组</td>
+		               <td width="120">
+			                <select id="execUnitGroupName" name="execUnitGroupName" class="selected01" style="width: 250px;">
+	                    		<option value="000">请选择...</option>
+	                    		<option value="*">不区分</option>
+								<option th:each="item : ${execList}" th:text="${item.unitGroupName}" th:value="${item.unitGroupId}"></option>
+							</select>
+		               </td>
+		               <td>
+		                   <p id="execUnitGroupNameMsg" class="validateTips red"></p>
+					   </td>
+	                </tr>
+		            <tr>
+		               <td class="label" width="100" ><span class="red">*</span>就诊类型</td>
+					 <!-- Author:liu_hongjie
+	                      Date : 2014/9/5 15:58
+	                      [BUG]0047611 ADD BEGIN--> 
+		               <td width="120">
+			                <select id="visitTypeName" name="visitTypeName" class="selected01" style="width: 250px;">
+	                    		<option value="000">请选择...</option>							
+								<option  value="*">不区分</option>
+								<option th:each="item : ${visitTypeList}" th:text="${item.name}" th:value="${item.code}"></option>						
+							</select>
+		               </td>
+					  <!-- [BUG]0047611 ADD END--> 
+		               <td>
+		                   <p id="visitTypeNameMsg" class="validateTips red"></p>
+					   </td>
+	                </tr>
+						<!-- Author:lsg
+	                      Date : 2014/10/16 14:50
+	                      [BUG]0049708 ADD BEGIN--> 
+		            <tr th:if="${msgHeaderType == '08'}" >
+		               <td class="label" width="100" ><span class="red">*</span>医嘱执行分类</td>
+			           <td width="120">
+							<select id="orderExecId" name="orderExecId" class="selected01" style="width: 250px;">
+	                    		<option value="000">请选择...</option>							
+								<option  value="*">不区分</option>
+								<option th:each="item : ${subsOrderExecIdList}" th:text="${item.name}" th:value="${item.code}"></option>						
+							</select>
+			           </td>
+			           <td>
+		                   <p id="orderExecIdMsg" class="validateTips red"></p>
+					   </td>
+		            </tr>
+					<!-- [BUG]0049708 ADD END--> 									
+		            <tr>
+		               <td class="label" width="100" ><span class="red">*</span>扩展码</td>
+			           <td width="120">
+							<select id="extendSubId" name="extendSubId" class="selected01" style="width: 250px;">
+	                    		<option value="000">请选择...</option>
+								<option  value="*">不区分</option>							
+								<option th:each="item : ${subsExtendSubIdList}" th:text="${item.name}" th:value="${item.code}"></option>						
+							</select>							
+			           </td>
+			           <td>
+		                   <p id="extendSubIdMsg" class="validateTips red"></p>
+					   </td>
+		            </tr>
+		            <tr>
+			           <td class="label" width="100" ><span class="red">*</span>发送系统</td>
+			           <td width="120">
+							<select id="sendSysId" name="sendSysId" class="selected01" style="width: 250px;">
+	                    		<option value="000">请选择...</option>
+								<option  value="*">不区分</option>							
+								<option th:each="item : ${subsSysList}" th:text="${item.sysName}" th:value="${item.sysId}"></option>						
+							</select>							
+			           </td>
+		               <td>
+		                   <p id="sendSysIdMsg" class="validateTips red"></p>
+					   </td>
+		            </tr>
+		            <tr>
+			           <td class="label" width="100" ><span class="red">*</span>输出队列</td>
+		               <td width="120">
+			                <input type="text" name="outputQueueName" id="outputQueueName" value="" size="42"/>
+		               </td>
+		               <td>
+		                   <p id="outputQueueNameMsg" class="validateTips red"></p>
+					   </td>
+		            </tr>
+		            
+		            <tr>
+			           <td class="label" width="100" >订阅描述</td>
+		               <td width="120">
+			                <textarea  name="subsDesc" id="subsDesc" value="" rows="4" cols="30"></textarea>
+		               </td>
+		               <td>
+		                   <p id="outputQueueNameMsg" class="validateTips red"></p>
+					   </td>
+		            </tr>
+		            <tr>
+			           <td class="label" width="100" ><label for="goOn">继续订阅</label></td>
+		               <td width="120">
+			              	  <input type="checkbox" name="goOn" id="goOn" />
+		               </td>
+		               <td>
+		                   <p id="outputQueueNameMsg" class="validateTips red"></p>
+					   </td>
+		            </tr>
+		        </table>
+		        <table class="Table_s">
+				  	<tr>
+				  		<td></td>
+	                </tr>
+			  	</table>
+		        <div align="center">
+			        
+				  	<button id="saveBtn" name="saveBtn" type="button" style="overflow:visible;width:100px;height:25px;padding-left:4px;"  class="btn01" >
+				  	   <img src="../images/btn/save.gif" style="vertical-align: middle;" />保存订阅
+				    </button>
+				  	<button id="resetBtn" name="resetBtn" type="button" style="overflow:visible;width:70px;height:25px;padding-left:4px;"  class="btn01" >
+				  	   <img src="../images/btn/clear.gif" style="vertical-align: middle;" />重置
+				    </button>
+				  	 <button id="backBtn" name="backBtn" type="button" style="overflow:visible;width:70px;height:25px;padding-left:4px;"  class="btn01" >
+				  	   <img src="../images/btn/back.gif" style="vertical-align: middle;" />返回
+				    </button>
+			  	</div>
+			  	 <table class="Table_s">
+				  	<tr>
+				  		<td></td>
+	                </tr>
+			  	</table>
+			  	
+			  	<div id="serviceDialog"  title="服务列表" style="margin: 5px; padding: 0px;  solid :#aacbee; background: #f8f8f8;overflow:auto" >
+					<iframe id="serviceFrame" width="890px" height="370px;" frameborder="0" scrolling="no"  src=""></iframe>
+				</div>
+			</form>
+			
+			
+	</div>
+</body>
+</html>

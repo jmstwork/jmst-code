@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>${page_title}</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<link rel="icon" type="image/x-icon" href="../favicon.ico" />
+<link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" />
+<style>
+fieldset {
+	padding: 0;
+	border: 0;
+	margin-top: 3px;
+}
+
+.ui-dialog .ui-state-error {
+	padding: .3em;
+}
+
+.validateTips {
+	border: 1px solid transparent;
+}
+
+.ui-widget-header {
+	border: 1px solid #aaaaaa;
+	background: #cccccc
+		url(../images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50%
+		repeat-x;
+	color: #222222;
+	font-weight: bold;
+}
+</style>
+<div th:fragment="styles">
+	<link href="../styles/monitor.css" type="text/css" rel="stylesheet" />
+	<link href="../styles/layout.css" type="text/css" rel="stylesheet" />
+	<link href="../styles/table.css" type="text/css" rel="stylesheet" />
+	<link href="../styles/monitor-search.css" type="text/css" rel="stylesheet" />
+</div>
+<script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="../scripts/AsyncBox.v1.4.5.js"></script>
+<div th:fragment="scripts">
+	<script type="text/javascript" src="../scripts/sysmgt/logManagerList.js"></script>
+	<script type="text/javascript" src="../scripts/My97DatePicker/WdatePicker.js"></script> 
+	<script type="text/javascript" src="../scripts/paging.js"></script>
+	<script type="text/javascript" src="../scripts/sysmgt/createCutLog.js"></script>
+</div>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+<body>
+	<div th:fragment="content"
+		style="margin: 5px; padding: 2px; border: 1px solid #aacbee; background: #f8f8f8; min-width: 1020px;">
+		<form action="" id="logForm" name="logForm" method="post" th:object="${logManagerCondition}">
+		
+		
+			<input type="hidden" name="currentPage" value="1" th:field="*{currentPage}" /> 
+			<input type="hidden" name="totalPage" value="5" th:field="*{totalPage}" /> 
+			<input type="hidden" name="jumpToPage" id="jumpToPage" value="" /> 
+			<input type="hidden" name="backMsg" id="backMsg" th:value="${backMsg}" />
+			
+			
+			
+			<table cellpadding="0" cellspacing="0" border="0" width="100%">
+				<tr>
+					<td class="Table_title"><img src="../images/icon_01.gif" /> 日志管理</td>
+				</tr>
+			</table>
+			<div id="searchDiv" class="Graybg">
+				<p class="validateTips" style="color: red; text-align: left"></p>
+				<table class="Table_s">
+					<tr>
+						<td class="label" align="right">模块</td>
+						<td align="left"><select id="operModu" name="operModu"
+							style="width: 150px; line-height: 20px; height: 25px;"
+							onchange="refreshOperObj(this);" th:field="*{operModu}">
+								<option selected="selected" value="">请选择</option>
+								<option th:each="item : ${listModu}" th:text="${item.resrName}"
+									th:value="${item.resrCode}"></option>
+						</select></td>
+						<td style="width: 50px;"></td>
+						<td class="label" align="right">对象</td>
+						<td align="left"><select name="operObj" id="operObj"
+							style="width: 124px; line-height: 20px; height: 25px;" th:field="*{operObj}">
+								<option selected="selected" value="">请选择</option>
+								<option th:each="item : ${listObj}" th:text="${item.optName}"
+									th:value="${item.optCode}"></option>
+						</select></td>
+						<td style="width: 50px;"></td>
+						<td style="width: 50px;"></td>
+						<td style="width: 50px;"></td>
+						
+					</tr>
+					<tr>
+						<td class="label" align="right">用户ID</td>
+						<td align="left"><input type="text" name="operorId" id="operorId" th:value="${logManagerDetailDto.operorId}" style="width: 148px" /></td>
+						<td style="width: 50px;"></td>
+						<td class="label" align="right">操作时间</td>
+						<td align="left">
+							<table align="left" border="0">
+								<tr align="left">
+									<td align="left"
+										style="padding-top: 0px; padding-left: 0px;">
+										<input type="text" onclick="display()" th:value="${logManagerDetailDto.operDt1}" id="operDt1" name="operDt1" style="width: 120px; height: 20px;"/></td>
+									<td align="left"
+										style="padding-top: 0px; padding-left: 0px;">&nbsp;-
+										<input type="text" onclick="display()" th:value="${logManagerDetailDto.operDt2}" id="operDt2" name="operDt2" style="width: 120px; height: 20px;"/></td>
+								</tr>
+							</table>
+						</td>
+						<td>&nbsp;&nbsp;</td>
+						<td><button type="button" style="width: 85px;height:25px;" class="btn01" onclick="doSearch();">
+							<img src="../images/btn/search.gif" style="vertical-align: middle;"/>&nbsp;搜索
+							</button>
+						</td>
+						<td><button type="button" style="width: 85px;height:25px;" class="btn01" onclick="doClear();">
+							<img src="../images/btn/clean.gif" style="vertical-align: middle;"/>&nbsp;清空
+							</button>
+						</td>
+					</tr>
+					<tr style="height:1px;">
+                        <td colspan="7"></td>
+                    </tr>
+				</table>
+			</div>
+		</form>
+		<hr/>
+		<div id="dataTable"
+			style="padding-top: 5px; border: 0px solid #aacbee;">
+			<table style="width: 100%; margin-top: 1px;" border="1px"
+				cellspacing="0" cellpadding="1" class="Table_01">
+				<thead>
+					<tr>
+						<th width="5%" align="center">列号</th>
+						<th width="10%">用户ID</th>
+						<th width="10%">用户名</th>
+						<th width="15%">模块</th>
+						<th width="15%">对象</th>
+						<th width="33%">操作内容</th>
+						<th width="12%">操作时间</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="item : ${grolist}">
+						<td th:text="${#ids.seq('')}" align="center">BS001</td>
+						<td th:text="${item.operorId}" align="left">用户ID</td>
+						<td th:text="${item.userName}" align="left">用户名</td>
+						<td th:text="${item.resrName}" align="left">操作模块</td>
+						<td th:text="${item.optName}" align="left">操作对象</td>
+						<!--  <td th:if="${#strings.length(item.operCont) > 20}" th:text="${#strings.substring(item.operCont,0,24)} + '......'" th:title="${item.operCont}" align="left">操作内容</td>
+						<td th:unless="${#strings.length(item.operCont) > 20}" th:text="${item.operCont}" align="left">操作内容</td>-->
+						<!-- <td th:text="${item.operCont}" align="left">操作内容</td> -->
+						<td th:title="${item.operCont}"><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:400px;"><nobr><label th:text="${item.operCont}"></label></nobr></div></td>
+						<td th:text="${item.operDt}" align="left">操作时间</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr th:unless="${#lists.isEmpty(grolist)}" class="datatable-paging">
+						<td colspan="3" class="datatable-paging-info">
+							<span class="datatable-paging-count">第
+								<span th:text="${logManagerCondition.currentPage}">1</span>页/共
+								<span th:text="${logManagerCondition.totalPage}">550</span>页
+							</span> 
+							<span class="datatable-paging-total">总共
+								<span th:text="${logManagerCondition.totalSize}">5500</span>条数据
+							</span>
+						</td>
+						<td colspan="4" class="datatable-paging-page">
+							<span class="datatable-paging-first" th:style="${logManagerCondition.currentPage == 1 ? 'display: none;' : ''}"
+								onclick="firstPage(document.logForm);">首页</span> 
+							<span class="datatable-paging-previous" th:style="${logManagerCondition.currentPage == 1 ? 'display: none;' : ''}"
+								onclick="prevPage(document.logForm);">上一页</span> 
+							<span class="datatable-paging-next" th:style="${logManagerCondition.currentPage == logManagerCondition.totalPage ? 'display: none;' : ''}"
+								onclick="nextPage(document.logForm);">下一页</span> 
+							<span class="datatable-paging-last" th:style="${logManagerCondition.currentPage == logManagerCondition.totalPage ? 'display: none;' : ''}"
+								onclick="lastPage(document.logForm);">尾页</span> 
+							<span class="datatable-paging-jump" th:style="${logManagerCondition.totalPage == 1 ? 'display: none;' : ''}">
+								<span>跳转到：</span> 
+								<input type="text" class="datatable-paging-jump-input" id="jumpToInput" /> 
+								<span class="datatable-paging-jump-go" onclick="jumpToPage(document.logForm, document.getElementById('jumpToInput'));"></span>
+							</span>
+						</td>
+					</tr>
+					<tr th:if="${#lists.isEmpty(grolist)}" class="datatable-paging">
+						<td colspan="7" class="datatable-paging-info"><span>没有查询结果，请修改检索条件重新检索。</span>
+						</td>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

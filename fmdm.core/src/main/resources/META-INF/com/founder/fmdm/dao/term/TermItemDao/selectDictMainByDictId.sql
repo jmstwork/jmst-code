@@ -1,0 +1,1 @@
+select * from dict_main dm where dm.dict_id = /*dictId*/'dictId'

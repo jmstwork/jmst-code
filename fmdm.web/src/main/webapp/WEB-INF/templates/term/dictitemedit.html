@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>字典项目编辑</title>
+<!-- <script type="text/javascript">
+	function checkLen($this) {
+		var x = $this.val()
+		var l = x.replace(/[^\x00-\xff]/g, "xxx").length;
+		var maxLen = parseInt($this.attr("maxLength"))
+		var labelValue =$this.parent().prev().children('label').eq(0).text();
+		if (l > maxLen) {
+			$( ".validateTips" ).text( labelValue + "长度超过表的定义长度！" ).addClass( "ui-state-highlight" )
+		}
+		console.info(x);
+		console.info(l);
+		console.info(maxLen);
+		console.info(labelValue);
+	}
+</script> -->
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+</head>
+<body>
+	<p class="validateTips" style="color: red;" id="test001"></p>
+	<div th:if="${#lists.size(termItemDtoList) le 10 }">
+	<form action="termDataEdit.html" name="itemDataEditForm"
+		id="itemDataEditForm" method="POST">
+		<fieldset>
+			<div align="center">
+				<table style="width: 100%; margin-top: 2px;" cellspacing="0"
+					cellpadding="0" class="Table_02" border="1">
+					<tr th:each="item : ${termItemDtoList}" th:if="${item['field_is_edit']=='Y'}">
+						<td  class="label"><label for="name"
+							th:text="${item['field_desc']+(item['is_primary'] == 'Y' ? '(p)' : '' )}">数据源名称：</label>
+						</td>
+						<td align="left" th:if="${item['field_type']=='DATE'}">
+							<input 
+							type="text"
+							class="Wdate"
+							style="width: 220px;"
+							th:name="${item['field_name']}" th:id="${item['field_name']}"
+							th:value="*{uni_key.isEmpty() ? item['default_value'] : termDataMap['__${item['field_name']}__']}"
+							th:maxlength="${item['length']}"
+							th:disabled="${item['is_primary'] == 'Y' and !uni_key.isEmpty() ? 'true' : 'false' }"
+							th:pattern="${item['is_must']+','+item['field_type']+','+(item['is_primary'] == 'Y' and termDataMap['__${item['field_name']}__'].isEmpty() ? 'Y' : 'N' )}"
+							onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+						</td>
+						<td align="left" th:if="${item['field_type']=='NVARCHAR2'}">
+							<input
+							type="text" 
+							style="width: 220px;"
+							th:name="${item['field_name']}"
+							th:id="${item['field_name']}"
+							th:value="*{uni_key.isEmpty() ? item['default_value'] : termDataMap['__${item['field_name']}__']}"
+							th:disabled="${item['is_primary'] == 'Y' and !uni_key.isEmpty()  ? 'true' : 'false' }"
+							th:maxlength="${item['length']}"
+							th:pattern="${item['is_must']+','+item['field_type']+','+(item['is_primary'] == 'Y' and termDataMap['__${item['field_name']}__'].isEmpty() ? 'Y' : 'N' )}" />
+						</td>
+						<td align="left" th:if="${item['field_type']=='VARCHAR2'}">
+							<input
+							type="text" 
+							style="width: 220px;"
+							th:name="${item['field_name']}"
+							th:id="${item['field_name']}"
+							th:value="*{uni_key.isEmpty() ? item['default_value'] : termDataMap['__${item['field_name']}__']}"
+							th:disabled="${item['is_primary'] == 'Y' and !uni_key.isEmpty()  ? 'true' : 'false' }"
+							th:maxLength="${item['length']}"  onchange="checkLen($(this))"
+							th:pattern="${item['is_must']+','+item['field_type']+','+(item['is_primary'] == 'Y' and termDataMap['__${item['field_name']}__'].isEmpty() ? 'Y' : 'N' )}" />
+						</td>						
+						<td align="left" th:if="${item['field_type']=='NUMBER'}">
+							<input
+							type="text" 
+							style="width: 220px;"
+							th:name="${item['field_name']}"
+							th:id="${item['field_name']}"
+							th:value="*{uni_key.isEmpty() ? item['default_value'] : termDataMap['__${item['field_name']}__']}"
+							th:disabled="${item['is_primary'] == 'Y' and !uni_key.isEmpty() ? 'true' : 'false' }"
+							th:pattern="${item['is_must']+','+item['field_type']+','+(item['is_primary'] == 'Y' and termDataMap['__${item['field_name']}__']==null ? 'Y' : 'N' )+','+item['precision']+','+item['length']}" />
+						</td>
+						<td th:if="${item['field_type']=='NUMBER(1)'}" align="left">
+							<select style="width: 100px;"
+								th:name="${item['field_name']}"
+								th:id="${item['field_name']}" 
+								th:value="*{uni_key.isEmpty() ? '0' : termDataMap['__${item['field_name']}__']}"
+								th:disabled="${item['is_primary'] == 'Y' and !uni_key.isEmpty() ? 'true' : 'false' }"
+								th:pattern="${item['is_must']+','+item['field_type']+','+(item['is_primary'] == 'Y' and termDataMap['__${item['field_name']}__']==null ? 'Y' : 'N' )}">
+									<option value="0" th:selected="*{uni_key.isEmpty() ? '0' : termDataMap['__${item['field_name']}__']}">否</option>
+									<option value="1" th:selected="*{uni_key.isEmpty() ? '0' : termDataMap['__${item['field_name']}__']}">是</option>
+							</select>
+						</td>
+					</tr>
+					<tr th:each="item : ${termItemDtoList}" th:if="${item['field_is_edit']=='N'}">
+						<td align="left">
+							<input
+							type="hidden" 
+							style="width: 220px;"
+							th:name="${item['field_name']}"
+							th:value="*{uni_key.isEmpty() ? item['default_value'] : termDataMap['__${item['field_name']}__']}"
+							/>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</fieldset>
+		<input type="hidden" name="dictId" th:value="*{dictId}" /> <input
+			type="hidden" name="editStatus" th:value="*{editStatus}" /> <input
+			type="hidden" name="uni_key" th:value="*{uni_key}" /> <input
+			type="hidden" name="title" th:value="*{title}" /> <input
+			type="hidden" name="length" th:value="*{length}" />
+	</form>
+	</div>
+	<div th:if="${#lists.size(termItemDtoList) gt 10}">
+	<form action="termDataEdit.html" name="itemDataEditForm"
+		id="itemDataEditForm" method="POST">
+		<fieldset>
+			<div align="center">
+				<table style="width: 100%; margin-top: 2px;" cellspacing="0"
+					cellpadding="0" class="Table_02" border="1">
+					<tr th:each="item,iterStat : ${termItemDtoList}" >
+						<td class="label" th:if="${iterStat.odd}"><label for="name"
+							th:text="${item['field_desc']+(item['is_primary'] == 'Y' ? '(p)' : '' )}">数据源名称：</label>
+						</td>
+						<td align="left" th:if="${item['field_type']=='DATE' and iterStat.odd}">
+							<input 
+							type="text"
+							class="Wdate"
+							style="width: 220px;"
+							th:name="${item['field_name']}" th:id="${item['field_name']}"
+							th:value="*{uni_key.isEmpty() ? item['default_value'] : termDataMap['__${item['field_name']}__']}"
+							th:maxlength="${item['length']}"
+							th:disabled="${item['is_primary'] == 'Y' and !uni_key.isEmpty() ? 'true' : 'false' }"
+							th:pattern="${item['is_must']+','+item['field_type']+','+(item['is_primary'] == 'Y' and termDataMap['__${item['field_name']}__'].isEmpty() ? 'Y' : 'N' )}"
+							onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+						</td>
+						<td align="left" th:if="${item['field_type']=='NVARCHAR2'  and iterStat.odd}">
+							<input
+							type="text" 
+							style="width: 220px;"
+							th:name="${item['field_name']}"
+							th:id="${item['field_name']}"
+							th:value="*{uni_key.isEmpty() ? item['default_value'] : termDataMap['__${item['field_name']}__']}"
+							th:disabled="${item['is_primary'] == 'Y' and !uni_key.isEmpty()  ? 'true' : 'false' }"
+							th:maxlength="${item['length']}"
+							th:pattern="${item['is_must']+','+item['field_type']+','+(item['is_primary'] == 'Y' and termDataMap['__${item['field_name']}__'].isEmpty() ? 'Y' : 'N' )}" />
+						</td>
+						<td align="left" th:if="${item['field_type']=='VARCHAR2'  and iterStat.odd}">
+							<input
+							type="text" 
+							style="width: 220px;"
+							th:name="${item['field_name']}"
+							th:id="${item['field_name']}"
+							th:value="*{uni_key.isEmpty() ? item['default_value'] : termDataMap['__${item['field_name']}__']}"
+							th:disabled="${item['is_primary'] == 'Y' and !uni_key.isEmpty()  ? 'true' : 'false' }"
+							th:maxlength="${item['length']}" 
+							th:pattern="${item['is_must']+','+item['field_type']+','+(item['is_primary'] == 'Y' and termDataMap['__${item['field_name']}__'].isEmpty() ? 'Y' : 'N' )}" />
+						</td>						
+						<td align="left" th:if="${item['field_type']=='NUMBER'  and iterStat.odd}">
+							<input
+							type="text" 
+							style="width: 220px;"
+							th:name="${item['field_name']}"
+							th:id="${item['field_name']}"
+							th:value="*{uni_key.isEmpty() ? item['default_value'] : termDataMap['__${item['field_name']}__']}"
+							th:disabled="${item['is_primary'] == 'Y' and !uni_key.isEmpty() ? 'true' : 'false' }"
+							th:pattern="${item['is_must']+','+item['field_type']+','+(item['is_primary'] == 'Y' and termDataMap['__${item['field_name']}__']==null ? 'Y' : 'N' )+','+item['precision']+','+item['length']}" />
+						</td>
+						<td align="left" th:if="${item['field_type']=='NUMBER(1)'  and iterStat.odd}">
+							<select style="width: 100px;"
+								th:name="${item['field_name']}"
+								th:id="${item['field_name']}" 
+								th:value="*{uni_key.isEmpty() ? '0' : termDataMap['__${item['field_name']}__']}"
+								th:disabled="${item['is_primary'] == 'Y' and !uni_key.isEmpty() ? 'true' : 'false' }"
+								th:pattern="${item['is_must']+','+item['field_type']+','+(item['is_primary'] == 'Y' and termDataMap['__${item['field_name']}__']==null ? 'Y' : 'N' )}">
+									<option value="0">否</option>
+									<option value="1">是</option>
+							</select>
+						</td>
+						
+						<td class="label" th:if="${iterStat.even}"><label for="name"
+							th:text="${item['field_desc']+(item['is_primary'] == 'Y' ? '(p)' : '' )}">数据源名称：</label>
+						</td>
+						<td align="left" th:if="${item['field_type']=='DATE' and iterStat.even}">
+							<input 
+							type="text"
+							class="Wdate"
+							style="width: 220px;"
+							th:name="${item['field_name']}" th:id="${item['field_name']}"
+							th:value="*{uni_key.isEmpty() ? item['default_value'] : termDataMap['__${item['field_name']}__']}"
+							th:maxlength="${item['length']}"
+							th:disabled="${item['is_primary'] == 'Y' and !uni_key.isEmpty() ? 'true' : 'false' }"
+							th:pattern="${item['is_must']+','+item['field_type']+','+(item['is_primary'] == 'Y' and termDataMap['__${item['field_name']}__'].isEmpty() ? 'Y' : 'N' )}"
+							onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+						</td>
+						<td align="left" th:if="${item['field_type']=='NVARCHAR2' and iterStat.even}">
+							<input
+							type="text" 
+							style="width: 220px;"
+							th:name="${item['field_name']}"
+							th:id="${item['field_name']}"
+							th:value="*{uni_key.isEmpty() ? item['default_value'] : termDataMap['__${item['field_name']}__']}"
+							th:disabled="${item['is_primary'] == 'Y' and !uni_key.isEmpty()  ? 'true' : 'false' }"
+							th:maxlength="${item['length']}"
+							th:pattern="${item['is_must']+','+item['field_type']+','+(item['is_primary'] == 'Y' and termDataMap['__${item['field_name']}__'].isEmpty() ? 'Y' : 'N' )}" />
+						</td>
+						<td align="left" th:if="${item['field_type']=='VARCHAR2' and iterStat.even}">
+							<input
+							type="text" 
+							style="width: 220px;"
+							th:name="${item['field_name']}"
+							th:id="${item['field_name']}"
+							th:value="*{uni_key.isEmpty() ? item['default_value'] : termDataMap['__${item['field_name']}__']}"
+							th:disabled="${item['is_primary'] == 'Y' and !uni_key.isEmpty()  ? 'true' : 'false' }"
+							th:maxlength="${item['length']}"
+							th:pattern="${item['is_must']+','+item['field_type']+','+(item['is_primary'] == 'Y' and termDataMap['__${item['field_name']}__'].isEmpty() ? 'Y' : 'N' )}" />
+						</td>						
+						<td align="left" th:if="${item['field_type']=='NUMBER' and iterStat.even}">
+							<input
+							type="text" 
+							style="width: 220px;"
+							th:name="${item['field_name']}"
+							th:id="${item['field_name']}"
+							th:value="*{uni_key.isEmpty() ? item['default_value'] : termDataMap['__${item['field_name']}__']}"
+							th:disabled="${item['is_primary'] == 'Y' and !uni_key.isEmpty() ? 'true' : 'false' }"
+							th:pattern="${item['is_must']+','+item['field_type']+','+(item['is_primary'] == 'Y' and termDataMap['__${item['field_name']}__']==null ? 'Y' : 'N' )+','+item['precision']+','+item['length']}" />
+						</td>
+						<td align="left" th:if="${item['field_type']=='NUMBER(1)' and iterStat.even}">
+							<select style="width: 100px;"
+								th:name="${item['field_name']}"
+								th:id="${item['field_name']}" 
+								th:value="*{uni_key.isEmpty() ? '0' : termDataMap['__${item['field_name']}__']}"
+								th:disabled="${item['is_primary'] == 'Y' and !uni_key.isEmpty() ? 'true' : 'false' }"
+								th:pattern="${item['is_must']+','+item['field_type']+','+(item['is_primary'] == 'Y' and termDataMap['__${item['field_name']}__']==null ? 'Y' : 'N' )}">
+									<option value="0">否</option>
+									<option value="1">是</option>
+							</select>
+						</td>
+					</tr>
+					<tr th:each="item : ${termItemDtoList}" th:if="${item['field_is_edit']=='N'}">
+						<td align="left">
+							<input
+							type="hidden" 
+							style="width: 220px;"
+							th:name="${item['field_name']}"
+							th:value="*{uni_key.isEmpty() ? item['default_value'] : termDataMap['__${item['field_name']}__']}"
+							/>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</fieldset>
+		<input type="hidden" name="dictId" th:value="*{dictId}" /> 
+		<input type="hidden" name="editStatus" th:value="*{editStatus}" /> 
+	    <input type="hidden" name="uni_key" th:value="*{uni_key}" /> 
+	    <input type="hidden" name="title" th:value="*{title}" />
+	    <input type="hidden" name="length" th:value="*{length}" />
+	</form>
+	</div>
+</body>
+</html>

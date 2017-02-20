@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>${page_title}</title>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" /> 
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" /> 
+    <style>
+		fieldset { padding:0; border:0; margin-top:3px; }
+		.ui-dialog .ui-state-error { padding: .3em; }
+		.validateTips { border: 1px solid transparent; }
+		.ui-widget-header { border: 1px solid #aaaaaa; background: #cccccc url(../images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x; color: #222222; font-weight: bold; }
+	</style>
+    <div th:fragment="styles">
+    <link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+    <link href="../styles/layout.css" type="text/css"  rel="stylesheet" />
+    <link href="../styles/table.css" type="text/css"  rel="stylesheet" />
+    <link href="../styles/monitor-search.css" type="text/css"  rel="stylesheet" />
+    <link href="../styles/asyncbox/asyncbox.css" type="text/css" rel="stylesheet" />
+    </div>
+    <script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+    <script type="text/javascript" src="../scripts/AsyncBox.v1.4.5.js"></script>
+    <div th:fragment="scripts">
+    <script type="text/javascript" src="../scripts/paging.js"></script>
+    <script type="text/javascript" src="../scripts/rule/grouDetail.js"></script>
+    </div>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+<body>
+	<div th:fragment="content" style="height: 490px; margin: 5px; padding: 2px; border: 1px solid #aacbee; background: #f8f8f8; min-width: 1020px;">
+		<form action="" id="editGroupForm" name="editGroupForm" method="post" >
+			<p class="validateTips" style="color:red; text-align:left" ></p>
+			<table style="width: 100%; margin-top: 1px;" border="1px"
+				cellspacing="0" cellpadding="1" class="Table_04">
+				<thead>
+					<tr>
+						<td colspan="3" class="Table_title">&nbsp;&nbsp;修改规则组</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr style="display: none">
+						<td width="198" align="right" class="title">规则组编号&nbsp;:&nbsp;</td>
+						<td><input id="rulegroupId" name="rulegroupId" type="text"
+							th:value="${groDetailDto.rulegroupId}" maxsize="50" size="40" nullable="false"/></td>
+							<td style="width: 120px;">&nbsp;</td>
+					</tr>
+					<tr>
+						<td width="198" align="right" class="title">规则组名称&nbsp;:&nbsp;</td>
+						<td><input type="text" id="condGroName" name="condGroName"
+							th:value="${groDetailDto.rulegroupName}" maxsize="50" size="40" />
+							<label id="tipcondGroName" class="validateTips" style="color:red;"></label></td>
+					</tr>
+					<tr>
+						<td width="198" align="right" class="title">规则组英文名称&nbsp;:&nbsp;</td>
+						<td><input type="text" id="condGroNameEn" name="condGroNameEn"
+							th:value="${groDetailDto.rulegroupEnName}" maxsize="50" size="40" />
+							<label id="tipcondGroNameEn" class="validateTips" style="color:red;"></label></td>
+					</tr>
+				</tbody>
+			</table>
+			<p class="space20"></p>
+			<div align="center">
+				<table align="center">
+					<tbody>
+						<tr>
+							<td name="save" id="save">
+								<button type="button" style="width: 85px; height: 25px;"
+									class="btn01" id="saveBtn" onclick="save()">
+									<img src="../images/btn/save.gif"
+										style="vertical-align: middle;" />&nbsp;保存
+								</button>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<button type="button" style="width: 85px; height: 25px;"
+									class="btn01" id="closeBtn" onclick="closePage()">
+									<img src="../images/btn/close.png"
+										style="vertical-align: middle;" />&nbsp;关闭
+								</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</form>
+
+	</div>
+</body>
+</html>

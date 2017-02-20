@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>告警设置</title>
+<div th:fragment="styles">
+	    <link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/layout.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/table.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/monitor-search.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/asyncbox/asyncbox.css" type="text/css" rel="stylesheet" />
+    </div>
+   	<script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+    <script type="text/javascript" src="../scripts/paging.js"></script>
+    <div th:fragment="scripts">
+		<script type="text/javascript" src="../scripts/sysmgt/warningSettingList.js"></script>
+   		<script type="text/javascript" src="../scripts/autocomplete/autocomplete.js"></script>
+   </div>
+</head>
+<body>
+	<div th:fragment="content" style="height:490px;margin: 5px; padding: 2px; border: 1px solid #aacbee; background: #f8f8f8; min-width: 1020px;">
+		<form id="wsForm" name="wsForm" action="" method="post"  th:object="${wsCondition}">
+		<input type="hidden" id="temp" name="temp" th:value="${dictDepartmentJson}" />
+		<input type="hidden" id="saveFlg" name="saveFlg" th:value="${saveFlg}" />
+		<input type="hidden" id="opt" name="opt" th:value="${opt}" />
+		<input type="hidden" id="result" name="result" th:value="${result}" />
+		<input type="hidden" id="settingId" name="settingId" value="" />
+		<input type="submit" name="submitBtn" id="submitBtn" style="display: none;" />
+		<input type="hidden" name="currentPage" value="1" th:field="*{currentPage}"/>
+        <input type="hidden" name="totalPage"   value="5" th:field="*{totalPage}"/>
+        <input type="hidden" name="jumpToPage" id="jumpToPage"  value="" />
+        <input type="hidden" name="backMsg" id="backMsg" th:value="${backMsg}" />
+		<div id="CNMain">
+			<table cellpadding="0" cellspacing="0" border="0" width="100%">
+				<tr>
+					<td class="Table_title"><img src="../images/icon_01.gif" /> 警告设置</td>
+				</tr>
+			</table>
+			<div class="Graybg">
+				<table cellpadding="0" cellspacing="0" border="0" class="Table_02">
+					<tr>
+						<td align="right" width="8%">规则组</td>
+						<td align="left" width="10%">
+							<select name="groupCode" id="groupCode" class="selected01" style="width: 150px;" th:field="*{groupCode}">
+					            <option value="">请选择</option>
+					            <option th:each="item : ${ruleGroup}" th:text="${item.rulegroupName}" th:value="${item.rulegroupId}"></option>
+				          	</select>
+						</td>
+						<td width="10%" align="right">接收者</td>
+						<td width="10%"  align="center">
+							<button  id="cardBtn" name='cardBtn' type="button" style="width: 100px;height:25px;" class="btn01">
+								<img src="../images/btn/card.gif" style="vertical-align: middle;"/>选项卡
+							</button>
+						</td>
+						<td width="20%"  ><input type="text" id="userNo" name="userNo" style="background-color:#cbcbcb;width:70px;" readonly="true" th:field="*{userNo}"/>
+						<input type="text" id="userName" name="userName" th:field="*{userName}"  style="background-color:#cbcbcb;width:73px;" readonly="true"/>
+						</td>
+						<td align="right" width="10%">对象类型</td>
+						<td colspan="2">
+							<select id="userType" name="userType" class="selected01" style="width: 100px;" th:field="*{userType}">
+								<option value="" selected="selected">
+									请选择
+								</option>
+								<option th:each="item: ${codeList}" th:text="${item.cdValue}" th:value="${item.cdDiv}"></option>
+							</select>
+						</td>
+						<td width="15%"></td>
+					</tr>
+					<tr>
+						<td align="right" width="8%">科室部门</td>
+				        <td>
+				        	<div class="selectDeptDict" style="z-index: 1">
+								<input id="unitName" name="unitName" value="" style="width:145px;" th:value="${wsCondition.unitName}"/>
+							</div>
+							<input id="unitId" name="unitId" type="hidden" value="" />
+				        </td>
+						<td width="10%" align="right">通知方式</td>
+						<td width="10%" align="left" style="">
+							<select id="noticeMethod" name="noticeMethod" class="selected01" style="width: 87px;"
+								th:field="*{noticeMethod}">
+								<option value="" selected="selected">
+									请选择
+								</option>
+								<option value="tel">
+									电话
+								</option>
+								<option value="email">
+									邮件
+								</option>
+							</select>
+						</td>
+						<td>
+							<input type="text" id="noticeMethodValue" th:style="${#strings.isEmpty(wsCondition.noticeMethod)?'background-color: #cbcbcb;width:150px;':'width:150px;'}" th:readonly="${#strings.isEmpty(wsCondition.noticeMethod)}" th:field="*{tel}"/>
+						</td>
+						<td align="right">
+							<button  id="seachBtn" name='seachBtn' type="button" style="width: 85px;height:25px;" class="btn01">
+								<img src="../images/btn/search.gif" style="vertical-align: middle;"/>&nbsp;搜索
+							</button>
+						</td>
+						<td width="20%" align="left" colspan="2">
+							<button  id="cleanBtn" name='cleanBtn' type="button" style="width: 85px;height:25px;cursor:pointer;" class="btn01">
+								<img src="../images/btn/clean.gif" style="vertical-align: middle;"/>&nbsp;清空
+							</button>
+						</td>
+						<td width="15%" colspan="2"></td>
+						
+					</tr>
+				</table>
+				<hr/>
+				<p style="height:5px;"></p>
+				<table>
+					<tr>
+						<td >
+							<button  id="addWs" type="button" style="overflow:visible;width:85px;height:25px;"  class="btn01">
+								<img src="../images/btn/add.gif" style="vertical-align: middle;" />新增
+							</button>
+						</td>
+					</tr>
+					
+				</table>
+				<p style="height:5px;"></p>
+			</div>
+		</div>
+		<div id="WSView">
+				<table id="Table_View" style="width: 100%; margin-top: 1px;" border="1px" cellspacing="0" cellpadding="1" class="Table_01">
+				<thead>
+					<tr>
+						<th style="width:30px;" align="center">序号</th>
+						<th style="width:70px;">接收者ID</th>
+						<th style="width:70px;">接收者名称</th>
+						<th style="width:100px;">对象类型</th>
+						<th style="width:100px;">科室部门</th>
+						<th style="width:100px;">规则组名</th>
+						<th style="width:150px;">电话</th>
+						<th style="width:150px;">邮箱</th>
+						<th style="width:100px;">操作</th>
+					</tr>
+				</thead>
+				<tbody class="tbody">
+					<tr style="cursor: pointer;" th:each="item:${wsList}">					
+						<td th:text="${#ids.seq('')}" align="center">1</td>
+						<td th:text="${item.userNo}"></td>
+						<td th:text="${item.userName}"></td>
+						<td th:text="${item.userTypeName}"></td>
+						<td th:text="${item.unitName}"></td>
+						<td th:text="${item.rulegroupName}"></td>
+						<td th:text="${item.tel}"></td>
+						<td th:text="${item.email}"></td>
+						<td align="center">
+							<a th:onclick="'javascript:editWS(\'' + ${item.settingId} + '\');'" style="color:blue;text-decoration:underline; " class="Linkblue" target="_self">编辑</a>
+							&nbsp;&nbsp;&nbsp;<a th:onclick="'javascript:deleteWS(\'' + ${item.settingId} +'\',this);'" style="color:blue;text-decoration:underline; " class="Linkblue" target="_self">删除</a>
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr th:unless="${#lists.isEmpty(wsList)}" class="datatable-paging">
+		                 <td colspan="5" class="datatable-paging-info">
+		                     <span class="datatable-paging-count">第<span th:text="${wsCondition.currentPage}">1</span>页/共<span th:text="${wsCondition.totalPage}">550</span>页</span>
+		                     <span class="datatable-paging-total">总共<span th:text="${wsCondition.totalSize}">5500</span>条数据</span>
+		                 </td>
+		                 <td colspan="4" class="datatable-paging-page">
+		                     <span class="datatable-paging-first" th:style="${wsCondition.currentPage == 1 ? 'display: none;' : ''}" onclick="firstPage(document.wsForm);">首页</span>
+		                     <span class="datatable-paging-previous" th:style="${wsCondition.currentPage == 1 ? 'display: none;' : ''}" onclick="prevPage(document.wsForm);">上一页</span>
+		                     <span class="datatable-paging-next" th:style="${wsCondition.currentPage == wsCondition.totalPage ? 'display: none;' : ''}" onclick="nextPage(document.wsForm);">下一页</span>
+		                     <span class="datatable-paging-last" th:style="${wsCondition.currentPage == wsCondition.totalPage ? 'display: none;' : ''}" onclick="lastPage(document.wsForm);">尾页</span>
+		                     <span class="datatable-paging-jump" th:style="${wsCondition.totalPage == 1 ? 'display: none;' : ''}">
+		                         <span>跳转到：</span>
+		                         <input type="text" class="datatable-paging-jump-input" id="jumpToInput" />
+		                         <span class="datatable-paging-jump-go" onclick="jumpToPage(document.wsForm, document.getElementById('jumpToInput'));"></span>
+		                     </span>
+		                 </td>
+	                </tr>
+                    <tr th:if="${#lists.isEmpty(wsList)}" class="datatable-paging">
+	                    <td colspan="9" class="datatable-paging-info">
+	                        <span>没有查询结果，请修改检索条件重新检索。</span>
+	                    </td>
+	                </tr>
+				</tfoot>
+			</table>
+		</div>
+	</form>
+</div>
+</body>
+</html>

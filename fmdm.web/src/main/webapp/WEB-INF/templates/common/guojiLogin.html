@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <title th:text="${#wpload.loadProperty('SYSTEM_LOGO_STYLE')}">登录</title>
+        <link rel="icon" type="image/x-icon" href="../favicon.ico" /> 
+        <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" /> 
+		<link rel="stylesheet" type="text/css" media="all" href="../styles/layoutMonitor.css" />
+        <script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+        <script type="text/javascript" src="../scripts/paging.js"></script>
+        <style type="text/css">
+   			.loginButton{width:56px; height:22px; background-image:url(../images/login/loginBtn.png); background-repeat:no-repeat;  background-color:transparent;border:none;}
+			.closeButton{width:56px; height:22px; background-image:url(../images/login/closeBtn.png); background-repeat:no-repeat;  background-color:transparent;border:none;}
+		</style>
+		<script>
+			function clean(){
+				$("#j_username").val("");
+				$("#j_password").val("");
+			}
+		</script>
+    </head>
+<body style="overflow:-Scroll;overflow-x:hidden;overflow-y:hidden">
+	<div style="width:128px;height:128px;border:0px solid red; position: absolute;z-index:10000;">
+	<img src='../images/login/logo-international.png'></img>
+	</div>
+	<img id="login-backgrond-img"
+		 style="position: absolute; position: fixed; left: 0px; top: 0px; width: 100%; height: 55%; min-width: 1024px; min-height: 708px; z-Index: -1; border: 0px solid green; margin: 0 auto;"
+		 src="../images/login/login-bj.png" />
+	<!-- mawen:修改表格尺寸取消滚动 --> 
+	<form name="loginForm" style="line-height: 50px; margin-left: 0%;" id="loginForm" action="../j_spring_security_check" method="post">
+		<table style="position: absolute; top: 25%; left: 1%; width: 99%; min-width: 700px; z-Index: 9; border=0;">
+			<tr>
+				<td width="55%" style="min-width: 300px;">&nbsp;</td>
+				<td colspan="3" rowspan="7" style="background-image: url(../images/login/loginform.png);background-repeat:no-repeat; _background-image: none; _filter: progid:DxImageTransform.Microsoft.AlphaImageLoader(src='./images/login/loginform.png', sizingMethod='image' );">
+					<table style="position: absolute; top: 1%; left: 55%; width: 300px; height: 270px; z-Index: 66;" border="0">
+						<tr style="line-heigth:5px;">
+							<td style="heigth:5px;" colspan="6">&nbsp;</td>
+						</tr>
+						<tr style="line-height: 10px;">
+							<td></td>
+							<td colspan="3" style="color: #fff; font-size: 16px; font-family: 微软雅黑;">
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户登录</td>
+							<td colspan="2"></td>
+						</tr>
+						<tr style="line-height: 10px;">
+							<td>&nbsp;&nbsp;</td>
+							<td colspan="5" align="center">
+								<span th:if="${loginMsg eq 'error'}" style="padding-left: 0px; font-size: 13px; color: #ff9900; font-weight: bold;">用户名或密码错误</span>
+								<span th:if="${loginMsg eq 'disabled'}" style="padding-left: 0px; font-size: 13px; color: #ff9900; font-weight: bold;">账户已停用，请联系管理员</span>
+							</td>
+						</tr>
+						<tr style="line-height: 40px;">
+							<td colspan="2"></td>
+							<td style="font-family:微软雅黑; font-size:12px;color:#fff;" align="right">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;登录名&nbsp;&nbsp;</td>
+							<td colspan="1"><input style="width:150px;" type="text" name="j_username" id="j_username" value="" class="validate[required] input-text" /></td>
+						</tr>
+						<tr style="line-height: 40px;">
+							<td colspan="2"></td>
+							<td style="font-family:微软雅黑; font-size:12px;color:#fff;" align="right">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;密&nbsp;&nbsp;&nbsp;码&nbsp;&nbsp;</td>
+							<td colspan="1"><input style="width:150px;" type="password" name="j_password" id="j_password" class="validate[required] input-text" /></td>
+						</tr>
+						<tr style="line-height: 10px;">
+							<td colspan="3">&nbsp;</td>
+							<td style="font-size: 12px; color: white;" align="right">
+								<u style="cursor: pointer;" title="重置" onclick="clean()"> 重置</u>
+							</td>
+						</tr>
+						<tr style="line-height: 50px;">
+							<td colspan="3">&nbsp;&nbsp;</td>
+							<td>
+								<input type="button" value="" onclick="loginForm.submit();" class="loginButton" /> &nbsp; 
+								<input type="button" value="" onclick="window.close();" class="closeButton" />
+							</td>
+						</tr>
+						<tr style="height: 40px;">
+							<td colspan="5" style="color: #fff; font-size: 16px; font-family: 微软雅黑;"> &nbsp;&nbsp;&nbsp;</td>
+						</tr>
+					</table>
+				</td>
+				<td width="18%">&nbsp;</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td align="center">
+					<div>
+						<span style="color: #fff; font-size: 33px; font-family: 微软雅黑;">主数据管理系统</span>
+					</div>
+				</td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td align="center">
+					<div>
+						<span style="color: #fff; font-size: 19px; font-family: Arial;">Master Data Management</span>
+					</div>
+				</td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>&nbsp;</td>
+			</tr>
+			<!-- 马文:添加padding属性使字体居中 --> 
+			<tr style="line-height: 90px;">
+				<td style="padding:10px">&nbsp;</td>
+				<td width="200px">&nbsp;</td>
+			</tr>
+		</table>
+	</form>
+	<!-- mawen:取消滤镜 --> 
+	<div style="filter: progid:DxImageTransform.Microsoft.AlphaImageLoader(src='../images/login/banner.png', sizingMethod='scale' ); position: absolute; top: 33%; min-top: 700px; width: 100%; min-width: 1024px; z-Index: 4; height: 200px; border: 0px solid red;">
+		<img style="position: fixed; top: 33%; min-top: 700px; width: 100%; height: 20%; z-Index: 4; min-width: 1024px; min-height: 198px; border: 1px solid none" src="../images/login/banner.png" />
+	</div>
+	<div style="position: absolute; bottom: 0px;_margin-bottom:0px;">
+		<span style="color: #d6d8d9; font-size: 12px; font-family: arial; font-weight: bold;">CS_T11_20131209-7</span>
+	</div>
+</body>
+</html>

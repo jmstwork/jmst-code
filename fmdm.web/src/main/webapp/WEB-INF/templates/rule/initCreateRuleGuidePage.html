@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<title>规则新建向导</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" /> 
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" /> 
+    <div th:fragment="styles">
+    <link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+    <link href="../styles/layout.css" type="text/css"  rel="stylesheet" />
+    <link href="../styles/table.css" type="text/css"  rel="stylesheet" />
+    <link href="../styles/monitor-search.css" type="text/css"  rel="stylesheet" />
+    </div>
+    <script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+    <script type="text/javascript" src="../scripts/AsyncBox.v1.4.5.js"></script>
+    <script type="text/javascript" src="../scripts/term/synclist.js"></script>
+<div th:fragment="scripts">
+        <script type="text/javascript" src="../scripts/rule/RuleModel.js"></script>
+	    <script type="text/javascript" src="../scripts/paging.js"></script>
+    </div>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+<body  >
+<div th:fragment="content" style="margin: 5px; padding: 2px; border: 1px solid #aacbee; background: #f8f8f8; min-width: 1020px;">
+	<table cellpadding="0" cellspacing="0" border="0" width="100%">
+		<tr>
+			<td class="Table_title"><img src="../images/icon_01.gif" />&nbsp;&nbsp;
+				选择创建方式
+			</td>
+		</tr>
+	</table>
+		<table border="0" cellpadding="0" cellspacing="0"
+			class="Table_01" style="width:100%" >
+			<tr>
+				<td align="right">创建方式</td>
+				<td align="left">&nbsp; &nbsp;
+					<input type="radio" id="self" name="type" onclick="radioClick(this.value);" value="0"/>
+					<span style="cursor: hand;" onclick='jQuery("#self").click();'>自定义创建</span> &nbsp; &nbsp; &nbsp; &nbsp;
+					<input type="radio" id="copy" name="type" onclick="radioClick(this.value);" value="1"/>
+					<span style="cursor: hand;" onclick='jQuery("#copy").click();'>复制创建</span>
+				</td>
+			</tr>
+		</table>
+	<p class="space10"></p>
+	<div id="ruleListDiv" style="display: none;">
+	<form id="ruleForm" name="DataForm" method="post" action="../rule/initCreateGuidePage.html" th:object="${ruleListDto}">
+			<input type="hidden" name="currentPage" value="1" th:field="*{currentPage}"/>
+            <input type="hidden" name="totalPage"   value="5" th:field="*{totalPage}"/>
+            <input type="hidden" name="jumpToPage" id="jumpToPage"  value="" />
+            <input type="hidden" name="backMsg" id="backMsg" th:value="${backMsg}" />
+            <input type="hidden" name="operFlg" id="operFlg" th:value="*{operFlg}" />
+		<table cellpadding="0" cellspacing="0" border="0" width="100%">
+			<tr>
+				<td class="Table_title"><img src="../images/icon_01.gif" />&nbsp;&nbsp;选择参考规则</td>
+			</tr>
+		</table>
+		<div class="Graybg">
+			<table cellpadding="0" cellspacing="0" border="0" class="Table_02">
+				<tr>
+					<td  align="right">规则名
+					</td>
+					<td  align="left"><input type="text"
+						id="condRuleName" maxlength="20" class="" name="condRuleName"
+						size="20" th:value="*{condRuleName}"  /></td>
+					<td  align="right">状态</td>
+					<td   align="left"><select id="condStatus" name="condStatus"
+						style="width: 130px;">
+							<option value="-1">
+								请选择
+							</option>
+								<option th:each="status : ${ruleStatus }" th:value="${status.cdDiv}" th:text="${status.cdValue}" th:selected="${status.cdDiv==ruleListDto.condStatus}">${status.cdValue}</option>
+					</select>
+					</td>
+				</tr>
+				<tr>
+					<td   align="right">引用模型</td>
+					<td   align="left"><input type="text"
+						id="condModelName" maxlength="20" class="" name="condModelName"
+						size="20" th:value="${ruleListDto.condModelName}"  /></td>
+
+					<td  align="right">规则组名</td>
+					<td  align="left"><input type="text"
+						id="condRuleGroName" maxlength="20" class=""
+						name="condRuleGroName" size="20"
+						th:value="${ruleListDto.condRuleGroName}"  /></td>
+					<td></td>
+					<td align="right" >
+							<button  id="seachBtn" name='seachBtn' type="submit" style="width: 85px;height:25px;cursor:pointer;" onclick="searchClick()"  class="btn01">
+								<img src="../images/btn/search.gif" style="vertical-align: middle;"/>&nbsp;搜索
+							</button>
+						</td>
+						<td align="left">
+							<button  id="cleanBtn" name='cleanBtn' style="width: 85px;height:25px;cursor:pointer;" onclick="cleanBtnClick()" class="btn01">
+								<img src="../images/btn/clean.gif" style="vertical-align: middle;"/>&nbsp;清空
+							</button>
+						</td>
+					<td></td>
+				</tr>
+				
+			</table>
+			<table class="Table_02">
+				<tr>
+					<td width="60%"></td>
+					<td width="1%" id="approveBtn" align="right"></td>
+					<td width="8%"></td>
+				</tr>
+			</table>
+			<p class="space10"></p>
+		</div>
+		<div id="ruleTable" style="padding-top: 5px; border: 0px solid #aacbee;">
+			<table style="width: 100%; margin-top: 1px;" border="1px" cellspacing="0" cellpadding="1" class="Table_01">
+				<thead>
+					<tr>
+						<th width="8%">选择</th>
+						<th width="8%" align="center" >序号</th>
+						<th width="30%">规则名</th>
+						<th width="25%">所属科室</th>
+						<th width="20%">引用模型</th>
+						<th width="20%">状态</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="item : ${ruleList}" >
+						<td align="center"><input type="radio" id="childrenBox" name="childrenBox" onclick="javascript:checkRule(this.id);" th:id="${item.ruleId}"/></td>
+						<td align="center" th:text="${#ids.seq('')}">1</td>
+						<td th:text="${item.ruleName}" align="left">aaaa</td>
+						<td th:text="${item.departName}" align="left">aaa</td>
+						<td th:text="${item.modelName}" align="left">aaa</td>
+						<td th:text="${item.statusText}" align="left">aaa</td>
+					</tr>
+				</tbody>
+				<tfoot>
+                    <tr th:unless="${#lists.isEmpty(ruleList)}" class="datatable-paging">
+		                 <td colspan="2" class="datatable-paging-info">
+		                     <span class="datatable-paging-count">第<span th:text="${ruleListDtoCondition.currentPage}">1</span>页/共<span th:text="${ruleListDtoCondition.totalPage}">550</span>页</span>
+		                     <span class="datatable-paging-total">总共<span th:text="${ruleListDtoCondition.totalSize}">5500</span>条数据</span>
+		                 </td>
+		                 <td colspan="5" class="datatable-paging-page">
+		                     <span class="datatable-paging-first" th:style="${ruleListDtoCondition.currentPage == 1 ? 'display: none;' : ''}" onclick="firstPage(document.DataForm);">首页</span>
+		                     <span class="datatable-paging-previous" th:style="${ruleListDtoCondition.currentPage == 1 ? 'display: none;' : ''}" onclick="prevPage(document.DataForm);">上一页</span>
+		                     <span class="datatable-paging-next" th:style="${ruleListDtoCondition.currentPage == ruleListDtoCondition.totalPage ? 'display: none;' : ''}" onclick="nextPage(document.DataForm);">下一页</span>
+		                     <span class="datatable-paging-last" th:style="${ruleListDtoCondition.currentPage == ruleListDtoCondition.totalPage ? 'display: none;' : ''}" onclick="lastPage(document.DataForm);">尾页</span>
+		                     <span class="datatable-paging-jump" th:style="${ruleListDtoCondition.totalPage == 1 ? 'display: none;' : ''}">
+		                         <span>跳转到：</span>
+		                         <input type="text" class="datatable-paging-jump-input" id="jumpToInput" />
+		                         <span class="datatable-paging-jump-go" onclick="jumpToPage(document.DataForm, document.getElementById('jumpToInput'));"></span>
+		                     </span>
+		                 </td>
+	                </tr>
+                    <tr th:if="${#lists.isEmpty(ruleList)}" class="datatable-paging">
+	                    <td colspan="8" class="datatable-paging-info">
+	                        <span>没有查询结果，请修改检索条件重新检索。</span>
+	                    </td>
+	                </tr>
+				</tfoot>
+			</table>
+		</div>
+		</form>
+	</div>
+	<p class="space20"></p>
+	<div>
+		<form id="creadeRuleForm" name="checkType" action="" method="post">
+			<input type="hidden" id="ruleId" value=""/>
+			<input type="submit" id="submitBtn" name="submitBtn" style="display: none;"/>
+			<table cellpadding="0" cellspacing="0" border="0" align="center">
+				<tr>
+					<td width="60" align="center" id="saveBtn"><input id="OkBtn" type="button" onclick="okBtnClick()" value="确定" class="btn01"/>
+				</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<p class="space20"></p>
+</div>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>数据编辑/新增</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<link href="../styles/monitor.css" type="text/css" rel="stylesheet" />
+	<link href="../styles/layout.css" type="text/css" rel="stylesheet" />
+	<link href="../styles/table.css" type="text/css" rel="stylesheet" />
+	<link href="../styles/monitor-search.css" type="text/css" rel="stylesheet" />
+	<script type="text/javascript" src="../scripts/My97DatePicker/WdatePicker.js"></script> 
+</head>
+<body>
+	<p class="validateTips" style="color: red;" id="test001"></p>
+	<div>
+	<form action="termDataEdit.html" name="itemDataEditForm"
+		id="itemDataEditForm" method="POST">
+		<fieldset>
+			<div th:if="${uniKey == 'undefined'}" align="center">
+				<table style="width: 100%; margin-top: 2px;" cellspacing="0"
+					cellpadding="0" class="Table_02" border="1">
+					<tr th:if="${tableName == 'SUBS_SYS'}">
+					<td style="width:12%;"></td>
+					<td style="width:20%;" align="left"><label class="label" th:if="${#maps.containsKey(termDataMap,'SYS_ID') and tableName == 'SUBS_SYS'}" for="name">系统编码</label></td>
+					<td style="width:60%;" align="left"><input th:if="${tableName == 'SUBS_SYS'}" name='SYS_ID' id='SYS_ID' /></td>
+					</tr>
+					<tr th:if="${tableName == 'SUBS_SYS'}">
+					<td></td>
+					<td align="left"><label class="label" th:if="${#maps.containsKey(termDataMap,'HOSPITAL_ID') and tableName == 'SUBS_SYS'}" for="name">医疗机构编码</label></td>
+					<!-- <td align="left"><input th:if="${tableName == 'SUBS_SYS'}" name='HOSPITAL_ID' id='HOSPITAL_ID'/></td> -->
+					<td align="left">
+					  <select id="HOSPITAL_ID" name="HOSPITAL_ID" style="width: 303px" onchange="linkage(this.options[this.selectedIndex].id,'SUBS_SYS')">
+						<option selected="selected" value="">请选择</option>
+						<option th:each="item : ${hospitalList}" th:id="${item.uniKey}" th:value="${item.hospitalCode}" th:text="${item.hospitalCode}">
+						        医疗机构编码列表
+						</option>
+					  </select>
+					</td>
+					</tr>
+					<tr th:if="${tableName == 'SUBS_SYS'}">
+					<td></td>
+					<td align="left"><label class="label" th:if="${#maps.containsKey(termDataMap,'SYS_NAME') and tableName == 'SUBS_SYS'}" for="name">系统名称</label></td>
+					<td align="left"><input th:if="${tableName == 'SUBS_SYS'}" name='SYS_NAME' id='SYS_NAME'/></td>
+					</tr>
+					<tr th:if="${tableName == 'SUBS_SYS'}">
+					<td></td>
+					<td align="left"><label class="label" th:if="${#maps.containsKey(termDataMap,'SYS_APPLY') and tableName == 'SUBS_SYS'}" for="name">供应商</label></td>
+					<td align="left"><input th:if="${tableName == 'SUBS_SYS'}" name='SYS_APPLY' id='SYS_APPLY'/></td>
+					</tr>
+					<tr th:if="${tableName == 'DICT_HOSPITAL'}">
+					<td style="width:12%;"></td>        
+					<td style="width:20%;" align="left"><label class="label" th:if="${#maps.containsKey(termDataMap,'HOSPITAL_CODE') and tableName == 'DICT_HOSPITAL'}" for="name">医疗机构编码</label></td>
+					<td style="width:60%;" align="left"><input th:if="${tableName == 'DICT_HOSPITAL'}" name='HOSPITAL_CODE' id='HOSPITAL_CODE' /></td>
+					</tr>
+					<tr th:if="${tableName == 'DICT_HOSPITAL'}">
+					<td></td>        
+					<td align="left"><label class="label" th:if="${#maps.containsKey(termDataMap,'HOSPITAL_NAME') and tableName == 'DICT_HOSPITAL'}" for="name">医疗机构名称</label></td>
+					<td align="left"><input th:if="${tableName == 'DICT_HOSPITAL'}" name='HOSPITAL_NAME' id='HOSPITAL_NAME' /></td>
+					</tr>
+				</table>
+			</div>
+			
+			<div th:unless="${uniKey == 'undefined'}" align="center">
+				<table style="width: 100%; margin-top: 2px;" cellspacing="0"
+					cellpadding="0" class="Table_02" border="1">
+					<tr th:if="${tableName == 'SUBS_SYS'}">
+					<td style="width:12%;"></td>        
+					<td style="width:20%;" align="left"><label class="label" th:if="${#maps.containsKey(termDataMap,'SYS_ID') and tableName == 'SUBS_SYS'}" for="name">系统编码</label></td>
+					<td style="width:60%;" align="left"><input th:if="${tableName == 'SUBS_SYS'}" name='SYS_ID' id='SYS_ID' disabled="true" th:value="${termDataMap.get('SYS_ID')}"/></td>
+					</tr>
+					<tr th:if="${tableName == 'SUBS_SYS'}">
+					<td></td>        
+					<td align="left"><label class="label" th:if="${#maps.containsKey(termDataMap,'HOSPITAL_ID') and tableName == 'SUBS_SYS'}" for="name">医疗机构编码</label></td>
+					<!-- <td align="left"><input th:if="${tableName == 'SUBS_SYS'}" name='HOSPITAL_ID' id='HOSPITAL_ID' disabled="true" th:value="${termDataMap.get('HOSPITAL_ID')}"/></td> -->
+					<td align="left">
+					  <select id="HOSPITAL_ID" name="HOSPITAL_ID" style="width: 303px;">
+						<option th:each="item : ${hospitalList}" th:id="${item.uniKey}" th:value="${item.hospitalCode}" th:text="${item.hospitalCode}" 
+						        th:selected="${termDataMap.get('HOSPITAL_ID') == item.hospitalCode}">对应的医疗机构编码
+						</option>
+					  </select>
+					</td>
+					</tr>
+					<tr th:if="${tableName == 'SUBS_SYS'}">
+					<td></td>        
+					<td align="left"><label class="label" th:if="${#maps.containsKey(termDataMap,'SYS_NAME') and tableName == 'SUBS_SYS'}" for="name">系统名称</label></td>
+					<td align="left"><input th:if="${tableName == 'SUBS_SYS'}" name='SYS_NAME' id='SYS_NAME' th:value="${termDataMap.get('SYS_NAME')}"/></td>
+					</tr>
+					<tr th:if="${tableName == 'SUBS_SYS'}">
+					<td></td>        
+					<td align="left"><label class="label" th:if="${#maps.containsKey(termDataMap,'SYS_APPLY') and tableName == 'SUBS_SYS'}" for="name">供应商</label></td>
+					<td align="left"><input th:if="${tableName == 'SUBS_SYS'}" name='SYS_APPLY' id='SYS_APPLY' th:value="${termDataMap.get('SYS_APPLY')}"/></td>
+					</tr>
+					<tr th:if="${tableName == 'DICT_HOSPITAL'}">
+					<td style="width:12%;"></td>        
+					<td style="width:20%;" align="left"><label class="label" th:if="${#maps.containsKey(termDataMap,'HOSPITAL_CODE') and tableName == 'DICT_HOSPITAL'}" for="name">医疗机构编码</label></td>
+					<td style="width:60%;" align="left"><input th:if="${tableName == 'DICT_HOSPITAL'}" name='HOSPITAL_CODE' id='HOSPITAL_CODE' disabled="disabled" th:value="${termDataMap.get('HOSPITAL_CODE')}"/></td>
+					</tr>
+					<tr th:if="${tableName == 'DICT_HOSPITAL'}">
+					<td></td>        
+					<td align="left"><label class="label" th:if="${#maps.containsKey(termDataMap,'HOSPITAL_NAME') and tableName == 'DICT_HOSPITAL'}" for="name">医疗机构名称</label></td>
+					<td align="left"><input th:if="${tableName == 'DICT_HOSPITAL'}" name='HOSPITAL_NAME' id='HOSPITAL_NAME' th:value="${termDataMap.get('HOSPITAL_NAME')}"/></td>
+					</tr>
+				</table>
+			</div>
+		</fieldset>
+	</form>
+	</div>
+	
+</body>
+</html>
+
+

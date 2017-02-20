@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>新建术语结构</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" /> 
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" /> 
+    <div th:fragment="styles">
+    	
+	    <link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+
+	    <link rel="stylesheet" href="../styles/themes/base/jquery.ui.all.css"/>
+	    <link href="../styles/layout.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/table.css" type="text/css"  rel="stylesheet" />
+		<link href="../styles/asyncbox/asyncbox.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/monitor-search.css" type="text/css"  rel="stylesheet" />
+	    <style>
+	    	.red{color:#ff0000;font-family:"宋体";font-weight:normal;}
+	    </style>
+	    <style>
+            .coolscrollbar{scrollbar-arrow-color:#F8F8F8;scrollbar-track-color:#F8F8F8;}
+        </style>
+        <style type="text/css">
+            #mainRows {
+            	height: 220px;
+	            width: 1130px;
+            	overflow-y: auto;
+                margin-bottom:20px;
+        } 
+       </style>
+</div>
+    <script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+    
+    <div th:fragment="scripts">
+    	<script type="text/javascript" src="../scripts/AsyncBox.v1.4.5.js"></script>
+	    <script type="text/javascript" src="../scripts/paging.js"></script>
+	    <script type="text/javascript" src="../scripts/ui/jquery.ui.core.js"></script>
+	  	<script type="text/javascript" src="../scripts/ui/jquery.ui.widget.js"></script>
+	  	<script type="text/javascript" src="../scripts/ui/jquery.ui.mouse.js"></script>
+	  	<script type="text/javascript" src="../scripts/ui/jquery.ui.button.js"></script>
+	  	<script type="text/javascript" src="../scripts/ui/jquery.ui.draggable.js"></script>
+	  	<script type="text/javascript" src="../scripts/ui/jquery.ui.position.js"></script>
+	  	<script type="text/javascript" src="../scripts/ui/jquery.ui.resizable.js"></script>
+	  	<script type="text/javascript" src="../scripts/ui/jquery.ui.dialog.js"></script>
+	  	<script type="text/javascript" src="../scripts/ui/jquery.ui.effect.js"></script>
+	  	<script type="text/javascript" src="../scripts/My97DatePicker/WdatePicker.js"></script>
+  	    <script type="text/javascript" src="../scripts/term/termstructadd.js"></script>
+  	    <script type="text/javascript" src="../scripts/jquery.processing.waterfall.js"></script>
+  	    <script>
+  	    	$(function() {
+  	    		if($("#autoOpen").val()=="true"){
+  	    			showSQLDialog();
+  	    		}
+  	    		if($("#tableIsExist").val()=="1"){
+  	    			$("#tableName").attr("disabled","true");
+  	    			$("#mgErrorSQL").css("display","inline-block");
+  	    			$("#mgErrorSQL").before("&nbsp;&nbsp;");
+  	    		}
+  	    	})
+  	    	
+  	    </script>
+  	    <script src="../scripts/jquery.nicescroll.min.js"></script>
+        <script>
+           $(document).ready(function() {
+             $("#mainRows").niceScroll({cursorborder:"",cursorcolor:"#B2E0F9",boxzoom:true});
+           });
+        </script>
+    </div>
+</head>
+<body>
+	<div th:fragment="content" style="height:490px;margin: 5px; padding: 2px; border: 1px solid #aacbee; background: #f8f8f8; min-width: 1020px;">
+		<form id="tsform" name="tsform" method="post" action="" th:object="${termStruct}">
+			<input type="hidden" id="operation" name="operation" th:value="${operation}"/>
+			<input type="hidden" id="dictId" name="dictId" th:field="*{dictId}"/>
+			<input type="hidden" id="autoOpen" name="autoOpen" th:value="${autoOpen}"/>
+			<input type="hidden" id="tableIsExist" name="tableIsExist" th:value="${tableIsExist}"/>
+			<table cellpadding="0" cellspacing="0" border="0" width="100%">
+				<tr>
+					<td class="Table_title" th:unless="${#lists.isEmpty(operation)}"><img src="../images/icon_01.gif" /> 术语结构修改</td>
+					<td class="Table_title" th:if="${#lists.isEmpty(operation)}"><img src="../images/icon_01.gif" /> 术语结构新增</td>
+				</tr>
+			</table>
+			
+          <div id="searchDiv" class="Graybg">
+          	<div class="mainValidateTips" style="text-align:left;">
+		    </div>
+            <table width="100%" align="left" class="Table_s">
+              <tr>
+                <td width="100" class="label"><span class="red">*</span>结构名称</td>
+                <td width="120"><div align="left">
+                  <input type="text" name="dictName" value="" th:field="*{dictName}"/>
+                </div></td>
+                <td width="100" class="label"><span class="red">*</span>对应表名</td>
+                <td width="120"><div align="left">
+                  <input type="text" name="tableName" id="tableName" value="" th:field="*{tableName}"/>
+                </div></td>
+				<td width="70" class="label" style="text-align: right"><span class="red">*</span>主数据源</td>
+				<td width="120" align="left">
+					 <select id="sysId" name="sysId" class="selected01" style="width: 135px;" th:field="*{sysId}">
+	             			<option value="">请选择...</option>
+							<option th:each="item : ${sysList}" th:text="${item['sys_name']}" th:value="${item['sys_id']}"></option>
+					 </select>
+				</td>
+				<td width="10%"></td>
+              </tr>
+              <tr>
+                <td class="label" width="100" ><span class="red">*</span>术语ID</td>
+                <td width="120"><div align="left">
+                  <input type="text" name="serviceId" id="serviceId" value="" th:field="*{serviceId}"/>
+                </div></td>
+                <td class="label" width="100" ><span class="red">*</span>结构类型</td>
+                <td width="120"><div align="left">
+                  <select id="typeCd" name="typeCd" class="selected01" style="width:135px;" th:field="*{typeCd}">
+	          			<option value="">请选择...</option>
+						<option th:each="item : ${termTypeList}" th:text="${item['typename']}" th:value="${item['typecd']}"></option>
+				  </select>
+                </div></td>
+				<td width="350" colspan="2"></td>
+				<td width="10%"></td>
+              </tr>
+             
+			  <tr>
+				<td colspan="7">
+				<div>
+					    <button id="addrow" name="addrow" type="button" style="overflow:visible;width:auto;height:25px;"  class="btn01" >
+									<img src="../images/btn/add.gif"
+											style="vertical-align: middle;" />新增列
+						</button>
+				</div>
+				</td>
+			  </tr>
+			  <tr style="height:1px;">
+				<td colspan="7"></td>
+			  </tr>
+            </table>
+          </div>
+          
+            <input type="hidden" name="currentPage" value="1" />
+            <input type="hidden" name="totalPage" value="10" />
+            <input type="hidden" name="jumpToPage" value="" />
+            <input type="hidden" name="paramData" id="paramData" value="" />
+            <input type="hidden" name="dropColumn" id="dropColumn" value="" />
+		</form>
+		
+		<div id="dataTable" style="padding-top: 5px; border: 0px solid #aacbee;">
+			<div id="mainRows">
+				<table id="fieldTable" style="width: 100%;margin-top: 1px;" border="1px" cellspacing="0" cellpadding="1" class="Table_01">
+					<thead>
+						<tr>
+							<th style="width:40px;">序号</th>
+							<th style="width:100px;">列名</th>
+							<th style="width:100px;">注释</th>
+							<th style="width:60px;">类型</th>
+							<th style="width:60px;">长度</th>
+							<th style="width:60px;">精度</th>
+							<th style="width:120px;">缺省值</th>
+							<th style="width:60px;">必须项</th>
+							<th style="width:60px;">唯一标识</th>
+							<th style="width:60px;">列表显示</th>
+							<th style="width:60px;">检索条件</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="data,rowStat:${dfList}" th:id="'tr_'+${rowStat.count}">
+							<td style="display:none" th:text="${data.fieldId}"></td>
+							<td align="center" th:text="${rowStat.count}"></td>
+							<td th:text="${data.fieldName}"></td>
+							<td th:text="${data.fieldDesc}"></td>
+							<td th:text="${data.fieldTypeName}"></td>
+							<td style="display:none" th:text="${data.fieldType}"></td>
+							<td th:text="${data.length}"></td>
+							<td th:text="${data.precision}"></td>
+							<td th:text="${data.defaultValue}"></td>
+							<td align="center" th:text="${data.isMust=='Y'?'√':'×'}"></td>
+							<td align="center" th:text="${data.isPrimary=='Y'?'√':'×'}"></td>
+							<td align="center" th:text="${data.isShow=='Y'?'√':'×'}"></td>
+							<td align="center" th:text="${data.isFilter=='Y'?'√':'×'}"></td>
+							<td style="display:none" th:text="${data.dictSql}"></td>
+							<td  align="center" style="color:#2d56a5;cursor:pointer;">
+							<a th:onclick="'javascript:editRow(\''+${rowStat.count}+'\');'" style="color:#2d56a5;" >修改</a>&nbsp;&nbsp;&nbsp;&nbsp;
+							<a style="color:#2d56a5;"  th:onclick="'javascript:deleteRow(\''+${data.dispOrder}+'\',this);'">删除</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<p style="height:5px;"></p>
+			<div align="center">
+				<button id="saveTermStuct" type="button" style="overflow:visible;width:auto;height:25px;" class="btn01">
+							<img src="../images/btn/save.gif" style="vertical-align: middle;" />保存
+				</button>
+				&nbsp;&nbsp;
+				<button id="showSQL" type="button" style="overflow:visible;width:auto;height:25px;"  class="btn01">
+							<img src="../images/showsql.png"
+									style="vertical-align: middle;" />保存并预览SQL
+				</button>
+				
+				&nbsp;&nbsp;
+				<button  type="button" style="overflow:visible;width:auto;height:25px;"  class="btn01"
+								onclick="javascript:location.href='../term/termStructList.html';">
+							<img src="../images/btn/back.gif"
+									style="vertical-align: middle;" />返回
+				</button>
+				
+				&nbsp;&nbsp;
+			</div>
+			<p style="height:5px;"></p>
+			
+			<div>
+			
+			<div id="addrowdialog" title="术语结构新增列">
+				<p class="fieldValidateTips" style="color:red;"></p>
+				<form id="fieldform" name="fieldform">
+					<input type="hidden" id="optRow" name="optRow" value="0"/>
+					<fieldset>
+						<div align="center">
+							<table style="width: 100%; margin-top: 2px;" cellspacing="0" cellpadding="0" class="Table_02"  border="0">
+								<tr>
+									<td class="label"><label for="fieldName"><span class="red">*</span>列名：</label></td>
+									<td colspan="3" align="left">
+										<input type="text" name="fieldName" id="fieldName" /></td>
+								</tr>
+								<tr>
+									<td class="label"><label for="fieldDesc"><span class="red">*</span>注释：</label></td>
+									<td colspan="3" align="left">
+										<input type="text" name="fieldDesc" id="fieldDesc" class="{required:true, email:true}"/></td>
+								</tr>
+								<tr>
+									<td class="label"><label for="fieldType"><span class="red">*</span>类型：</label></td>
+									<td colspan="3" align="left">
+									    <select id="fieldType" name="fieldType" class="selected01">
+					                		<option value="">请选择...</option>
+											<option th:each="item : ${fieldTypeList}" th:text="${item['typename']}" th:value="${item['typecd']}"></option>
+										</select>
+									</td>
+								</tr>
+								<tr id="lengthShow">
+									<td class="label"><label for="length"><span class="red">*</span>长度：</label></td>
+									<td colspan="3" align="left">
+									 	<input type="text" name="length" id="length"></input> 
+									</td>
+								</tr>
+								<tr style="display:none" id="precisionShow">
+									<td class="label"><label for="precision">精度：</label></td>
+									<td colspan="3" align="left">
+									 	<input type="text" name="precision" id="precision" value=""></input> 
+									</td>
+								</tr>					
+								<tr>
+									<td class="label"><label for="defaultValue">缺省值：</label></td>
+									<td colspan="3" align="left" id="showDate">
+										<input type="text" name="defaultValue" id="defaultValue" value=""/></td>
+								</tr>
+								<tr>
+									<td class="label"  style="text-align: center" colspan="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="isMust" id="isMust" style="width:20px;"/><label for="isMust">必须项</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="isPrimary" id="isPrimary" style="width:20px;"/><label for="isPrimary">唯一标识</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="isShow" id="isShow" style="width:20px;"/><label for="isShow">列表显示</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="isFilter" id="isFilter" style="width:20px;"/><label for="isFilter">检索条件</label></td>
+								</tr>
+							</table>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+			
+			<div id="mgErrorSQLDialog" title="管理异常SQL">
+			
+			</div>
+			
+			
+			<div id="showSQLdialog" title="创建物理表SQL预览">
+			<p class="executeValidateTips" style="color:red;"></p>
+			<form id="showSQLform" name="showSQLform">
+			<input type="hidden" id="sqlContentArr" />
+			<input type="hidden" id="sqlIdArr" />
+				<fieldset>
+					<div align="">
+						<table id="executeSql" style="width: 100%; margin-top: 2px;" cellspacing="0" cellpadding="0" class="Table_02"  border="0">
+							
+						</table>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+		</div>
+		</div>
+	</div>
+</body>
+</html>

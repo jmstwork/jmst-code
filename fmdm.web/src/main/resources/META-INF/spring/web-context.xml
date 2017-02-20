@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd"> 
+
+	<bean id="classTemplateResolver" class="org.thymeleaf.templateresolver.ClassLoaderTemplateResolver"> 
+		<property name="prefix" value="META-INF/templates/" /> 
+		<property name="suffix" value=".html" />
+		<property name="templateMode" value="HTML5" /> 
+		<property name="cacheable" value="false" />
+		<property name="characterEncoding" value="UTF-8" /> 
+		<property name="order" value="1" /> 
+	</bean> 
+
+	<bean id="webTemplateResolver" class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
+		<property name="prefix" value="/WEB-INF/templates/" />
+		<property name="suffix" value=".html" />
+		<property name="templateMode" value="HTML5" />
+		<property name="cacheable" value="false" />
+		<property name="characterEncoding" value="UTF-8" /> 
+		<property name="order" value="2" /> 
+	</bean>
+	
+	<bean id="templateEngine" class="org.thymeleaf.spring3.SpringTemplateEngine">
+		<property name="templateResolvers"> 
+			<set> 
+				<ref bean="classTemplateResolver" /> 
+				<ref bean="webTemplateResolver" /> 
+			</set> 
+		</property> 
+		<!-- wp-整合thymeleaf自定义方言 -->
+		<property name="additionalDialects">
+			<set>
+				<bean class="com.founder.web.common.CommonUtilsDialect" />
+			</set>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+					<property name="supportedMediaTypes">
+						<list>
+							<value>text/plain;charset=UTF-8</value>
+						</list>
+					</property>
+				</bean>
+				<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+			</list>
+		</property>
+	</bean>
+
+    <!-- 根据客户端的不同的请求决定不同的view进行响应, 如 /blog/1.json /blog/1.xml -->
+    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+        <!-- 设置为true以忽略对Accept Header的支持 -->
+        <property name="ignoreAcceptHeader" value="true" />
+
+        <!-- 在没有扩展名时即: "/blog/1" 时的默认展现形式 -->
+        <property name="defaultContentType" value="text/html" />
+
+        <!-- 扩展名至mimeType的映射,即 /blog.json => application/json -->
+        <property name="mediaTypes">
+            <map>
+                <entry key="html" value="text/html" />
+                <entry key="pdf" value="application/pdf" />
+                <entry key="xsl" value="application/vnd.ms-excel" />
+                <entry key="xml" value="application/xml" />
+                <entry key="json" value="application/json" />
+            </map>
+        </property>
+
+        <!-- 用于开启 /blog/123?format=json 的支持 -->
+        <property name="favorParameter" value="false" />
+        <property name="viewResolvers">
+            <list>
+		        <!--  
+                <bean class="org.springframework.web.servlet.view.BeanNameViewResolver" />
+                <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+                    <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+                    <property name="prefix" value="/pages" />
+                    <property name="suffix" value=".jsp"></property>
+                </bean>
+        		-->
+				<bean id="thymeleafViewResolver" class="org.thymeleaf.spring3.view.ThymeleafViewResolver">
+					<property name="templateEngine" ref="templateEngine" />
+					<property name="order" value="1" />
+					<property name="characterEncoding" value="UTF-8" />
+					<property name="cache" value="false" />
+				</bean>
+            </list>
+        </property>
+        <property name="defaultViews">
+            <list>
+                <!-- for application/json -->
+                <bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" />
+                <!-- for application/xml -->
+                <!--
+                <bean class="org.springframework.web.servlet.view.xml.MarshallingView">
+                    <property name="marshaller">
+                        <bean class="org.springframework.oxm.xstream.XStreamMarshaller"/>
+                    </property>
+                </bean>
+                -->
+            </list>
+        </property>
+    </bean>
+    <bean id="freeMarker" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="templateLoaderPath" value="classpath:META-INF/templates"></property>
+        <property name="freemarkerSettings">
+            <props>
+                <!-- Cache the template for 10 seconds -->
+                <prop key="template_update_delay">10</prop>
+                <prop key="default_encoding">UTF-8</prop>
+                <prop key="locale">zh_CN</prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="mqQMAndQConfig" class="com.founder.fmdm.service.sysmgt.MQqmAndqConfig">
+		<property name="dictSendQName" value="${dictSendQName}" />                   <!-- 术语发送队列名称 -->
+		<property name="userManagerSendQName" value="${userManagerSendQName}" />     <!-- 账户管理发送队列名称 -->
+		<property name="warningSetingSendQName" value="${warningSetingSendQName}" />     <!-- 警告通知设定消息发送队列-->
+		<property name="accessControllerSendQName" value="${accessControllerSendQName}" />  <!-- 访问控制发送队列名称 -->
+		<property name="roleSendQName"  value="${roleSendQName}"/>                <!-- 角色发送消息队列名称 -->
+		<property name="ngSendQName"  value="${ngSendQName}"/>                    <!-- 消息处理NG发送队列名称 -->
+		<property name="sendQMName" value="${sendQMName}" />                      <!-- 发送队列管理器名称 -->
+		<property name="receiveQName" value="${receiveQName}" />                  <!-- 接收队列名称 -->
+		<property name="receiveQMName" value="${receiveQMName}" />                    <!-- 接收队列管理器名称 -->
+	</bean>
+</beans>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>审计事件管理</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" /> 
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" /> 
+    <div th:fragment="styles">
+	    <link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/themes/base/jquery.ui.all.css" rel="stylesheet"/>
+	    <link href="../styles/layout.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/table.css" type="text/css"  rel="stylesheet" />
+		<link href="../styles/asyncbox/asyncbox.css" type="text/css"  rel="stylesheet" />
+		<link href="../styles/monitor-search.css" type="text/css" rel="stylesheet" />
+    </div>
+    <script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+    <div th:fragment="scripts">
+    	<script type="text/javascript" src="../scripts/audit/auditManageList.js"></script> 
+    	<script type="text/javascript" src="../scripts/My97DatePicker/WdatePicker.js"></script> 
+    	<script type="text/javascript" src="../scripts/paging.js"></script>
+   </div>
+</head>
+<body>
+	<div th:fragment="content" style="height:490px;margin: 5px; padding: 2px; border: 1px solid #aacbee; background: #f8f8f8; min-width: 1020px;">
+		<form action="" id="auditManageForm" name="auditManageForm" method="post" th:object="${auditSearchCondition}" >
+			<p class="space10"></p>
+			<table cellpadding="0" cellspacing="0" border="0" width="100%">
+				<tr>
+					<td class="Table_title"><img src="../images/icon_01.gif" />&nbsp;&nbsp;审计事件管理</td>
+				</tr>
+			</table>
+			<div class="Graybg">
+				 <table class="Table_s">
+                    <tr>
+                        <td class="label" width="80px">审计事件编号</td>
+                   		<td>
+                   			<input style="height:20px;" type="text" name="eventCode" id="eventCode" th:value="${auditManageDto.eventCode}"/>
+                   		</td>
+						<td style="width: 55px;"></td>
+						<td class="label" width="80px">审计事件名称</td>
+                        <td>
+                            <input style="height:20px;" type="text" name="eventName" id="eventName" th:value="${auditManageDto.eventName}"/>
+                        </td>
+                        <td style="width: 55px;"></td>
+                        <td>
+							<button  id="seachBtn" name='seachBtn' onclick="doSearch()" type="button" style="width: 85px;height:25px;cursor:pointer;" class="btn01">
+								<img src="../images/btn/search.gif" style="vertical-align: middle;"/>&nbsp;搜索
+							</button>
+						</td>
+						<td>
+							<button  id="cleanBtn" name='cleanBtn' onclick="cleanFunction()" type="button" style="width: 85px;height:25px;cursor:pointer;" class="btn01">
+								<img src="../images/btn/clean.gif" style="vertical-align: middle;"/>&nbsp;清空
+							</button>
+						</td>
+                    </tr>
+                    <tr style="height:1px;">
+                        <td colspan="8"></td>
+                    </tr>
+                </table>
+			</div>
+		<input type="hidden" name="currentPage" value="1" th:field="*{currentPage}"/>
+        <input type="hidden" name="totalPage"   value="5" th:field="*{totalPage}"/>
+        <input type="hidden" name="jumpToPage" id="jumpToPage"  value="" />
+        <input type="hidden" name="backMsg" id="backMsg" th:value="${backMsg}" />
+	</form>
+	<hr />
+	<div id="dataTable" style="padding-top: 5px; border: 0px solid #aacbee;height:400px;" scroll="auto">
+		<div align="left">
+					<button  id="addBtn" type="button" style="overflow:visible;width:auto;height:25px;"  class="btn01" onclick="addEvent()">
+					<img src="../images/btn/add.gif"
+						style="vertical-align: middle;" />新增
+					</button>
+				</div>
+				<p style="height:3px;"></p>
+			<table style="width: 100%; margin-top: 1px;" border="1px" cellspacing="0" cellpadding="1" class="Table_01">
+				<thead>
+					<tr>
+						<th style="width:156px;">列号</th>
+						<th style="width:258px;">审计事件编号</th>
+						<th style="width:516px;">审计事件名称</th>
+						<th style="width:205px;">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="item,itemStatus : ${resultSet}">
+						<td th:text="${#ids.seq('')}" align="center">10.8.4.39</td>
+						<td th:text="${item.evenCode}">10.8.4.39</td>
+						<td th:text="${item.evneName}">10.8.4.39</td>
+						<td align="center" style="color:#2d56a5;">
+							<a  class="Linkblue" style="cursor:pointer;" th:onclick="'javascript:editEvent(\'' + ${item.evenCode} + '\');'">编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<a  class="Linkblue" style="cursor:pointer;" th:onclick="'javascript:deleteEvent(\'' + ${item.evenCode} + '\',this);'">删除</a>
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr th:unless="${#lists.isEmpty(resultSet)}" class="datatable-paging">
+		                 <td colspan="2" class="datatable-paging-info">
+		                     <span class="datatable-paging-count">第<span th:text="${auditSearchCondition.currentPage}">1</span>页/共<span th:text="${auditSearchCondition.totalPage}">550</span>页</span>
+		                     <span class="datatable-paging-total">总共<span th:text="${auditSearchCondition.totalSize}">5500</span>条数据</span>
+		                 </td>
+		                 <td colspan="2" class="datatable-paging-page">
+		                     <span class="datatable-paging-first" th:style="${auditSearchCondition.currentPage == 1 ? 'display: none;' : ''}" onclick="firstPage(document.auditManageForm);">首页</span>
+		                     <span class="datatable-paging-previous" th:style="${auditSearchCondition.currentPage == 1 ? 'display: none;' : ''}" onclick="prevPage(document.auditManageForm);">上一页</span>
+		                     <span class="datatable-paging-next" th:style="${auditSearchCondition.currentPage == auditSearchCondition.totalPage ? 'display: none;' : ''}" onclick="nextPage(document.auditManageForm);">下一页</span>
+		                     <span class="datatable-paging-last" th:style="${auditSearchCondition.currentPage == auditSearchCondition.totalPage ? 'display: none;' : ''}" onclick="lastPage(document.auditManageForm);">尾页</span>
+		                     <span class="datatable-paging-jump" th:style="${auditSearchCondition.totalPage == 1 ? 'display: none;' : ''}">
+		                         <span>跳转到：</span>
+		                         <input type="text" class="datatable-paging-jump-input" id="jumpToInput" />
+		                         <span class="datatable-paging-jump-go" onclick="jumpToPage(document.auditManageForm, document.getElementById('jumpToInput'));"></span>
+		                     </span>
+		                 </td>
+	                </tr>
+                    <tr th:if="${#lists.isEmpty(resultSet)}" class="datatable-paging">
+	                    <td colspan="9" class="datatable-paging-info">
+	                        <span>没有查询结果，请修改检索条件重新检索。</span>
+	                    </td>
+	                </tr>
+				</tfoot>
+			</table>
+	</div>
+		<div id="dialog-form" title="详细情况"
+				style="margin: 5px; padding: 1px; solid: #aacbee; background: #f8f8f8;">
+				
+			</div>
+	</div>
+</body>
+</html>

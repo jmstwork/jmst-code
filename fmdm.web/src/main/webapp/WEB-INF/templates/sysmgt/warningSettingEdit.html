@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>修改警告设定</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" /> 
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" /> 
+     <style>
+		fieldset { padding:0; border:0; margin-top:3px; }
+		.ui-dialog .ui-state-error { padding: .3em; }
+		.validateTips { border: 1px solid transparent; }
+		.ui-widget-header { border: 1px solid #aaaaaa; background: #cccccc url(images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x; color: #222222; font-weight: bold; }
+	</style>
+    <div th:fragment="styles">
+	    <link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/layout.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/table.css" type="text/css"  rel="stylesheet" />
+	    <link rel="stylesheet" href="../styles/themes/base/jquery.ui.all.css"/>
+	    <link href="../styles/monitor-search.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/asyncbox/asyncbox.css" type="text/css" rel="stylesheet" />
+	    <link href="../styles/autocomplete/autocomplete.css" type="text/css"  rel="stylesheet" />
+    </div>
+   	<script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+    <script type="text/javascript" src="../scripts/paging.js"></script>
+    <div th:fragment="scripts">
+		<script type="text/javascript" src="../scripts/sysmgt/warningSettingEdit.js"></script>
+   		<script type="text/javascript" src="../scripts/asyncBox.v1.4.js" charset="utf-8"></script>
+   		<script type="text/javascript" src="../scripts/autocomplete/autocomplete.js"></script>
+   </div>
+</head>
+<body>
+	<div th:fragment="content" style="height:490px;margin: 5px; padding: 2px; border: 1px solid #aacbee; background: #f8f8f8; min-width: 1020px;">
+		<input type="hidden" id="saveFlg" name="saveFlg" value="${saveFlg}" />
+	<form id="tempForm" name="tempForm">
+		<input type="hidden" id="settingId" name="settingId" th:value="${ws.settingId}"/>
+		<input type="hidden" id="resetOpt" name="resetOpt" />
+	</form>
+	<form id="editForm" name="editForm" action="../sysmgt/wsOperate.html" method="post">
+		<input type="hidden" id="temp" name="temp" th:value="${dictDepartmentJson}" />
+		<input type="hidden" id="opt" name="opt" th:value="${opt}" /> 
+		<input type="hidden" id="settingId" name="settingId" th:value="${ws.settingId}" />
+		<input type="hidden" id="receiveDays" name="receiveDays" />
+		<table cellpadding="0" cellspacing="0" border="0" width="100%">
+			<tr>
+				<td class="Table_title"><img src="../images/icon_01.gif" />&nbsp;&nbsp;
+					<span style="min-width: 400px" th:if="${opt eq 'edit'}"> 修改警告设定</span>
+				</td>
+			</tr>
+		</table>
+		<p class="space10"></p>
+		<div class="panel" style="text-align:left">
+		</div>
+		<table class="Table_01" style="width:100%;">
+			<tr align="left">
+				<td align="right" width="7%" class="titleWords">科室部门</td>
+				<td align="left" width="15%">
+					<div class="selectDeptDict" style="z-index: 140" th:if="${ws.userType=='4'}">
+						<input id="unitName" name="unitName" style="width: 145px;" th:value="${ws.unitName}"/>
+						<input id="unitId" name="unitId" type="hidden" th:value="${ws.unitId}" />
+					</div>
+					<div th:if="${ws.userType!='4'}">
+						<input id="unitName" name="unitName" style="width: 145px;background-color: #cbcbcb;" readOnly="true" th:value="${ws.unitName}"/>
+						<input type="hidden" id="unitId" name="unitId" th:value="${ws.unitId}"/>
+					</div>
+				</td>
+				<td align="right" width="10%" >
+					接收者
+				</td>
+				<td width="5%" align="left">
+					<button  id="cardBtn" name='cardBtn' type="button" style="width: 97px;height:25px;" class="btn01" disabled="disabled">
+						<img src="../images/btn/card.gif" style="vertical-align: middle;"/>选项卡
+					</button>
+				</td>
+				<td width="25%" colspan="3" style="border-left-color: white"
+					align="left">
+					&nbsp;<input type="text" size="8" name="userNo"
+					id="userNo" style="background-color: #cbcbcb;" readonly="true" th:value="${ws.userNo}" />&nbsp;
+					 <input type="text" size="8" name="userName"
+					id="userName" style="background-color: #cbcbcb;" readonly="true" th:value="${ws.userName}"/>
+				<input type="hidden" id="uName"
+					name="userName"  /></td>
+			</tr>
+			<tr>
+				<td align="right">规则组名
+				</td>
+				<td>
+					<input type="text" size="23" name="groupName" id="groupName"
+							style="background-color: #cbcbcb;" readonly="true"
+							th:value="${ws.rulegroupName}" />
+					<input type="hidden" id="groupCode" name="groupCode" th:value="${ws.groupCode}" />		 
+					</td>
+				<td align="right" class="titleWords">对象类型</td>
+				<td align="left" colspan="4">
+						<input type="text" size="23" name="userTypeName" id="userTypeName"
+							style="background-color: #cbcbcb;" th:readonly="${ws.userTypeName}"
+							th:value="${ws.userTypeName}" /> 
+				&nbsp;<input type="hidden" id="userType" name="userType" th:value="${ws.userType}"/>
+					
+					</td>
+			</tr>
+			<tr id="hideRow" bgcolor="#BFFF99" style="display: none;">
+				<td colspan="7" align="center"><span id="checkExistResult"
+					style="color: red;"></span>
+				</td>
+			</tr>
+			<tr>
+				<td rowspan="3" align="right" class="titleWords">通知方式</td>
+				<td colspan="6">
+					<input type="checkbox" id="telMethod" value="telMethod" onclick="readOnlyOrNot(this.id,'#telMethod')" th:checked="${#strings.isEmpty(ws.tel)?null:'checked'}"/>
+					&nbsp;&nbsp;手机
+					 <input type="text" size="25" maxlength="11" id="tel" name="tel" th:value="${ws.tel}"  th:disabled="${#strings.isEmpty(ws.tel)}" th:style="${#strings.isEmpty(ws.tel)?'background-color: #cbcbcb;':''}"/>&nbsp;
+					 <span style="display: none; color: #f3764f;" id="telResult"></span></td>
+			</tr>
+			<tr>
+				<td colspan="6">
+					<input type="checkbox" id="emailMethod" value="emailMethod" onclick="readOnlyOrNot(this.id,'#emailMethod')" th:checked="${#strings.isEmpty(ws.email)?null:'checked'}"/>
+					&nbsp;&nbsp;邮件
+					<input type="text" size="25" id="email" name="email" th:value="${ws.email}" th:disabled="${#strings.isEmpty(ws.email)}" th:style="${#strings.isEmpty(ws.email)?'background-color: #cbcbcb;':''}" />&nbsp;
+				<span style="display: none; color: #f3764f;" id="emailResult"></span></td>
+			</tr>
+			<tr>
+				<td colspan="6"><input type="checkbox" id="systemSetMethod"
+					value="systemSetMethod" onclick="readOnlyOrNot(this.id,'#systemSetMethod')" th:checked="${#strings.isEmpty(ws.sysIds)?null:'checked'}" />&nbsp;&nbsp;系统
+					<button id="systemSet" name="systemSet" th:disabled="${#strings.isEmpty(ws.sysIds)}" type="button" style="overflow:visible;width:100px;height:25px;padding-left:4px;"  class="btn01" >
+				  	   <img src="../images/btn/set.png" style="vertical-align: middle;" />系统设定
+				    </button>
+					<span style="" id="systemSetResult" th:text="${ws.sysNames}"></span> 
+					<input type="hidden" id="sysIds" name="sysIds" th:value="${ws.sysIds}" />
+					<input type="hidden" id="sysNames" name="sysNames" th:value="${ws.sysNames}" />
+				</td>
+			</tr>
+			<tr>
+				<td align="right" class="titleWords">接收时段
+				</td>
+				<td colspan="6"><input type="checkbox" id="day_1"
+					value="1"  th:disabled="${#strings.isEmpty(ws.tel)}" th:style="${#strings.isEmpty(ws.tel)?'background-color: #cbcbcb;':''}" th:checked="${ws.monday}"
+					 />周一 
+					 <input type="checkbox" id="day_2" value="2"
+					 th:disabled="${#strings.isEmpty(ws.tel)}" th:style="${#strings.isEmpty(ws.tel)?'background-color: #cbcbcb;':''}" th:checked="${ws.tuesday}"
+					 />周二 <input type="checkbox" id="day_3"
+					value="3"
+					th:disabled="${#strings.isEmpty(ws.tel)}" th:style="${#strings.isEmpty(ws.tel)?'background-color: #cbcbcb;':''}" th:checked="${ws.wednesday}"
+					/> 周三 <input type="checkbox" id="day_4"
+					value="4"
+					th:disabled="${#strings.isEmpty(ws.tel)}" th:style="${#strings.isEmpty(ws.tel)?'background-color: #cbcbcb;':''}" th:checked="${ws.thursday}"
+					 />周四 <input type="checkbox" id="day_5"
+					
+					value="5" th:disabled="${#strings.isEmpty(ws.tel)}" th:style="${#strings.isEmpty(ws.tel)?'background-color: #cbcbcb;':''}" th:checked="${ws.friday}"
+					/> 周五 <input type="checkbox" id="day_6"
+					value="6"
+					th:disabled="${#strings.isEmpty(ws.tel)}" th:style="${#strings.isEmpty(ws.tel)?'background-color: #cbcbcb;':''}" th:checked="${ws.saturday}"
+					 />周六 <input type="checkbox" id="day_7"
+					value="7"
+					th:disabled="${#strings.isEmpty(ws.tel)}" th:style="${#strings.isEmpty(ws.tel)?'background-color: #cbcbcb;':''}" th:checked="${ws.sunday}"
+					/> 周日 &nbsp; <span id="receiveDaysResult"
+					style="display: none; color: #f3764f;"></span></td>
+			</tr>
+		</table>
+		<p class="space10"></p>
+		<p class="space10"></p>
+		<table cellpadding="0" cellspacing="0" border="0" align="center">
+			<tr>
+				<td>
+				<button id="saveBtn" name="saveBtn" type="button" style="overflow:visible;width:70px;height:25px;padding-left:4px;"  class="btn01" >
+				  	   <img src="../images/btn/save.gif" style="vertical-align: middle;" />保存
+				    </button>
+				  	<button id="resetBtn" name="resetBtn" type="button" style="overflow:visible;width:70px;height:25px;padding-left:4px;"  class="btn01" >
+				  	   <img src="../images/btn/clear.gif" style="vertical-align: middle;" />重置
+				    </button>
+				  	 <button id="backBtn" name="backBtn" type="button" style="overflow:visible;width:70px;height:25px;padding-left:4px;"  class="btn01" >
+				  	   <img src="../images/btn/back.gif" style="vertical-align: middle;" />返回
+				    </button>
+				</td>
+			</tr>
+		</table>
+	</form>
+	</div>
+</body>
+</html>

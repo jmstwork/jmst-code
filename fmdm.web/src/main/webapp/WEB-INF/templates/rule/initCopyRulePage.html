@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<title>规则新建向导</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" /> 
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" /> 
+    <link rel="stylesheet" type="text/css" href="../styles/autocomplete/jquery.autocomplete.css"/>
+    <div th:fragment="styles">
+	    <link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/layout.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/table.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/monitor-search.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/asyncbox/asyncbox.css" type="text/css"  rel="stylesheet" />
+	    <link rel="stylesheet" href="../styles/themes/base/minified/jquery-ui.min.css"/>
+  		<link rel="stylesheet" href="../styles/style.css"/>		
+    </div>
+    <script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+    <script type="text/javascript" src="../autocomplete/thickbox-compressed.js"></script>
+    <script type="text/javascript" src="../scripts/ui/jquery.ui.button.js"></script>
+    
+<div th:fragment="scripts">
+        <script type="text/javascript" src="../scripts/rule/initCopyRulePage.js"></script>
+        <script type="text/javascript" src="../scripts/AsyncBox.v1.4.5.js"></script>
+        <script type="text/javascript" src="../scripts/ui/minified/jquery-ui.min.js"></script>
+    </div>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+</head>
+<body>
+	<div th:fragment="content" style="margin: 5px; padding: 2px; border: 1px solid #aacbee; background: #f8f8f8; min-width: 1020px;">
+		<input type="hidden" name="aaa" id="aaa" th:value="${memo}"/>
+		<table cellpadding="0" cellspacing="0" border="0" width="100%">
+			<tr>
+				<td class="Table_title"><img src="../images/icon_01.gif" />
+				&nbsp;&nbsp;
+				<span th:text="${page_title}">title</span> 
+				</td>
+				<input type="hidden" th:value="${itemList}" id="itemList"/>
+			</tr>
+		</table>
+		<form name="ruleForm" action="../rule/createRule.html" method="post">
+			<input type="submit" name="submitBtn" id="submitBtn" style="display: none;" /> 
+			<input type="hidden" name="titles" id="titles"/> 
+			<input type="hidden" name="exe" id="exe" th:value="${exe}"/>
+			<input type="hidden" id="createType" th:value="${createType}"/>
+			<input type="hidden" name="dictDepartmentJson" id="dictDepartmentJson" th:value="${dictDepartmentJson}"/>
+			<input type="hidden" name="data" id="data"/>
+			<!-- edit -->
+			<input type="hidden" name="deleteItem" id="deleteItem"/> 
+			<!-- <input type="hidden" name="ruleId" id="ruleId" th:value="${ruleId}"/>  -->
+			<input type="hidden" name="updateItems" id="updateItems"/> 
+			<input type="hidden" name="addItems" id="addItems"/> 
+			<input type="hidden" name="rowData" id="rowData"/> 
+			<input type="hidden" name="deleteData" id="deleteData"/> 
+			<input type="hidden" name="updateData" id="updateData"/>
+			<div style="width: 100%; height: 100%;">
+				<table height="46%" border="0" cellpadding="0" cellspacing="0"
+					class="Table_01" style="width: 100%; height: 100%;">
+					<tr >
+						<td align="right" style="width:60px;">规则名称
+						</td>
+						<td style="width:210px;">
+						<input type="text" id="ruleName" name="ruleName" size="18"  th:value="${rule.ruleName}"
+							 onblur="checkValue(this.id,this.value);" />
+						<input type="hidden" id="ruleId" name="ruleId" size="18"  th:value="${rule.ruleId}"/> 
+						<input type="hidden" id="opt" th:value="${opt}" />
+						</td>
+						<td align="right" style="width:60px;">所属的组
+						</td>
+						<td style="width:210px;"><select name="rulegroupId" id="groupCode"
+							class="selected01" 
+							onchange="checkValue(this.id,this.value);">
+								<option value="">
+									请选择
+								</option>
+									<option th:each="group : ${ruleGroup }" th:value="${group.rulegroupId}" th:text="${group.rulegroupName}" th:selected="${group.rulegroupId==rule.rulegroupId}" >${group.rulegroupName}
+									</option>
+						</select></td>
+						<td align="right" style="width:60px;">所属科室
+						</td>
+						<td align="left">
+							<div class="selectDeptDict" style="z-index: 200">
+								<input id="deptName" onblur="checkValue(this.id,this.value);"  th:value="${deptName}" style="width:150px;"/>
+							</div>
+							<input id="deptCode" type="hidden" th:value="${deptCode}" />
+						</td>
+					</tr>
+					<tr>
+						<td align="right">模型事实
+						</td>
+						<td colspan="5"><select name="modelId" id="modelCode"
+							class="selected01" style="width: 180px;"
+							onchange="checkValue(this.id,this.value);">
+								<option value="">
+									请选择
+								</option>
+									<option th:each=" model: ${ruleMode }" th:value="${model.modelId}" th:text="${model.modelName}" th:selected="${model.modelId==rule.modelId}" >${model.modelName}
+									</option>
+						</select> </td>
+					</tr>
+					<tr>
+						<td align="right">规则条件
+						</td>
+						<td colspan="5" id="td_condition"><input name="Input"
+							type="button" class="btn01"
+							onclick="javascript:addCondition(0);" value="添加条件" />
+							 <div th:each="item:${itemList }" th:id="'div_' + ${item.ruleItemName }+ ''" th:if="${item.itemType == 1}">
+								<a class="Linkblue" href='#'
+									th:onclick="'javascript:editCondition(\'' + ${item.ruleItemName} + '\');'">&nbsp;&nbsp;&nbsp;&nbsp;编辑</a>&nbsp;&nbsp;<a
+									href='#' class="Linkblue"
+									th:onclick="'javascript:removeCondition(\'' + ${item.ruleItemName} + '\');'">删除</a>&nbsp;&nbsp;
+									<span th:text="${item.ruleItemName}"></span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td align="right">执行操作
+						</td>
+						<td colspan="5" id="td_operate"><input name="Input2"
+							type="button" class="btn01"
+							onclick="javascript:addCondition(1);" value="添加操作" />
+							<div th:each="item:${itemList }" th:id="'div_' + ${item.ruleItemName }+ ''" th:if="${item.itemType == 2}" name="result">
+								<a class="Linkblue" href='#'
+									th:onclick="'javascript:editCondition(\'' + ${item.ruleItemName} + '\');'">&nbsp;&nbsp;&nbsp;&nbsp;编辑</a>&nbsp;&nbsp;<a
+									href='#' class="Linkblue"
+									th:onclick="'javascript:removeCondition(\'' + ${item.ruleItemName} + '\');'">删除</a>&nbsp;&nbsp;<span th:text="${item.ruleItemName}"></span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td align="right">描述
+						</td>
+						<td colspan="5" align="left">
+						<textarea id="memo" name="memo" rows="3" cols="30" th:inline="text">
+						[[${rule.memo}]]
+						</textarea></td>
+					</tr>
+				</table>
+			</div>
+		</form>
+		<div style="width: 1140px; height: 90%; overflow: auto;">
+			<table id="mainTable" border="0" cellpadding="0" cellspacing="0"
+				class="Table_01" th:if="${#lists.size(itemList) >= 9}"
+				style="width: 200%;">
+				<thead>
+					<tr id="column_title">
+						<th rowspan="2" align="center" ><div style="width: 100px;"><label>操作</label></div></th>
+						<th rowspan="2" align="center" ><div style="width: 40px;">序号</div></th>
+						<th  th:each="item:${itemList }" th:if="${item.itemType eq 0}"  align="center" rowspan="2" th:type="${item.ruleItemId }" ><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width: 300px;"><nobr><label th:text="${item.ruleItemName}"></label></nobr></div></th>
+						<th  th:each="item:${itemList }" th:if="${item.itemType ne 0}" th:type="${item.ruleItemId }" th:id="${item.ruleItemName }" th:name="${item.itemType }" th:class="${item.editType }" th:text="${item.ruleItemName}"></th>
+					</tr>
+					<tr id="column_exe">
+						<td th:each="item:${itemList }" th:if="${item.itemType ne 0}"  th:id="${item.ruleItemId }" >
+							<span th:text="${item.itemExpression }"></span>
+							<input type="hidden" name="val" th:value="${item.defaultValue }" />
+						</td>
+						<!-- <c:forEach items="${itemList }" var="item">
+							<c:if test="${item.itemType ne 0}">
+								<td style='width:8%;height:10px;word-break:keep-all;white-space:nowrap;'
+								id="${item.ruleItemId }">${item.itemExpression }</td>
+							</c:if>
+						</c:forEach> -->
+					</tr>
+				</thead>
+				<tbody class="tbody">
+						<tr th:each="r:${dataMap}">
+							<td align="center" width="30px;"><a class="Linkblue"
+								href="javascript:void(0);" onclick="addRow();">添加</a>&nbsp;&nbsp;<a
+								class="Linkblue" href="javascript:void(0);"
+								onclick="deleteRow(this);">删除</a>
+							</td>
+							<td align="center" th:text="${r.key+1 }"></td>
+							<td th:title="${d.value.dataValue}" th:each="d:${r.value }" th:id="${d.value.dataId}" 
+								ondblclick="javascript:editTD(this);"><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width: 300px;"><nobr><label th:text="${d.value.dataValue}"></label></nobr></div></td>
+								<!-- <div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width: 200px;"><nobr><label th:text="${item.ruleItemName}"></label></nobr></div> -->
+						</tr>
+				</tbody>
+			</table>
+			<table id="mainTable" border="0" cellpadding="0" cellspacing="0"
+				class="Table_01" th:unless="${#lists.size(itemList) >= 9}"
+				style="width: 100%;">
+				<thead>
+					<tr id="column_title">
+						<th rowspan="2" align="center" ><div style="width: 100px;"><label>操作</label></div></th>
+						<th rowspan="2" align="center" ><div style="width: 40px;">序号</div></th>
+						<th  th:each="item:${itemList }" th:if="${item.itemType eq 0}"  align="center" rowspan="2" th:type="${item.ruleItemId }" ><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width: 300px;"><nobr><label th:text="${item.ruleItemName}"></label></nobr></div></th>
+						<th  th:each="item:${itemList }" th:if="${item.itemType ne 0}" th:type="${item.ruleItemId }" th:id="${item.ruleItemName }" th:name="${item.itemType }" th:class="${item.editType }" th:text="${item.ruleItemName}"></th>
+					</tr>
+					<tr id="column_exe">
+						<td th:each="item:${itemList }" th:if="${item.itemType ne 0}"  th:id="${item.ruleItemId }" >
+							<span th:text="${item.itemExpression }"></span>
+							<input type="hidden" name="val" th:value="${item.defaultValue }" />
+						</td>
+						<!-- <c:forEach items="${itemList }" var="item">
+							<c:if test="${item.itemType ne 0}">
+								<td style='width:8%;height:10px;word-break:keep-all;white-space:nowrap;'
+								id="${item.ruleItemId }">${item.itemExpression }</td>
+							</c:if>
+						</c:forEach> -->
+					</tr>
+				</thead>
+				<tbody class="tbody">
+						<tr th:each="r:${dataMap}">
+							<td align="center" width="30px;"><a class="Linkblue"
+								href="javascript:void(0);" onclick="addRow();">添加</a>&nbsp;&nbsp;<a
+								class="Linkblue" href="javascript:void(0);"
+								onclick="deleteRow(this);">删除</a>
+							</td>
+							<td align="center" th:text="${r.key+1 }"></td>
+							<td th:title="${d.value.dataValue}" th:each="d:${r.value }" th:id="${d.value.dataId}" 
+								ondblclick="javascript:editTD(this);"><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width: 300px;"><nobr><label th:text="${d.value.dataValue}"></label></nobr></div></td>
+								<!-- <div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width: 200px;"><nobr><label th:text="${item.ruleItemName}"></label></nobr></div> -->
+						</tr>
+				</tbody>
+			</table>
+		</div>
+		<p class="space20" style="margin-top: 5px;">
+			<input name="" type="button"
+				value='添加一行' class="btn01"
+				onclick="javascript:addRow();" />
+		</p>
+		<div>
+			<table cellpadding="0" cellspacing="0" border="0" align="center">
+				<tr>
+					<td >
+						<button id="saveBtn" type="button" onclick="saveRule()" style="overflow:visible;width:auto;height:23px;"  class="btn01">
+							<img src="../images/btn/save.gif" style="vertical-align: middle;" />保存
+						</button>
+					</td>
+					
+					<td >
+						<button id="returnBtn" type="button" th:onclick="'returnRule(\''+${opt}+'\')'"  style="overflow:visible;width:auto;height:23px;"  class="btn01">
+							<img src="../images/btn/back.gif" style="vertical-align: middle;" />返回
+						</button>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<p class="space20"></p>
+		<div id="setResult"></div>
+	</div>
+</body>
+</html>

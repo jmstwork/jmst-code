@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title></title>
+<div th:fragment="styles">
+	    <link href="../styles/monitor.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/cssAdmin.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/layout.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/table.css" type="text/css"  rel="stylesheet" />
+	    <link href="../styles/asyncbox/asyncbox.css" type="text/css" rel="stylesheet" />
+</div>
+<script type="text/javascript" src="../scripts/jquery-1.7.1.js"></script>
+<script>
+function jumpToPage2(form, pageNo)
+{
+    var tp = parseInt(form.totalPage.value, 10);
+    try
+    {
+        var inpVal = parseInt(pageNo.value, 10);
+        if(isNaN(inpVal) || 1 > inpVal)
+        {
+            var msg = "请输入正确的页码！";
+            var err = new Error(msg);
+            if(!err.message)
+            {
+                err.message = msg;
+            }
+            throw err;
+        }
+        else if(inpVal > tp)
+        {
+            var msg = "输入的页码超过总页数，请重新输入！";
+            var err = new Error(msg);
+            if(!err.message)
+            {
+                err.message = msg;
+            }
+            throw err;
+        }
+        else
+        {
+            //form.reset();
+            form.jumpToPage.value = pageNo.value;
+            form.submit();
+            form.reset();
+        }
+    }
+    catch(e)
+    {
+        //alert(e.message);
+    	alert(e);
+        pageNo.focus();
+        pageNo.select();
+    }
+}
+</script>
+<div th:fragment="scripts">
+	<script type="text/javascript" src="../scripts/sysmgt/userSelect.js"></script>
+	<script type="text/javascript" src="../scripts/paging.js"></script>
+</div>
+</head>
+<body class="yui3-skin-sam" id="Manage">
+	<form id="userForm" name="userForm" action="../sysmgt/userSelectList.html" method="post" th:object="${userCondition}">
+		<input type="hidden" name="currentPage" value="1" th:field="*{currentPage}"/>
+        <input type="hidden" name="totalPage"   value="5" th:field="*{totalPage}"/>
+        <input type="hidden" name="jumpToPage" id="jumpToPage"  value="" />
+		<p class="space05"></p>
+		<div id="dataDiv">
+			<table cellpadding="0" cellspacing="0" border="0" width="100%">
+				<tr>
+					<td class="Table_title"><img src="../images/icon_01.gif" />&nbsp;接收者选择
+					</td>
+				</tr>
+			</table>
+			<div class="Graybg">
+				<table cellpadding="0" cellspacing="0" border="0" class="Table_02">
+					<tr>
+						<td align="right">接收者ID
+						</td>
+						<td align="left"><input type="text" name="code"
+							id="code" style="width:120px;" th:field="*{userId}"  />
+						</td>
+
+						<td align="right">接收者名称</td>
+						<td align="left"><input type="text" name="name"
+							id="name" style="width:120px;" th:field="*{userName}" /></td>
+						<td align="right">
+							<button  id="seachBtn" name='seachBtn' type="button" style="width: 85px;height:25px;" class="btn01">
+								<img src="../images/btn/search.gif" style="vertical-align: middle;"/>&nbsp;搜索
+							</button></td>
+						<td align="right">
+							<button  id="cleanBtn" name='cleanBtn' type="button" style="width: 85px;height:25px;cursor:pointer;" class="btn01">
+								<img src="../images/btn/clean.gif" style="vertical-align: middle;"/>&nbsp;清空
+							</button></td>
+						<td width="5%"><div id="cleanBtn"></div></td>
+					</tr>
+				</table>
+			</div>
+			<hr/>
+			<div id="setSystemTable">
+				<table style="width: 100%; margin-top: 3px;" border="1px" cellspacing="0" cellpadding="1" class="Table_01">
+					<thead>
+						<tr>
+							<th style="width:50px;" align="center" >序号</th>
+							<th style="width:100px;">接收者ID</th>
+							<th style="width:150px;">接收者名称</th>
+							<th style="width:150px;">操作</th>
+						</tr>
+					</thead>
+					<tbody class="tbody">
+						<tr th:each="item : ${userList}" >
+							<td align="center" th:text="${#ids.seq('')}">1</td>
+							<td th:text="${item.code}"></td>
+							<td th:text="${item.name}"></td>
+							<td th:onclick="'javascript:chooseUser(\''+${item.code} +'\',\''+${item.name}+'\');'" style="cursor:pointer;color:blue;" align="center">选择</td>
+						</tr>
+					</tbody>
+					<tfoot>
+					<tr th:unless="${#lists.isEmpty(userList)}" class="datatable-paging">
+		                 <td colspan="2" class="datatable-paging-info">
+		                     <span class="datatable-paging-count">第<span th:text="${userCondition.currentPage}">1</span>页/共<span th:text="${userCondition.totalPage}">550</span>页</span>
+		                 	 <span class="datatable-paging-total">总共<span th:text="${userCondition.totalSize}">5500</span>条数据</span>
+		                 </td>
+		                 <td colspan="2" class="datatable-paging-page">
+		                     <span class="datatable-paging-first" th:style="${userCondition.currentPage == 1 ? 'display: none;' : ''}" onclick="firstPage(document.userForm);">首页</span>
+		                     <span class="datatable-paging-previous" th:style="${userCondition.currentPage == 1 ? 'display: none;' : ''}" onclick="prevPage(document.userForm);">上一页</span>
+		                     <span class="datatable-paging-next" th:style="${userCondition.currentPage == userCondition.totalPage ? 'display: none;' : ''}" onclick="nextPage(document.userForm);">下一页</span>
+		                     <span class="datatable-paging-last" th:style="${userCondition.currentPage == userCondition.totalPage ? 'display: none;' : ''}" onclick="lastPage(document.userForm);">尾页</span>
+		                     <span class="datatable-paging-jump" th:style="${userCondition.totalPage == 1 ? 'display: none;' : ''}">
+		                         <span>跳转到：</span>
+		                         <input type="text" class="datatable-paging-jump-input" id="jumpToInput" />
+		                         <span class="datatable-paging-jump-go" onclick="jumpToPage2(document.userForm, document.getElementById('jumpToInput'));"></span>
+		                     </span>
+		                 </td>
+	                </tr>
+                    <tr th:if="${#lists.isEmpty(userList)}" class="datatable-paging">
+	                    <td colspan="4" class="datatable-paging-info">
+	                        <span>没有查询结果，请修改检索条件重新检索。</span>
+	                    </td>
+	                </tr>
+				</tfoot>
+				</table>
+			</div>
+		</div>
+		<p class="space10"></p>
+	</form>
+</body>
+</html>

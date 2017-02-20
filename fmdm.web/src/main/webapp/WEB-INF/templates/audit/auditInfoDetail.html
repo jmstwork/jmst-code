@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>详细信息</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<style>
+	.textStyle{
+		background:transparent;border:1px solid #ffffff;
+	}
+	.titleWords{
+		word-wrap: break-word;
+		word-break: normal;
+		background:#edf6fe; font-weight:bold; color:#5fa7ce;border:1px solid #aacbee;
+	}
+</style>
+</head>
+<body>
+	<p class="space10"></p>
+	<table class="Table_01" style="width: 100%; height: 100%;">
+		<tr>
+			<td align="right" class="titleWords" width="60px">审计系统</td>
+			<td th:text="${audInfoDto.sysName}"></td>
+			<td align="right" class="titleWords">审计事件</td>
+			<td colspan="3" th:text="${audInfoDto.eventName}"></td>
+		</tr>
+		<tr>
+			<td align="right" class="titleWords">用户名</td>
+			<td th:text="${audInfoDto.userName}"></td>
+			<td align="right" class="titleWords">用户ID</td>
+			<td th:text="${audInfoDto.userNo}"></td>
+			<td align="right" class="titleWords">科室</td>
+			<td th:text="${audInfoDto.deptName}"></td>
+		</tr>
+		<tr>
+			<td align="right" class="titleWords" width="60px">机器名</td>
+			<td th:text="${audInfoDto.machineName}"></td>
+			<td align="right" class="titleWords">机器IP</td>
+			<td th:text="${audInfoDto.ipAddress}"></td>
+			<td align="right" class="titleWords">操作日期</td>
+			<td th:text="${audInfoDto.optDt}"></td>
+		</tr>
+		<tr>
+			<td align="right" class="titleWords">操作内容</td>
+			<td colspan="5"><textarea cols="10" rows="5" th:text="${audInfoDto.content}"
+					style="width: 100%; " class="textStyle"></textarea>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>
