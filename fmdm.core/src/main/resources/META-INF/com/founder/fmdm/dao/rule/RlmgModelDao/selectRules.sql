@@ -10,10 +10,10 @@ select distinct rr.rule_id,
   from rlmg_rule  rr
  where rr.delete_flg = 0
    /*%if ruleName != null && ruleName != "" */
-   and rr.rule_Name like concat('%',concat(/*ruleName*/'','%'))
+   and rr.rule_Name like '%'+/*ruleName*/''+'%'
    /*%end*/
    /*%if status != null && status != "" */
-   and rr.status like concat('%',concat(/*status*/'','%'))
+   and rr.status like '%'+/*status*/''+'%'
    /*%end*/
 
    and rr.status not in ('0')

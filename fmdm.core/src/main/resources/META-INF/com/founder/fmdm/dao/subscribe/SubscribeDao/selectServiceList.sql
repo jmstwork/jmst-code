@@ -76,7 +76,7 @@
    /*%end*/
    
    /*%if serviceName !=null && serviceName != "" */
-   and s2.service_name like concat('%',concat(/*serviceName*/'MS021','%'))
+   and s2.service_name like '%'+/*serviceName*/'MS021'+'%'
    /*%end*/
    
    /*%if hospitalCode !=null && hospitalCode != "" */

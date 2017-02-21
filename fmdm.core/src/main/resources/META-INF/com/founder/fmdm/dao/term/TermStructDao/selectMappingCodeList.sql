@@ -11,16 +11,16 @@ FROM  (SELECT lower(SOURCE_TABLE)        AS sourceTable,
        )a 
                  where 1=1
        /*%if @isNotEmpty(sourceTable) */
-         AND a.sourceTable like concat('%',concat(/*sourceTable*/'sourceTable','%'))
+         AND a.sourceTable like '%'+/*sourceTable*/''+'%'
        /*%end*/
        /*%if @isNotEmpty(sourceName) */
-         AND a.sourceName like concat('%',concat(/*sourceName*/'sourceName','%'))
+         AND a.sourceName like '%'+/*sourceName*/''+'%'
        /*%end*/ 
        /*%if @isNotEmpty(targetTable) */
-         AND a.targetTable like concat('%',concat(/*targetTable*/'targetTable','%'))
+         AND a.targetTable like '%'+/*targetTable*/''+'%'
        /*%end*/
        /*%if @isNotEmpty(targetName) */
-         AND a.targetName like concat('%',concat(/*targetName*/'targetName','%'))
+         AND a.targetName like '%'+/*targetName*/''+'%'
        /*%end*/ 
        GROUP  BY a.sourceTable,
                  a.targetTable,

@@ -12,7 +12,7 @@ select rrd.*
           from rlmg_rule_data
          where delete_flg = 0
               /*%if dataValue != null */
-           and data_value like concat('%', concat( /*dataValue*/'', '%'))
+           and data_value like '%'+/*dataValue*/''+'%'
         /*%end*/
         )
  order by rrd.data_row_no, rrde.rule_item_no;

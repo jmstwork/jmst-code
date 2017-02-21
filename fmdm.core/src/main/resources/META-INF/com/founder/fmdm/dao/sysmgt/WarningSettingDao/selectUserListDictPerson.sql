@@ -5,10 +5,10 @@
   from dict_person p1
  where p1.delete_flg = 0
   /*%if userNo!=null && userNo != "" */
-   and p1.code like concat('%',concat(/*userNo*/'11','%'))
+   and p1.code like '%'+/*userNo*/''+'%'
    /*%end*/
    /*%if userName!=null && userName != "" */
-   and p1.name like concat('%',concat(/*userName*/'11', '%'))
+   and p1.name like '%'+/*userName*/''+'%'
    /*%end*/
    and p1.item_version = (select max(p2.item_version)
                            from dict_person p2

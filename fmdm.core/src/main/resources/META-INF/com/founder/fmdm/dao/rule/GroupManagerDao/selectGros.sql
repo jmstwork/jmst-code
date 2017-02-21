@@ -2,10 +2,10 @@ select rulegroup_id, rulegroup_Name, rulegroup_En_Name
   from rlmg_rulegroup
  where delete_flg = 0
  /*%if rulegroupName != null && rulegroupName !=""*/
-   and rulegroup_Name like concat('%',concat(/*rulegroupName*/'11','%'))
+   and rulegroup_Name like '%'+/*rulegroupName*/''+'%'
    /*%end*/
    /*%if rulegroupEnName != null && rulegroupEnName !=""*/
-   and rulegroup_En_Name like concat('%',concat(/*rulegroupEnName*/'11','%'))
+   and rulegroup_En_Name like '%'+/*rulegroupEnName*/''+'%'
    /*%end*/
    order by    
    /*%if operFlg=="edit" */

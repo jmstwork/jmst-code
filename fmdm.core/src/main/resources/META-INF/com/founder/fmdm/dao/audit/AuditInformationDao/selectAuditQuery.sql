@@ -48,13 +48,13 @@ select a.aud_id audId,
    	and convert(a.opt_dt, getdate(), 120) <= /*optDt2*/'123'
    	/*%end*/
    	/*%if userNo != null && userNo != ""*/
-   and a.user_id like concat('%',concat(/*userNo*/'11','%'))
+   and a.user_id like '%'+/*userNo*/'11'+'%'
    	/*%end*/
     /*%if userName != null && userName != ""*/
-   and u.user_name like concat('%',concat(/*userName*/'123','%'))
+   and u.user_name like '%'+/*userName*/'123'+'%'
    	/*%end*/
    
    /*%if deptName != null && deptName != ""*/
-   and d.name like concat('%',concat(/*deptName*/'33','%'))
+   and d.name like '%'+/*deptName*/'33'+'%'
    	/*%end*/
  order by opt_dt desc

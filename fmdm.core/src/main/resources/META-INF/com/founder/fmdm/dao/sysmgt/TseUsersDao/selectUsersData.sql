@@ -36,8 +36,8 @@ where
   ) a 
   where 1=1
   /*%if userAccount != null && userAccount != ""*/
-  and a.user_account like concat('%',concat(/*userAccount*/'11','%')) 
+  and a.user_account like '%'+/*userAccount*/''+'%'
   /*%end*/
   /*%if userName != null && userName != ""*/
-  and a.user_name like concat('%',concat(/*userName*/'11','%'))
+  and a.user_name like '%'+/*userName*/''+'%'
   /*%end*/

@@ -12,10 +12,10 @@ select t1.dict_id,
  where t1.type_cd = t2.cd_div
    and t2.category_cd = 'C004'
    /*%if serviceId != null && serviceId != ""*/
-   and t1.service_id like concat('%',concat(/*serviceId*/'MS021','%'))
+   and t1.service_id like like '%'+/*serviceId*/''+'%'
    /*%end*/
    /*%if dictName != null && dictName != ""*/
-   and t1.dict_name like concat('%',concat(/*dictName*/'布尔字典','%'))
+   and t1.dict_name like like '%'+/*dictName*/''+'%'
    /*%end*/
    /*%if typeCd != null && typeCd != ""*/
    and t1.type_cd = /*typeCd*/'0'

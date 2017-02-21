@@ -19,25 +19,25 @@ select s.setting_id, s.user_no, s.unit_id,s.user_type,s.rulegroup_id group_code,
        and s.setting_id=/*settingId*/'11'
        /*%end*/
        /*%if unitId !="" && unitId!=null*/
-       and s.unit_id like concat('%',concat(/*unitId*/'22','%'))
+       and s.unit_id like '%'+/*unitId*/''+'%'
        /*%end*/
        /*%if unitName !="" && unitName != null*/
-       and pp.depart_name like concat('%',concat(/*unitName*/'33','%'))
+       and pp.depart_name like '%'+/*unitName*/''+'%'
        /*%end*/
        /*%if receiveId !="" && receiveId!=null*/
-       and s.user_no like concat('%',concat(/*receiveId*/'33','%'))
+       and s.user_no like '%'+/*receiveId*/''+'%'
        /*%end*/
        /*%if rulegroupId !="" && rulegroupId!=null*/
-       and s.rulegroup_id like concat('%',concat(/*rulegroupId*/'11','%'))
+       and s.rulegroup_id like '%'+/*rulegroupId*/''+'%'
        /*%end*/
        /*%if userType !="" && userType!=null*/
-       and s.user_type like concat('%',concat(/*userType*/'11','%'))
+       and s.user_type like '%'+/*userType*/''+'%'
        /*%end*/
        /*%if tel !="" && tel!=null*/
-       and s.setting_id=d.setting_id(+) and d.setting_value like concat('%',concat(/*tel*/'11','%')) and  d.nf_type='1' and d.delete_flg=0
+       and s.setting_id=d.setting_id(+) and d.setting_value like '%'+/*tel*/''+'%' and  d.nf_type='1' and d.delete_flg=0
        /*%end*/
        /*%if email !="" && email!=null*/
-       and s.setting_id=d.setting_id(+) and d.setting_value like concat('%',concat(/*email*/'11','%')) and d.nf_type='2' and d.delete_flg=0
+       and s.setting_id=d.setting_id(+) and d.setting_value like '%'+/*email*/''+'%' and d.nf_type='2' and d.delete_flg=0
        /*%end*/
 	   order by /*# orderBy */ 
        

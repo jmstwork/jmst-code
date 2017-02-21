@@ -8,10 +8,10 @@ select r.rule_id, r.rule_name, ia.user_name apply_by,convert(r.apply_time, getda
     and r.permit_by=iai.user_no(+)
     and  c.category_cd='C001' 
    /*%if ruleName != null */
-   and r.rule_name like concat('%',concat(/*ruleName*/'','%'))
+   and r.rule_name like '%'+/*ruleName*/''+'%'
    /*%end*/
    /*%if status != null */
-   and r.status like concat('%',concat(/*status*/'','%'))
+   and r.status like '%'+/*status*/''+'%'
    /*%end*/
    order by
      /*%if orderBy != null */

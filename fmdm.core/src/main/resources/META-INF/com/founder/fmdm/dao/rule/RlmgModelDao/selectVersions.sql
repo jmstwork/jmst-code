@@ -6,6 +6,6 @@ rlmg.version_memo
        iam_account_info iam
    where rlmg.create_by=iam.user_no
   /*%if versionNo != "" */
-and  version_no like concat('%',concat(/*versionNo*/'33','%'))
+and  version_no like '%'+/*versionNo*/''+'%'
    /*%end*/
     order by to_number(substr(version_no,2)) desc

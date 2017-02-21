@@ -12,7 +12,7 @@ select l.log_Id logId,
    and l.oper_Obj = o.opt_Code(+)
    and l.operor_Id = a.user_No(+)
   /*%if operorId != null && operorId!=""*/
-   and l.operor_Id like CONCAT('%',concat(/*operorId*/'', '%'))
+   and l.operor_Id like '%'+/*operorId*/''+'%'
    	/*%end */
    /*%if operModu != null && operModu!=""*/
    and l.oper_Modu = /*operModu*/''

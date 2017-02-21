@@ -22,13 +22,13 @@ WHERE dm.DELETE_FLG='0'
 	AND isi.sys_id = dm.sys_id
 	--AND dm.SYS_ID = isi.SYS_ID
 	/*%if serviceId != null && serviceId != "" */
-	AND dm.SERVICE_ID like concat('%',concat(/* serviceId */'0001','%')) 
+	AND dm.SERVICE_ID like '%'+/*serviceId*/''+'%'
 	/*%end*/
 	/*%if dictId != null && dictId != "" */
 	AND dm.DICT_ID = /* dictId */'0001'
 	/*%end*/
 	/*%if dictName != null && dictName != "" */
-	AND dm.DICT_NAME like  concat('%',concat(/* dictName */'%aaaa%','%'))
+	AND dm.DICT_NAME like  '%'+/*dictName*/''+'%'
 	/*%end*/
 	/*%if tableNames != null */
 	AND dm.TABLE_NAME in /* tableNames */('0','1')

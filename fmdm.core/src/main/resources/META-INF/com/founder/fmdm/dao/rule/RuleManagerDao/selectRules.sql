@@ -40,16 +40,16 @@ select distinct rr.rule_id,
    and rmt.delete_flg = 0
    and sc.delete_flg=0
    /*%if ruleName != null && ruleName != "" */
-   and rr.rule_Name like concat('%',concat(/*ruleName*/'','%'))
+   and rr.rule_Name like '%'+/*ruleName*/''+'%'
    /*%end*/
       /*%if rulegroupName != null && rulegroupName != "" */
-   and rrg.rulegroup_Name like concat('%',concat(/*rulegroupName*/'','%'))
+   and rrg.rulegroup_Name like '%'+/*rulegroupName*/''+'%'
    /*%end*/
       /*%if modelName != null && modelName != "" */
-   and rmt.model_Name like concat('%',concat(/*modelName*/'','%'))
+   and rmt.model_Name like '%'+/*modelName*/''+'%'
    /*%end*/
       /*%if status != null && status != "" */
-   and rr.status like concat('%',concat(/*status*/'','%'))
+   and rr.status like '%'+/*status*/''+'%'
    /*%end*/
    order by 
  /*%if orderBy != null */

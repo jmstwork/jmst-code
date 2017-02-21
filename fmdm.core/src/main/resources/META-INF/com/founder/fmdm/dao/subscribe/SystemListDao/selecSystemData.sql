@@ -9,7 +9,7 @@ select s.sys_id, s.sys_name, s.sys_apply
    and s.sys_id = /*sysId*/'a'
    /*%end*/
    /*%if sysName!=null && sysName!="" */
-   and s.sys_name like concat('%',concat(/*sysName*/'MS021','%'))
+   and s.sys_name like '%'+/*sysName*/'MS021'+'%'
    /*%end*/
    and s.release_status = 'c'
    and s.opt_status != 'd'
