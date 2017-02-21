@@ -50,27 +50,23 @@
         ,s3.subs_id as subsId,
         s3.output_queue_name as outputQueueName
         /*%end*/
-   from SUBS_SUBSCRIBES         s1,
-        SUBS_SERVICE            s2,
-        (select v.code, v.name from dict_visit_type v 
-         where v.delete_flg =0 ) d,
-         (select sd.code, cast(sd.name as VARCHAR ) name from subs_order_exec_id sd where sd.delete_flg !=1 ) ordid,
-        (select s.cd_div,s.cd_value from system_code s
-        where s.category_cd='C011' and s.delete_flg=0 ) c,
-        SUBS_SYS ss
+   from SUBS_SUBSCRIBES         s1
+    INNER join   SUBS_SERVICE  s2 on s1.service_id = s2.service_id,
+    left join  (select v.code, v.name from dict_visit_type v
+         where v.delete_flg =0 ) d on s1.domain_id=d.code
+    left join   (select sd.code, cast(sd.name as VARCHAR ) name
+            from subs_order_exec_id sd where sd.delete_flg !=1 ) ordid on s1.order_exec_id=ordid.code
+    left join   (select s.cd_div,s.cd_value from system_code s
+        where s.category_cd='C011' and s.delete_flg=0 ) c on s1.hospital_id = c.cd_div
+    left join  SUBS_SYS ss on s1.send_sys_id = ss.sys_id
         /*%if sysId !=null && sysId != "" && method=="show"*/
-        ,SUBS_SERVICE_SUBSCRIBES s3
+    inner join SUBS_SERVICE_SUBSCRIBES s3 on s1.subscribe_id = s3.subscribe_id
         /*%end*/
-  where s1.service_id = s2.service_id
-    and s1.hospital_id = c.cd_div(+)
-    and s1.domain_id=d.code(+)
-    and s1.order_exec_id=ordid.code(+)
-    and s1.delete_flg != 1
+  where s1.delete_flg != 1
     and s2.delete_flg != 1
     and s2.opt_status != 'd'
     and s2.release_status = 'c'
-    and s1.send_sys_id = ss.sys_id(+)
-    
+
    /*%if serviceId !=null && serviceId != "" */
    and s2.service_id = /*serviceId*/'a'
    /*%end*/
@@ -88,8 +84,7 @@
    /*%end*/
  
    /*%if sysId !=null && sysId != "" && method=="show"*/
-   and s1.subscribe_id = s3.subscribe_id
-   and s3.sys_id = /*sysId*/'S001' 
+   and s3.sys_id = /*sysId*/'S001'
    and s3.delete_flg != 1
    /*%end*/
    

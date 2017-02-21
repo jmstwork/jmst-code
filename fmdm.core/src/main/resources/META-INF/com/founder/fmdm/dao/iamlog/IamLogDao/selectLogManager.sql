@@ -7,10 +7,11 @@ select l.log_Id logId,
        o.opt_Name optName,
        l.oper_Cont operCont,
        a.user_name userName
-  from iam_log l, iam_resr r, iam_opt o, iam_account_info a
- where l.oper_Modu = r.resr_Code(+)
-   and l.oper_Obj = o.opt_Code(+)
-   and l.operor_Id = a.user_No(+)
+  from iam_log l
+  left join iam_resr r on l.oper_Modu = r.resr_Code
+  left join iam_opt o on l.oper_Obj = o.opt_Code
+  left join iam_account_info a on l.operor_Id = a.user_No
+ where 1=1
   /*%if operorId != null && operorId!=""*/
    and l.operor_Id like '%'+/*operorId*/''+'%'
    	/*%end */

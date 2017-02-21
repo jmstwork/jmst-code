@@ -15,20 +15,17 @@ select a.aud_id audId,
        a.user_id userId,
        a.ip_address ipAddress,
        a.machine_name machineName
-  from aud_info a,
-       aud_event e,
-       subs_sys s,
-       iam_account_info u,
-       (select d1.code, d1.name
+  from aud_info a
+   left join  aud_event e on a.event_code = e.event_code
+   left join  subs_sys s on a.sys_id = s.sys_id
+   left join  iam_account_info u on a.user_id = u.user_no
+   left join   (select d1.code, d1.name
           from dict_department d1
          where d1.item_version =
                (select max(d2.item_version)
                   from dict_department d2
-                 where d2.code = d1.code)) d
- where a.event_code = e.event_code(+)
-   and a.sys_id = s.sys_id(+)
-   and a.user_id = u.user_no(+)
-   and a.dept_code = d.code(+)
+                 where d2.code = d1.code)) d on a.dept_code = d.code
+ where 1=1
    /*%if hospitalCode != null && hospitalCode !=""*/
    and a.hospital_code = /*hospitalCode*/'123'
    	/*%end*/

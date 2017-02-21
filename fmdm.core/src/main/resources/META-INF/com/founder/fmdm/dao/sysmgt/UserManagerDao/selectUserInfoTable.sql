@@ -7,11 +7,11 @@ select iai.user_no as userNo,
        vd.name deptName,
        iai.status,
        s.name statusName
-  from iam_account_info iai, iam_userstatus s, dict_department vd, dict_sex vs
- where iai.dept_code = vd.code(+)
-   and iai.sex = vs.code(+)
-   and iai.status = s.code(+)
-   and iai.delete_flg = 0
+  from iam_account_info iai
+   left join iam_userstatus s on iai.sex = vs.code
+   left join dict_department vd on iai.dept_code = vd.code
+   left join dict_sex vs on iai.sex = vs.code
+ where iai.delete_flg = 0
    and iai.user_no != 'admin'
     /*%if userNo != null && userNo !=""*/
     and iai.user_no =/*userNo*/''
