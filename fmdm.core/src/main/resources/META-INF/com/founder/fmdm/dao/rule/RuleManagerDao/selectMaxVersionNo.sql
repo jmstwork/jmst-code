@@ -1,4 +1,4 @@
 /*
 *	exRuleManagerDao_selectMaxVersionNo.sql
 */
-select max(to_number(version_no)) from rlmg_rule_version 
+select max(convert(DECIMAL(18,2),version_no)) from rlmg_rule_version

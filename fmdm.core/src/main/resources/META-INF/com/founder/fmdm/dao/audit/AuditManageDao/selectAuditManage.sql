@@ -7,4 +7,4 @@ select e.event_code evenCode, e.event_name evneName
  /*%if eventName != null && eventName != ""*/
    	and e.event_name like '%'+/*eventName*/'11'+'%'
  /*%end*/
- order by to_number(e.event_code)
+ order by cast(e.event_code as INT )

@@ -8,4 +8,4 @@ rlmg.version_memo
   /*%if versionNo != "" */
 and  version_no like '%'+/*versionNo*/''+'%'
    /*%end*/
-    order by to_number(substr(version_no,2)) desc
+    order by convert(DECIMAL(18,2),version_no) desc

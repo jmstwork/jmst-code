@@ -1,3 +1,3 @@
 select * 
   from aud_event e
- where to_number(e.event_code) = to_number(/*eventCode*/'123')
+ where cast(e.event_code as INT ) = cast(/*eventCode*/'123' as INT )

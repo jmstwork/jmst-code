@@ -1,1 +1,1 @@
-select max(to_number(UNI_KEY)) from /*#tableName*/
+select max(cast(UNI_KEY as INT )) from /*#tableName*/

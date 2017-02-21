@@ -32,7 +32,7 @@
                                'release_status',
                                'uni_key')
           and t.delete_flg = 0
-        order by to_number(t.disp_order)) tt
+        order by cast(t.disp_order as INT )) tt
   left join dict_sql s
   on tt.field_id = s.field_id
   and s.delete_flg = 0
