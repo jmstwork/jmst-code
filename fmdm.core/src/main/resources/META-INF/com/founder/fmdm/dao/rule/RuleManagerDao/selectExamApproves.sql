@@ -1,5 +1,5 @@
 
-select r.rule_id, r.rule_name, ia.user_name apply_by,to_char(r.apply_time,'yyyy-MM-dd hh24:mi:ss') as apply_time,iai.user_name permit_by,to_char(r.permit_time,'yyyy-MM-dd hh24:mi:ss') as permit_time,c.cd_value,opinions
+select r.rule_id, r.rule_name, ia.user_name apply_by,convert(r.apply_time, getdate(), 120) as apply_time,iai.user_name permit_by,convert(r.permit_time, getdate(), 120) as permit_time,c.cd_value,opinions
   from rlmg_rule r,system_code c,iam_account_info ia,iam_account_info iai
  where r.delete_flg = 0
  	and  r.status!=0   

@@ -12,18 +12,18 @@
              c.cd_value
            end) hospitalName,
         s1.domain_id as visitTypeId,
-        to_char(case
+        cast(case
           when s1.domain_id = '*' then
            '不区分'
           else
-           to_char(d.name)
-        end) visitTypeName,
-         to_char(case
+           cast(d.name as VARCHAR )
+        end as VARCHAR ) visitTypeName,
+         cast(case
           when (s1.order_exec_id = '*' or s1.order_exec_id is null) then
            '不区分'
           else
-           to_char(ordid.name)
-        end) orderExecName,
+           cast(ordid.name as VARCHAR )
+        end as VARCHAR ) orderExecName,
         s1.apply_unit_group_id as applyUnitGroupId,
         (select g1.unit_group_name
            from SUBS_UNIT_GROUP g1
@@ -44,7 +44,7 @@
            when s1.send_sys_id ='*' then
              '不区分'
            else  
-             to_char(ss.sys_name)
+             cast(ss.sys_name as VARCHAR )
            end) as sendSysName
         /*%if sysId !=null && sysId != "" && method=="show"*/
         ,s3.subs_id as subsId,
@@ -54,7 +54,7 @@
         SUBS_SERVICE            s2,
         (select v.code, v.name from dict_visit_type v 
          where v.delete_flg =0 ) d,
-         (select sd.code, to_char(sd.name) name from subs_order_exec_id sd where sd.delete_flg !=1 ) ordid,
+         (select sd.code, cast(sd.name as VARCHAR ) name from subs_order_exec_id sd where sd.delete_flg !=1 ) ordid,
         (select s.cd_div,s.cd_value from system_code s
         where s.category_cd='C011' and s.delete_flg=0 ) c,
         SUBS_SYS ss

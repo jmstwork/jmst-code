@@ -1,6 +1,6 @@
 select l.log_Id logId,
        l.operor_Id operorId,
-       to_char(l.oper_Dt, 'yyyy-MM-dd hh24:mi:ss') as operDt,
+       convert(a.opt_dt, getdate(), 120) as operDt,
        l.oper_Modu operModu,
        r.resr_Name resrName,
        l.oper_Obj operObj,

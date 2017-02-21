@@ -4,7 +4,7 @@
 select a.aud_id audId,
 	   a.hospital_code hospitalCode,
        a.hospital_name hospitalName,
-       to_char(a.opt_dt,'yyyy-MM-dd HH24:mi:ss') as optDate,
+       convert(a.opt_dt, getdate(), 120) as optDate,
        a.sys_id sysId,
        s.sys_name sysName,
        a.event_code eventCode,
@@ -42,10 +42,10 @@ select a.aud_id audId,
    and a.event_code = /*auditEvent*/'11'
    	/*%end*/
    	/*%if optDt1 != null && optDt1 != ""*/
-   	and to_char(a.opt_dt,'yyyy-MM-dd hh24:mi:ss') >= /*optDt1*/'123'
+   	and convert(a.opt_dt, getdate(), 120) >= /*optDt1*/'123'
    	/*%end*/
    	/*%if optDt2 != null && optDt2 != ""*/
-   	and to_char(a.opt_dt,'yyyy-MM-dd hh24:mi:ss') <= /*optDt2*/'123'
+   	and convert(a.opt_dt, getdate(), 120) <= /*optDt2*/'123'
    	/*%end*/
    	/*%if userNo != null && userNo != ""*/
    and a.user_id like concat('%',concat(/*userNo*/'11','%'))

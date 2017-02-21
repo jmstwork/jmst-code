@@ -1,6 +1,6 @@
 select iam.user_name as create_by,
 'V'|| rlmg.version_no as version_no,
-to_char(rlmg.create_time,'yyyy-MM-dd HH24:mm:ss') as create_time,
+convert(rlmg.create_time, getdate(), 120) as create_time,
 rlmg.version_memo
   from rlmg_rule_version rlmg,
        iam_account_info iam
