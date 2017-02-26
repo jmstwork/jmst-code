@@ -17,5 +17,5 @@ select t1.sync_id,
    and    t1.sync_id = /*syncId*/''
     /*%end*/
    /*%if dictName != null && dictName != ""*/
-   and t1.dict_name like /*@contain(dictName)*/''
+   and t1.dict_name like '%'+/*dictName*/''+'%'
      /*%end*/

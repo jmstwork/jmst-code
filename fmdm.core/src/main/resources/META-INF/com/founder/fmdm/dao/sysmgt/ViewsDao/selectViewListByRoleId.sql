@@ -20,15 +20,15 @@ where
  and rv.delete_flg=0
    /*%if roleId != null && roleId != ""*/
    and r.role_id = /* roleId */'a'
-   /*%end*/		
+   /*%end*/
    /*%if viewName != null && viewName != ""*/
-   and v.view_name like /* @contain(viewName) */'aaa'
+   and v.view_name like '%'+/*viewName*/''+'%'
    /*%end*/
    /*%if viewType != null && viewType != ""*/
-   and v.view_type = /* viewType */'0'  
+   and v.view_type = /* viewType */'0'
    /*%end*/
    /*%if dictName != null && dictName != ""*/
-   and d.dict_name like /* @contain(dictName) */'aaa'  
+   and d.dict_name like '%'+/*dictName*/''+'%'
    /*%end*/
 order by v.create_time desc;
 		 

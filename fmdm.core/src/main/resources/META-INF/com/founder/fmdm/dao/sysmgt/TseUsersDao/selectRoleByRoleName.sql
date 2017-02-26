@@ -3,4 +3,4 @@ select role_id,
  memo
  from role
  where delete_flg=0
- and role_name like /* @contain(roleName) */'b'
+ and role_name like '%'+/*roleName*/''+'%'

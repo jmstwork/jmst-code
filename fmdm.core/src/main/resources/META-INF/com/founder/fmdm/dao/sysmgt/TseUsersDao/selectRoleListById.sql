@@ -9,5 +9,5 @@ r.memo
   and u.user_account =/*userId*/''
   /*%end*/
    /*%if roleName != null && roleName != ""*/
-  and r.role_name like /*@contain(roleName)*/''
+  and r.role_name like '%'+/*roleName*/''+'%'
   /*%end*/

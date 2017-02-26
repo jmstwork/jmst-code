@@ -9,6 +9,6 @@ select t.code  as unitId,
  and  t.code=/*unitId*/''
     /*%end*/
  /*%if unitName != null && unitName != ""*/
- and t.name like /*@contain(unitName)*/''
+ and t.name like '%'+/*unitName*/''+'%'
      /*%end*/
  order by t.code

@@ -11,7 +11,7 @@ select t.code  as unitId,
  and  t.code=/*unitId*/''
     /*%end*/
  /*%if unitName != null && unitName != ""*/
- and t.name like /*@contain(unitName)*/''
+ and t.name like '%'+/*unitName*/''+'%'
      /*%end*/
    and s.delete_flg = 0
    and t.delete_flg = 0

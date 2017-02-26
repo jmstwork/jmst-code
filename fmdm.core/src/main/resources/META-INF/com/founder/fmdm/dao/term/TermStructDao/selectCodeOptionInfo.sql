@@ -9,7 +9,7 @@
 	FROM /*# table */ 
 	WHERE delete_flg = 0
 /*%if @isNotEmpty(code) */
-         AND LOWER(code)  like  /* @contain(code) */'%X%' escape '$' 
+         AND LOWER(code)  like  '%'+/*code*/''+'%' escape '$'
          or 
-         LOWER(name) like /* @contain(code) */'%X%' escape '$' 
+         LOWER(name) like '%'+/*code*/''+'%' escape '$'
 /*%end*/

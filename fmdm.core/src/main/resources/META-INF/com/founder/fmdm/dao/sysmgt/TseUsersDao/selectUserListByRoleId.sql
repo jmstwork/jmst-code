@@ -20,10 +20,10 @@ where
   and r.role_id = /* roleId */'a'
   /*%end*/	
   /*%if userAccount != null && userAccount != ""*/
-  and t.user_account  like  /* @contain(userAccount) */'b'
+  and t.user_account  like  '%'+/*userAccount*/''+'%'
   /*%end*/
   /*%if userName != null && userName != ""*/
-  and t.user_name like /* @contain(userName) */'a' 
+  and t.user_name like '%'+/*userName*/''+'%'
   /*%end*/
   group by t.user_id,
 		  t.user_account, 

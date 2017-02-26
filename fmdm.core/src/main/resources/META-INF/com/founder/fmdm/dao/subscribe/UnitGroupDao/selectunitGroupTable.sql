@@ -25,7 +25,7 @@ select distinct t.unit_group_id,
     and t.unit_group_id=/*unitGroupId*/''
     /*%end*/
    /*%if unitGroupName != null && unitGroupName != ""*/
-    and t.unit_group_name like /*@contain(unitGroupName)*/''
+    and t.unit_group_name like '%'+/*unitGroupName*/''+'%'
      /*%end*/
      /*%if hospitalCode != null && hospitalCode != ""*/
     and t.hospital_code =/*hospitalCode*/''

@@ -18,7 +18,7 @@ select iai.user_no as userNo,
     and iai.user_no =/*userNo*/''
     /*%end*/
    /*%if userName != null && userName != ""*/
-    and iai.user_name like /*@contain(userName)*/''
+    and iai.user_name like '%'+/*userName*/''+'%'
      /*%end*/
     /*%if status != -1*/
     and iai.status = /*#status*/

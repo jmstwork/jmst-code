@@ -6,9 +6,9 @@ select i.user_no,
  where i.delete_flg != 1
    and i.user_no not in(select u.user_account from tse_users u where u.delete_flg!=1)
   /*%if userAccount != null && userAccount != ""*/
-  and user_no like /* @contain(userAccount) */'a'
+  and user_no like '%'+/*userAccount*/''+'%'
   /*%end*/
   /*%if userName != null && userName != ""*/
-  and user_name like /* @contain(userName) */'b'
+  and user_name like '%'+/*userName*/''+'%'
   /*%end*/
   order by user_no

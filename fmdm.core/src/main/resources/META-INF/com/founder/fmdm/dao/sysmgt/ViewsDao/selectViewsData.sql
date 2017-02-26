@@ -11,13 +11,13 @@ select v.view_id, v.dict_id, d.dict_name,upper(d.table_name) table_name, v.view_
    and v.delete_flag = 0
    and d.delete_flg = 0
    /*%if viewName != null && viewName != ""*/
-   and v.view_name like /* @contain(viewName) */'aaa'
+   and v.view_name like '%'+/*viewName*/''+'%'
    /*%end*/
    /*%if viewType != null && viewType != ""*/
-   and v.view_type = /* viewType */'0'  
+   and v.view_type = /* viewType */'0'
    /*%end*/
    /*%if dictName != null && dictName != ""*/
-   and d.dict_name like /* @contain(dictName) */'aaa'  
+   and d.dict_name like '%'+/*dictName*/''+'%'
    /*%end*/
    /*%if roleId != null && roleId != ""*/
    and v.view_id not in (select t.view_id from  ROLE_VIEW t where t.role_id=/*roleId*/'' and t.delete_flg=0)

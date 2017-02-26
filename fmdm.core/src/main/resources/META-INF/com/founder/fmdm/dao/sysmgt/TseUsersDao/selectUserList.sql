@@ -11,9 +11,9 @@ select
    tse_users t
   where t.delete_flg=0
   /*%if userName != null && userName != ""*/
-  and LOWER(t.user_name) like /* @contain(userName) */'a' 
+  and LOWER(t.user_name) like '%'+/*userName*/''+'%'
   /*%end*/
   /*%if userAccount !=null && userAccount!=""*/
-  and LOWER(t.user_account) like /* @contain(userAccount)*/'a'
+  and LOWER(t.user_account) like '%'+/*userAccount*/''+'%'
   /*%end*/
   order by t.last_update_time desc

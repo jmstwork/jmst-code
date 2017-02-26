@@ -5,7 +5,7 @@
        where dm.delete_flg='0'
       )a where 1=1
        /*%if @isNotEmpty(sourceTable) */
-         AND a.dictName like  /* @contain(sourceTable) */'%X%' escape '$' 
+         AND a.dictName like  '%'+/*sourceTable*/''+'%' escape '$'
          or 
-         a.tableName like /* @contain(sourceTable) */'%X%' escape '$' 
+         a.tableName like '%'+/*sourceTable*/''+'%' escape '$'
        /*%end*/
