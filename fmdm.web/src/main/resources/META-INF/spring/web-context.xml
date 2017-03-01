@@ -118,15 +118,15 @@
             </props>
         </property>
     </bean>
-    <bean id="mqQMAndQConfig" class="com.founder.fmdm.service.sysmgt.MQqmAndqConfig">
-		<property name="dictSendQName" value="${dictSendQName}" />                   <!-- 术语发送队列名称 -->
-		<property name="userManagerSendQName" value="${userManagerSendQName}" />     <!-- 账户管理发送队列名称 -->
-		<property name="warningSetingSendQName" value="${warningSetingSendQName}" />     <!-- 警告通知设定消息发送队列-->
-		<property name="accessControllerSendQName" value="${accessControllerSendQName}" />  <!-- 访问控制发送队列名称 -->
-		<property name="roleSendQName"  value="${roleSendQName}"/>                <!-- 角色发送消息队列名称 -->
-		<property name="ngSendQName"  value="${ngSendQName}"/>                    <!-- 消息处理NG发送队列名称 -->
-		<property name="sendQMName" value="${sendQMName}" />                      <!-- 发送队列管理器名称 -->
-		<property name="receiveQName" value="${receiveQName}" />                  <!-- 接收队列名称 -->
-		<property name="receiveQMName" value="${receiveQMName}" />                    <!-- 接收队列管理器名称 -->
-	</bean>
+   <!-- <bean id="mqQMAndQConfig" class="com.founder.fmdm.service.sysmgt.MQqmAndqConfig">
+		&lt;!&ndash;<property name="dictSendQName" value="${dictSendQName}" />                   &lt;!&ndash; 术语发送队列名称 &ndash;&gt;&ndash;&gt;
+		<property name="userManagerSendQName" value="${userManagerSendQName}" />     &lt;!&ndash; 账户管理发送队列名称 &ndash;&gt;
+		<property name="warningSetingSendQName" value="${warningSetingSendQName}" />     &lt;!&ndash; 警告通知设定消息发送队列&ndash;&gt;
+		<property name="accessControllerSendQName" value="${accessControllerSendQName}" />  &lt;!&ndash; 访问控制发送队列名称 &ndash;&gt;
+		<property name="roleSendQName"  value="${roleSendQName}"/>                &lt;!&ndash; 角色发送消息队列名称 &ndash;&gt;
+		<property name="ngSendQName"  value="${ngSendQName}"/>                    &lt;!&ndash; 消息处理NG发送队列名称 &ndash;&gt;
+		<property name="sendQMName" value="${sendQMName}" />                      &lt;!&ndash; 发送队列管理器名称 &ndash;&gt;
+		<property name="receiveQName" value="${receiveQName}" />                  &lt;!&ndash; 接收队列名称 &ndash;&gt;
+		<property name="receiveQMName" value="${receiveQMName}" />                    &lt;!&ndash; 接收队列管理器名称 &ndash;&gt;
+	</bean>-->
 </beans>

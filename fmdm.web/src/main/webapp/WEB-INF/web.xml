@@ -6,7 +6,7 @@
     <param-value>
         	classpath*:META-INF/spring/*-context.xml,
         	classpath*:META-INF/spring/cache-license.xml,
-        	classpath:META-INF/spring/webservice-context.xml
+        	classpath*:META-INF/spring/webservice-context.xml
         </param-value>
   </context-param>
   <filter>

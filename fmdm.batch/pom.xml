@@ -93,7 +93,7 @@
 		<dependency>
 			<groupId>org.jetel</groupId>
 			<artifactId>bulkloader</artifactId>
-			<version>${version.cloveretl}</version>
+			<version>3.4.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jetel</groupId>

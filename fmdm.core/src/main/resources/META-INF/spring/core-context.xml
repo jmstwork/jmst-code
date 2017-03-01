@@ -95,10 +95,14 @@
     <beans profile="mysql">
     	<bean id="mysqlDialect" class="org.seasar.doma.jdbc.dialect.MysqlDialect" />
     </beans>
-    
-    <beans profile="oracle">
-    	<bean id="oracleDialect" class="org.seasar.doma.jdbc.dialect.OracleDialect" />
-    </beans>
+
+	<beans profile="oracle">
+		<bean id="oracleDialect" class="org.seasar.doma.jdbc.dialect.OracleDialect" />
+	</beans>
+
+	<beans profile="sqlserver">
+		<bean id="mssqlDialect" class="org.seasar.doma.jdbc.dialect.MssqlDialect" />
+	</beans>
     
     
 </beans>

@@ -2,6 +2,7 @@ package com.founder.core;
 
 import java.util.Properties;
 
+import com.founder.util.StringUtil;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
@@ -45,6 +46,9 @@ public class AppSettings extends PropertiesLoaderSupport implements
 
     public static String getConfig(String key)
     {
+        if(StringUtil.isEmpty(props.getProperty(key))){
+            System.out.print(key);
+        }
         if (props != null)
             return props.getProperty(key).trim();
         else

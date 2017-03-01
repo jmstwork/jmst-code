@@ -7,8 +7,8 @@ import org.slf4j.LoggerFactory;
 
 import com.founder.core.AppSettings;
 import com.founder.util.ExceptionUtils;
-import com.pkuhit.license.LicenseManager;
-import com.pkuhit.license.SingleLicenseSource;
+//import com.pkuhit.license.LicenseManager;
+//import com.pkuhit.license.SingleLicenseSource;
 
 /**
  * license管理
@@ -25,13 +25,13 @@ public class LicenseValidator {
 		InputStream licenseFile = null;
 
 		try {
-			LicenseManager licenseManager = LicenseManager.getInstance();
-
-			licenseFile = LicenseValidator.class.getClassLoader()
-					.getResourceAsStream(LICENSE_FILE_NAME);
-
-			licenseManager.addLicenseSource(new SingleLicenseSource(
-					licenseFile, "主数据系统"));
+//			LicenseManager licenseManager = LicenseManager.getInstance();
+//
+//			licenseFile = LicenseValidator.class.getClassLoader()
+//					.getResourceAsStream(LICENSE_FILE_NAME);
+//
+//			licenseManager.addLicenseSource(new SingleLicenseSource(
+//					licenseFile, "主数据系统"));
 
 		} catch (Exception e) {
 			logger.error(e.getMessage());

@@ -54,43 +54,31 @@
 			<groupId>com.founder.mq</groupId>
 			<artifactId>dhbcore</artifactId>
 			<version>7.0.1.3</version>
-			<scope>system</scope>
-			<systemPath>/Users/wangmeng/repository/dhbcore/7.0.1.3/dhbcore-7.0.1.3.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>com.founder.mq</groupId>
 			<artifactId>com.ibm.mq.commonservices</artifactId>
 			<version>7.0.1.3</version>
-			<scope>system</scope>
-			<systemPath>/Users/wangmeng/repository/com.ibm.mq.commonservices/7.0.1.3/com.ibm.mq.commonservices-7.0.1.3.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>com.founder.mq</groupId>
 			<artifactId>com.ibm.mq.headers</artifactId>
 			<version>7.0.1.3</version>
-			<scope>system</scope>
-			<systemPath>/Users/wangmeng/repository/com.ibm.mq.headers/7.0.1.3/com.ibm.mq.headers-7.0.1.3.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>com.founder.mq</groupId>
 			<artifactId>com.ibm.mq</artifactId>
 			<version>7.0.1.3</version>
-			<scope>system</scope>
-			<systemPath>/Users/wangmeng/repository/com.ibm.mq/7.0.1.3/com.ibm.mq-7.0.1.3.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>com.founder.mq</groupId>
 			<artifactId>com.ibm.mq.jmqi</artifactId>
 			<version>7.0.1.3</version>
-			<scope>system</scope>
-			<systemPath>/Users/wangmeng/repository/com.ibm.mq.jmqi/7.0.1.3/com.ibm.mq.jmqi-7.0.1.3.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>com.founder</groupId>
 			<artifactId>com.ibm.mq.pcf</artifactId>
 			<version>7.0.1.3</version>
-			<scope>system</scope>
-			<systemPath>/Users/wangmeng/repository/com.ibm.mq.pcf/7.0.1.3/com.ibm.mq.pcf-7.0.1.3.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>com.thoughtworks.xstream</groupId>
