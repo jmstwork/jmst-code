@@ -7,15 +7,15 @@ select
   t.enable_flag, 
   t.super_user,
   t.memo,
- WMSYS.WM_CONCAT(r.role_name) as roleName
+ roleName=stuff((select ','+r.role_name from
+  tse_users ts
+  left join user_role u on t.user_account = u.user_account and u.delete_flg=0
+  left join role r on u.role_id =r.role_id where ts.user_id =t.user_id
+for xml path('')), 1, 1, '')
 from
-  tse_users t ,user_role u ,role r
+  tse_users t
 where
-  t.user_account = u.user_account
- and u.role_id =r.role_id
-  and u.delete_flg=0
-  and t.delete_flg=0
-  and r.delete_flg=0
+ t.delete_flg=0
   /*%if roleId != null && roleId != ""*/
   and r.role_id = /* roleId */'a'
   /*%end*/	

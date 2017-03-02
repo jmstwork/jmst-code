@@ -426,9 +426,9 @@ $(function() {
 					bValid = bValid && checkMixed(fieldName,"列名", 1,25);
 					bValid = bValid && checkMixed(fieldDesc,"注释",1,50);
 					bValid = bValid && checkNull(fieldType, "类型" );
-					if($("#lengthShow").css("display")!="none"){
+					/*if($("#lengthShow").css("display")!="none"){
 						bValid = bValid && checkMixed(length, "长度",1, 10);
-					}
+					}*/
 					//bValid = bValid && checkMixed(defaultValue, "缺省值",1, 25);
 					if(bValid){
 						var form = document.fieldform;
@@ -1313,14 +1313,14 @@ $(function() {
 					//字段类型
 					if(n==5){
 						typeA = $(this).text();
-						if($(this).text()=="DATE" || $(this).text()=="NUMBER(1)"){
+						if($(this).text()=="DATE" || $(this).text()=="bit"){
 							dateOrBoolean = true;
 							tdData += $(this).text() + "  ";
 						}else{
-							if($(this).text()=="NUMBER"){
+							if($(this).text()=="int"){
 								isNumber = true;
 							}
-							tdData += $(this).text() + "(";
+							tdData += $(this).text() ;
 						}
 						
 						
@@ -1330,30 +1330,30 @@ $(function() {
 					if(!dateOrBoolean){
 						//长度
 						if(n==6){
-							if(isNumber){
-								tdData += $(this).text() + ",";
-							}else{
+							if(!isNumber && $(this).text()!="undefined"){
+								tdData += "(" + $(this).text() + ")";
+							}//else{
 								
 							//Author:liu_hongjie
 				            // Date : 2014/9/9 13:58
 				            //[BUG]0048840 ADD BEGIN
 							//	tdData += $(this).text() + " char)";
-								tdData += $(this).text() + ")";
+							//	tdData += $(this).text() ;
 							//[BUG]0048840 ADD END
-							}
+							//}
 							
 						}
 						
 						//精度
-						if(n==7&&isNumber){
-							tdData += $(this).text() + ")";
+						if(n==7&&isNumber && $(this).text()!="" && $(this).text()!="undefined"){
+							tdData += "(" + $(this).text() + ")";
 						}
 					}
 					
 					//缺省值
 					if(n==8 && $(this).text()!=""){
 						//区分是数字还是字符
-						if(typeA.indexOf("NUMBER")!=-1){
+						if(typeA.indexOf("int")!=-1){
 							tdData += " default " + $(this).text();
 						}else if(typeA.indexOf("DATE")!=-1){
 							tdData += " default  timestamp '" + $(this).text() + "'";
@@ -1370,7 +1370,8 @@ $(function() {
 					
 					//添加索引
 					if(n==10 && $(this).text()=="√"){
-						indexUnion += fieldName + ",";
+						//indexUnion += fieldName + ",";
+						tdData += " identity(1,1)";//primary key
 					}
 				})
 				if(m==0){
@@ -1381,18 +1382,18 @@ $(function() {
 			})
 			indexUnion = indexUnion.substring(0,indexUnion.length-1);
 			
-			trData  += "  create_by  VARCHAR2(50),<br/>";
+			trData  += "  create_by  VARCHAR(50),<br/>";
 	    	trData  += "  create_time  DATE,<br/>";
-	    	trData  += "  last_update_by  VARCHAR2(50),<br/>";
+	    	trData  += "  last_update_by  VARCHAR(50),<br/>";
 	    	trData  += "  last_update_time  DATE,<br/>";
-	    	trData  += "  delete_by  VARCHAR2(50),<br/>";
+	    	trData  += "  delete_by  VARCHAR(50),<br/>";
 	    	trData  += "  delete_time  DATE,<br/>";
-	    	trData  += "  delete_flg  VARCHAR2(1),<br/>";
-	    	trData  += "  update_count  NUMBER(10),<br/>";
-	    	trData  += "  item_version  NUMBER(10),<br/>";
-	    	trData  += "  opt_status  VARCHAR2(1),<br/>";
-	    	trData  += "  release_status  VARCHAR2(1),<br/>";
-	    	trData  += "  uni_key  VARCHAR2(50) NOT　NULL<br/>";
+	    	trData  += "  delete_flg  VARCHAR(1),<br/>";
+	    	trData  += "  update_count  int,<br/>";
+	    	trData  += "  item_version  int,<br/>";
+	    	trData  += "  opt_status  VARCHAR(1),<br/>";
+	    	trData  += "  release_status  VARCHAR(1)<br/>";
+	    	//trData  += "  uni_key  VARCHAR2(50) NOT　NULL<br/>";
 	    	trData  += ");<br/>";
 	    	trData  += "alter table ";
 	    	trData  += $("#tableName").val();
@@ -1418,7 +1419,7 @@ $(function() {
 	    	comment += "comment on column " + $("#tableName").val() + ".item_version is  '版本号'; <br/>";
 	    	comment += "comment on column " + $("#tableName").val() + ".opt_status   is  '操作状态'; <br/>";
 	    	comment += "comment on column " + $("#tableName").val() + ".release_status is '发布状态'; <br/>";
-	    	comment += "comment on column " + $("#tableName").val() + ".uni_key  is '唯一主键'; <br/>";
+	    	//comment += "comment on column " + $("#tableName").val() + ".uni_key  is '唯一主键'; <br/>";
 	    			
 	    	trData  += comment;
 	    	//trData  += "create index index_" + $("#tableName").val() + " on " + $("#tableName").val() + "(" + indexUnion +")"+ "; <br/>"

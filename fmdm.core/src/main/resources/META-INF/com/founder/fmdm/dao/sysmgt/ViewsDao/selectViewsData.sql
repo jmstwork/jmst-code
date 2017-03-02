@@ -22,5 +22,5 @@ select v.view_id, v.dict_id, d.dict_name,upper(d.table_name) table_name, v.view_
    /*%if roleId != null && roleId != ""*/
    and v.view_id not in (select t.view_id from  ROLE_VIEW t where t.role_id=/*roleId*/'' and t.delete_flg=0)
    /*%end*/
-   order by v.last_update_time desc nulls last;
+   order by v.last_update_time desc ;
  

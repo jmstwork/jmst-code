@@ -104,8 +104,15 @@ public class TermStructureController extends AbstractController {
 		model.addAttribute("page_title", "术语映射列表");
 		SelectOptions options = getSelectOptions(cond);
 		List<DictCodeMapDto> tslist = new ArrayList<DictCodeMapDto>();
-		tslist = termStructureService.selectMappingCodeList(cond.getSourceTable(),
-				cond.getSourceName(), cond.getTargetTable(), cond.getTargetName(),options);
+
+		DictCodeMapDto dto = new DictCodeMapDto();
+		dto.setSourceTable("dict_sex");
+		dto.setSourceName("性别字典");
+		dto.setTargetTable("dict_department");
+		dto.setTargetName("科室字典");
+		tslist.add(dto);
+//		tslist = termStructureService.selectMappingCodeList(cond.getSourceTable(),
+//				cond.getSourceName(), cond.getTargetTable(), cond.getTargetName(),options);
 
 		model.addAttribute("tslist", tslist);
 	
@@ -148,9 +155,22 @@ public class TermStructureController extends AbstractController {
 			}
 		}
 		List<DictCodeMapDto> dfList = new ArrayList<DictCodeMapDto>();
-		dfList = termStructureService.selectMappingCodeAllList(cond.getSourceTable(),
+		DictCodeMapDto dto = new DictCodeMapDto();
+		dto.setSrcUniKey("73b90bb71fa54bb");
+		dto.setSourceCode("001");
+		dto.setSourceCodeContent("事假");
+		dto.setSourceCodeVersion("v1.0");
+		dto.setTarUniKey("d0aad37676b74030a3d6b53b4108a943");
+		dto.setTargetCode("2");
+		dto.setTargetCodeContent("女");
+		dto.setTargetCodeVersion("v1.0");
+		dto.setTargetTable("性别字典");
+		dfList.add(dto);
+
+
+		/*dfList = termStructureService.selectMappingCodeAllList(cond.getSourceTable(),
 				cond.getSourceName(), cond.getTargetTable(), cond.getTargetName(),options);
-		
+		*/
 		model.addAttribute("dfList", dfList);
 		model.addAttribute("operation", operation);
 		
@@ -787,7 +807,7 @@ public class TermStructureController extends AbstractController {
 		int tableIsExist = 0;
 		for (DictMain dm : dmList) {
 			model.put("termStruct", dm);
-			tableIsExist = termStructureService.selectTableIsExist(dm.getTableName());
+//			tableIsExist = termStructureService.selectTableIsExist(dm.getTableName());
 		}
 		model.put("dfList", dfList);
 		model.addAttribute("operation", "edit");
@@ -940,8 +960,6 @@ public class TermStructureController extends AbstractController {
 	}
 	/**
 	 * 
-	 * @param 术语基本信息数据对
-	 * @param 术语结构信息数据对
 	 * @return 融合后的数据对
 	 */
 	private List<String> mergetDataPair(List<String> basic, List<String> structure){
@@ -994,16 +1012,16 @@ public class TermStructureController extends AbstractController {
 	}
 	
 	//从数据库取出来的dictfield对象的类型是数据库的类型，和前端显示不一致，所以需要转换，有以下关系
-	//数值型：NUMBER
-	//字符型：VARCHAR2
-	//布尔型：NUMBER(1)
+	//数值型：NUMBER---int
+	//字符型：VARCHAR2---varchar
+	//布尔型：NUMBER(1)---bit
 	//时间型：DATE
 	private String getTypeNameByCode(String typeCode){
-		if(typeCode.equals("NUMBER")){
+		if(typeCode.equals("int")){
 			return "数值型";
-		}else if(typeCode.equals("VARCHAR2")){
+		}else if(typeCode.equals("VARCHAR")){
 			return "字符型";
-		}else if(typeCode.equals("NUMBER(1)")){
+		}else if(typeCode.equals("bit")){
 			return "布尔型";
 		}else if(typeCode.equals("DATE")){
 			return "时间型";
@@ -1575,7 +1593,8 @@ public class TermStructureController extends AbstractController {
 		String sql = "";
 		String[] contentArr = {};
 		StringBuffer resultList = new StringBuffer();
-		int exist = termStructureService.selectTableIsExist(cond.getTableName());
+		int exist=0;
+//		int exist = termStructureService.selectTableIsExist(cond.getTableName());
 		if(exist!=1 || cond.getSqlContentArr().indexOf("create table")<0){
 			String sqlContent = cond.getSqlContentArr();
 			String[] idArr = {};
@@ -1736,7 +1755,8 @@ public class TermStructureController extends AbstractController {
 			List<Map<Object,Object>> resultList = new ArrayList<Map<Object,Object>>();
 			//取物理表对应的字段信息
 			//先判断表是否存在
-			int exist = termStructureService.selectTableIsExist(tableName.toUpperCase());
+			int exist=0;
+//			int exist = termStructureService.selectTableIsExist(tableName.toUpperCase());
 			if(exist==1){
 				List<Map<String,Object>>  tableList = termStructureService.selectTableStruct(tableName);
 				Map<Object,Object> map2 = new HashMap<Object,Object>();
@@ -1875,7 +1895,8 @@ public class TermStructureController extends AbstractController {
 		}
 		int a = termStructureService.selectValueIsExist(cond.getDictName(),cond.getTableName(),cond.getServiceId());
 		if(!StringUtils.isEmpty(cond.getTableName())){
-			int b = termStructureService.selectTableIsExist(cond.getTableName());
+			int b=0;
+//			int b = termStructureService.selectTableIsExist(cond.getTableName());
 			if(a>0 || b>0){
 				if(a>0&&b>0){
 					model.put("status", 3); //术语结构和物理表都存在该表名
@@ -2310,7 +2331,8 @@ public class TermStructureController extends AbstractController {
 					}
 				}else if("delete".equalsIgnoreCase(cond.getOperation())){
 					if(dm.getLockStatus()==0 ||dm.getLockStatus()==1){
-						int tableIsExist = termStructureService.selectTableIsExist(cond.getTableName());
+						int tableIsExist=0;
+//						int tableIsExist = termStructureService.selectTableIsExist(cond.getTableName());
 						if(tableIsExist==1){
 							model.put("result", 1);
 						}else{
@@ -2349,8 +2371,8 @@ public class TermStructureController extends AbstractController {
 	@RequestMapping(value = "/selectIsOracleKeyWord")
 	public @ResponseBody Object  selectIsOracleKeyWord(final TermSearchCondition cond,final ModelMap model) {
 		model.clear();
-		int result = termStructureService.selectIsOracleKeyWord(cond.getFieldName());
-		model.put("result", result);
+//		int result = termStructureService.selectIsOracleKeyWord(cond.getFieldName());
+		model.put("result", 0);
 		return model;
 	}
 	

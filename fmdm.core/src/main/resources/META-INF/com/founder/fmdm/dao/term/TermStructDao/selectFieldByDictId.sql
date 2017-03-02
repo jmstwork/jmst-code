@@ -2,8 +2,8 @@
 /**
  * 根据dictId查询术语结构对应的字段信息，排除共通字段
  */
- select tt.*,  s.field_id || '&' || s.dict_sql || '&' || s.last_update_time as dict_sql 
- from (select t.disp_order    disp_order, 
+ select tt.*,  s.field_id + '&' + s.dict_sql + '&' + convert(varchar(20),s.last_update_time) as dict_sql
+ from (select top 100 t.disp_order    disp_order,
 		 	  t.field_id      field_id,
               t.field_name    field_name,
               t.field_desc    field_desc,

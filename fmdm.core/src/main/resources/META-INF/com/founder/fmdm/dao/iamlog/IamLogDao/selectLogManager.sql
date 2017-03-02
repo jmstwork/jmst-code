@@ -1,6 +1,6 @@
 select l.log_Id logId,
        l.operor_Id operorId,
-       convert(a.opt_dt, getdate(), 120) as operDt,
+       convert(varchar(20), l.oper_Dt, 120) as operDt,
        l.oper_Modu operModu,
        r.resr_Name resrName,
        l.oper_Obj operObj,

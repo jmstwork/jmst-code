@@ -91,7 +91,7 @@ public class DataManageController extends AbstractController {
 	public ModelAndView dataEditShow(final ModelMap model,String uniKey,String tableName){
 		List<String> fieldList = null;
 		if("SUBS_SYS".equals(tableName)){
-			fieldList = dataManageService.getSysfieldList();
+//			fieldList = dataManageService.getSysfieldList();
 			List<DictMultihospitalInfoDto> hospitalList = dataManageService.selectHospitalInfoDatasByCode(null);
 			model.addAttribute("hospitalList", hospitalList);
 		}else if("DICT_HOSPITAL".equals(tableName)){
