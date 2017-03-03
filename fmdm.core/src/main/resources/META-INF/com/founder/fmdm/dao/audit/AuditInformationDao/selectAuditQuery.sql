@@ -39,10 +39,10 @@ select a.aud_id audId,
    and a.event_code = /*auditEvent*/'11'
    	/*%end*/
    	/*%if optDt1 != null && optDt1 != ""*/
-   	and convert(a.opt_dt, getdate(), 120) >= /*optDt1*/'123'
+   	and convert(varchar(20), a.opt_dt, 120) >= /*optDt1*/'123'
    	/*%end*/
    	/*%if optDt2 != null && optDt2 != ""*/
-   	and convert(a.opt_dt, getdate(), 120) <= /*optDt2*/'123'
+   	and convert(varchar(20), a.opt_dt, 120) <= /*optDt2*/'123'
    	/*%end*/
    	/*%if userNo != null && userNo != ""*/
    and a.user_id like '%'+/*userNo*/'11'+'%'
