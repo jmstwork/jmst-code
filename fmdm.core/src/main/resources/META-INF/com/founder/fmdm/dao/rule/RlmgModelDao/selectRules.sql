@@ -1,9 +1,9 @@
 select distinct rr.rule_id,
        rr.rule_Name,
        rr.apply_by,
-       convert(rr.apply_time, getdate(), 120) as apply_Time,
+       convert(varchar(20), rr.apply_time, 120) as apply_Time,
        rr.permit_by,
-       convert(rr.permit_Time, getdate(), 120) as permit_Time,
+       convert(varchar(20), rr.apply_time, 120) as permit_Time,
        rr.status,
        rr.memo,
        rr.opinions
